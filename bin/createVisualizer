@@ -1,0 +1,85 @@
+#!/bin/sh
+
+if [ $# -eq 0 ]
+  then
+    echo "Usage: createVisualizer VisualizerName [LinkPath [SkeletonPath]]"
+	 exit
+fi
+
+if [ $# -gt 3 ]
+	then
+   	echo "Usage: createVisualizer VisualizerName [LinkPath [SkeletonPath]]"
+		exit
+fi
+
+if [ -z "$1" ]
+  then
+    echo "Name argument is an empty string"
+	 exit
+fi
+
+if [ $# -gt 1 -a -z "$2" ]
+  then
+    echo "Link path argument is an empty string"
+	 exit
+fi
+
+if [ $# -gt 2 -a -z "$3" ]
+  then
+    echo "Skeleton path argument is an empty string"
+	 exit
+fi
+
+if [ $# -lt 3 ]
+	then
+		SkelPath="$GRAPHENE_VIS/skeleton"
+	else
+		SkelPath=$2
+fi
+
+if [ ! -d "$SkelPath" ]
+	then
+		echo $SkelPath
+		echo "Skeleton path does not exist"
+fi
+
+
+
+Name=$1
+Current=$PWD
+
+if [ -d "$PWD/$Name" ]
+	then
+		echo "Path \"$PWD/$Name\" already exists."
+		exit
+fi
+
+mkdir "$PWD/$Name"
+cp "$SkelPath/Skeleton.cpp" "$PWD/$Name/$Name.cpp"
+cp "$SkelPath/Skeleton.h" "$PWD/$Name/$Name.h"
+cp "$SkelPath/visSkeleton.cpp" "$PWD/$Name/vis$Name.cpp"
+cp "$SkelPath/SConstruct" "$PWD/$Name/SConstruct"
+
+for File in $(ls -1 $PWD/$Name/)
+do
+	Path="$PWD/$Name/$File"
+	Upper=$(echo "$Name" | tr [a-z] [A-Z])
+	sed -i -r "s/Skeleton/$Name/g" "$Path"
+	sed -i -r "s/SKELETON/$Upper/g" "$Path"
+done
+
+if [ $# -gt 1 ]
+	then
+		LinkPath="$2"
+		if [ ! -d "$LinkPath" ]
+			then
+				echo "Link path does not exist"
+				exit
+		fi
+		cd "$Current/$Name"
+		scons
+		cd "$Current"
+		cd "$LinkPath"
+		ln -s "$Current/$Name/vis$Name.so"
+		cd $Current
+fi
