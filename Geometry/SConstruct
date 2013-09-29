@@ -1,0 +1,13 @@
+import os
+
+env = Environment(
+		CC = "g++",
+		CCFLAGS = "-Wall -pedantic -std=c++0x -g -O2 -D USE_BOOST_RANDOM",
+		LIBPATH = ['/usr/lib/OpenMesh', '/usr/local/lib/commons'],
+		LIBS = ['OpenMeshCore', 'RNG'],
+		ENV = {'PATH' : os.environ['PATH'],
+				 'TERM' : os.environ['TERM'],
+				 'HOME' : os.environ['HOME']}
+	)
+
+env.Program("test", "test.cpp")

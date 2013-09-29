@@ -1,0 +1,3 @@
+env = Environment(CCFLAGS='-Wall -O2 -g -D USE_BOOST_RANDOM -D DEBUG', CPPPATH=['.','/usr/local/include/commons'], LIBPATH=['/usr/local/lib/commons'], LIBS=['RNG'])
+
+env.Program('test', 'test.cpp')
