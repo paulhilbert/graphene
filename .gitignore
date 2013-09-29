@@ -1,3 +1,8 @@
 *.conf
 *.swp
 *sconsign*
+*.o
+*.a
+*.os
+*.so
+moc_*

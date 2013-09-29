@@ -56,7 +56,7 @@ QWidget* Qt5Tree::widget() {
 	return m_area;
 }
 
-void Qt5Tree::itemChanged(QTreeWidgetItem* item, int col) {
+void Qt5Tree::itemChanged(QTreeWidgetItem* item, int) {
 	QTreeWidgetItem* crt = item;
 	std::vector<std::string> path(1, item->text(0).toStdString());
 	while ((crt = crt->parent())) {

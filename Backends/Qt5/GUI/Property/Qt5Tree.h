@@ -35,7 +35,7 @@ class Qt5Tree : public QObject, public Tree {
 		QWidget* widget();
 
 	public slots:
-		void itemChanged(QTreeWidgetItem* item, int col);
+		void itemChanged(QTreeWidgetItem* item, int);
 
 	protected:
 		void add(const std::vector<std::string>& path, bool checked);
