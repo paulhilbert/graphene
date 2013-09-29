@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 130
 
 in vec4 fcolor;
 out vec4 fragmentColor;

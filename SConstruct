@@ -2,7 +2,7 @@ import os
 env = Environment(ENV = {'PATH' : os.environ['PATH'],
                          'TERM' : os.environ['TERM'],
                          'HOME' : os.environ['HOME']})
-env['CCFLAGS'] = ['-g', '-Wall', '-O2', '-std=c++11', '-fPIC', '-Wno-unused-local-typedefs']
+env['CCFLAGS'] = ['-g', '-Wall', '-O2', '-std=c++11', '-fPIC', '-Wno-unused-local-typedefs', '-D USE_BASH_COLORS']
 env['CPPPATH'] = ['.','externals/commons','/usr/include/eigen3']
 env['LIBS']    = ['dl', 'GL', 'GLU', 'boost_regex', 'boost_filesystem', 'boost_program_options', 'boost_system']
 
