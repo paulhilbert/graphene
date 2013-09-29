@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 130 compatibility
 layout(lines) in;
 layout(line_strip, max_vertices=6) out;
 
