@@ -121,7 +121,7 @@ void Qt5GLWidget::wheelEvent(QWheelEvent* event) {
 	mouseScroll(numDegrees.y());
 }
 
-bool Qt5GLWidget::eventFilter(QObject* object, QEvent* event) {
+bool Qt5GLWidget::eventFilter(QObject*, QEvent* event) {
 	if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
 		QKeyEvent* keyEvent = (QKeyEvent*)event;
 		std::string suffix = event->type() == QEvent::KeyPress ? "_PRESS" : "_RELEASE";

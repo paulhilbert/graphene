@@ -39,7 +39,7 @@ class Qt5GLWidget : public QGLWidget {
 		void mousePressEvent(QMouseEvent* event);
 		void mouseReleaseEvent(QMouseEvent* event);
 		void wheelEvent(QWheelEvent* event);
-		bool eventFilter(QObject* object, QEvent* event);
+		bool eventFilter(QObject*, QEvent* event);
 
 		void mouseClick(MouseButton btn, int x, int y);
 		void mouseMove(int dx, int dy, int x, int y);
