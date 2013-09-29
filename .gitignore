@@ -6,4 +6,5 @@
 *.os
 *.so
 moc_*
-externals/commons
+graphene
+Probes
