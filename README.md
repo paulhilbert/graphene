@@ -77,6 +77,8 @@ can always try to implement your own backend using another toolkit; we initially
 Compiling Graphene
 ==========
 
+(look at the end of this section for a screencast of a prototypical build)
+
 This section is meant for linux systems and we have tested this only on Arch Linux distributions. For some hints regarding Windows see the corresponding section below.
 
 First of all clone the graphene repository and commons using
@@ -97,6 +99,10 @@ https://github.com/paulhilbert/visualizer and then change your environment varia
 Finally cd to the graphene root and if all dependencies and your environment variables are set up it should suffice to execute
 
 % ./build.sh
+
+And here is everything in video form:
+
+http://sicgraph.org/graphene_install.ogv
 
 
 Testing Graphene
