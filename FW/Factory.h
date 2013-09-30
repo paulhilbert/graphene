@@ -6,7 +6,7 @@
 
 #include "Visualizer.h"
 
-#include <GUI/FactoryHandle.h>
+#include <GUI/GUIFactoryHandle.h>
 
 namespace FW {
 

@@ -44,7 +44,7 @@ Container::Ptr Qt5Settings::get(std::string name) {
 std::vector<std::string> Qt5Settings::getActiveTabs() const {
 	std::vector<std::string> result;
 	for (unsigned int idx = 1; idx < m_tabs.size(); ++idx) {
-		auto propActive = m_tabs[idx]->get<Bool>({"__active__"});
+		auto propActive = m_tabs[idx]->get<Bool>(std::vector<std::string>(1, "__active__"));
 		if (!propActive->value()) continue;
 		result.push_back(m_indexMap[idx]);
 	}

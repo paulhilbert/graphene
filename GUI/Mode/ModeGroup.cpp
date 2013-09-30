@@ -1,4 +1,4 @@
-#include "Group.h"
+#include "ModeGroup.h"
 
 namespace GUI {
 namespace Mode {

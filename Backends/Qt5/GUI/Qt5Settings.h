@@ -9,7 +9,7 @@
 using GUI::Property::Qt5VisSettings;
 using GUI::Property::Container;
 
-#include <GUI/Log.h>
+#include <GUI/GUILog.h>
 
 
 namespace GUI {

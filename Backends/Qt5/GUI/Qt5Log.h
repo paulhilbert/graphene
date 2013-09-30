@@ -1,7 +1,7 @@
 #ifndef QT5LOG_H_
 #define QT5LOG_H_
 
-#include <GUI/Log.h>
+#include <GUI/GUILog.h>
 #include "Qt5LogDialog.h"
 
 namespace GUI {

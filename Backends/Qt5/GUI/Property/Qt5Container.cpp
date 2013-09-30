@@ -10,7 +10,7 @@
 #include "Qt5File.h"
 #include "Qt5Files.h"
 #include "Qt5Folder.h"
-#include "Qt5Group.h"
+#include "Qt5PropGroup.h"
 #include "Qt5Number.h"
 #include "Qt5Range.h"
 #include "Qt5Section.h"
@@ -22,7 +22,7 @@
 namespace GUI {
 namespace Property {
 
-Qt5Container::Qt5Container(bool scrollable) : Container(), m_scrollable(scrollable), m_widgetCount(0) {
+Qt5Container::Qt5Container(bool scrollable) : Container(), m_scrollable(scrollable), m_outerArea(nullptr), m_outerBox(nullptr), m_scroll(nullptr), m_area(new QWidget()), m_box(new QVBoxLayout()), m_widget(nullptr), m_layout(new QGridLayout()), m_widgetCount(0) {
 	m_area->setLayout(m_box);
 	if (scrollable) {
 		m_outerArea = new QWidget();

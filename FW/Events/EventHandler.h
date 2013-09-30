@@ -2,6 +2,7 @@
 #define FWEVENTHANDLER_H_
 
 #include <iostream>
+#include <string>
 using std::string;
 
 #include <map>

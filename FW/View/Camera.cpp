@@ -1,6 +1,12 @@
 #include "Camera.h"
 
 #include <Eigen/OpenGL>
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
+#include <windows.h>
+#endif
+
+#include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 
@@ -73,9 +79,9 @@ Geometry::Ray::Ptr Camera::getPickRay() {
 
 void Camera::updatePickRay(int x, int y) {
 	auto trans = m_transforms.lock();
-	Eigen::Vector3f far  = Eigen::unProject( Eigen::Vector3f(x, y, 1.f), trans->modelview(), trans->projection(), trans->viewport() );
-	Eigen::Vector3f near = Eigen::unProject( Eigen::Vector3f(x, y, 0.f), trans->modelview(), trans->projection(), trans->viewport() );
-	m_pickRay->setPoints(near, far);
+	Eigen::Vector3f farPoint  = Eigen::unProject( Eigen::Vector3f(static_cast<float>(x), static_cast<float>(y), 1.f), trans->modelview(), trans->projection(), trans->viewport() );
+	Eigen::Vector3f nearPoint = Eigen::unProject( Eigen::Vector3f(static_cast<float>(x), static_cast<float>(y), 0.f), trans->modelview(), trans->projection(), trans->viewport() );
+	m_pickRay->setPoints(nearPoint, farPoint);
 }
 
 void Camera::updateTransforms() {
@@ -86,7 +92,7 @@ void Camera::updateTransforms() {
 }
 
 Eigen::Matrix4f Camera::getProjectionMatrix(int w, int h) {
-	float aspect = (float)std::max(w, h) / std::min(w, h);
+	float aspect = (float)(w > h ? w : h) / (w > h ? h : w);
 	Eigen::Matrix4f pr = Eigen::perspective(40.f, aspect, 0.1f, 500.f);
 	if (m_ortho) {
 		auto trans = m_transforms.lock();
@@ -96,7 +102,7 @@ Eigen::Matrix4f Camera::getProjectionMatrix(int w, int h) {
 		Eigen::Vector4f right = lookAt;
 		right[0] += 1.f;
 
-		float factor = tan(40*M_PI/180.f) * 20.f;
+		float factor = static_cast<float>(tan(40*M_PI/180.f) * 20.0);
 		Eigen::Matrix4f ortho = Eigen::ortho(-aspect*factor, aspect*factor, -factor, factor, 0.1f, 500.0f);
 		Eigen::Vector4f p0 = pr*lookAt, p1 = pr*right, o0 = ortho*lookAt, o1 = ortho*right;
 		p0.head(3) /= p0[3]; p1.head(3) /= p1[3];
@@ -116,9 +122,9 @@ void Camera::registerEvents() {
 		std::function<void (int,int,int,int)>(
 			[&](int dx, int dy, int x, int y) {
 				int m = 0;
-				if (m_eventHandler->modifier()->ctrl() )  { m |= MOD_CTRL; dx *= 3; dy *= 3; }
-				if (m_eventHandler->modifier()->alt()  )  { m |= MOD_ALT; }
-				if (m_eventHandler->modifier()->shift())  { m |= MOD_SHIFT;	}
+				if (m_eventHandler->modifier()->ctrl() )  { m |= MODIF_CTRL; dx *= 3; dy *= 3; }
+				if (m_eventHandler->modifier()->alt()  )  { m |= MODIF_ALT; }
+				if (m_eventHandler->modifier()->shift())  { m |= MODIF_SHIFT;	}
 				m_control->update(dx, dy, m);
 				updateTransforms();
 			}
@@ -129,7 +135,7 @@ void Camera::registerEvents() {
 		"Camera",
 		std::function<void (int)>(
 			[&](int d) {
-				m_control->update(0, -50*d, MOD_SHIFT);
+				m_control->update(0, -50*d, MODIF_SHIFT);
 				updateTransforms();
 			}
 		)

@@ -3,6 +3,17 @@
 #include <fstream>
 #include <memory>
 
+// gl
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
+#include <windows.h>
+#endif
+
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+
+
 // boost
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
@@ -21,7 +32,7 @@ using boost::regex_match;
 using namespace IO;
 
 // graphene
-#include <FW/Graphene.h>
+#include <FW/FWGraphene.h>
 using FW::Graphene;
 
 #include <FW/Events/EventHandler.h>
@@ -72,7 +83,7 @@ int main( int argc, char *argv[] ) {
 		std::cout << desc << "\n";
 		return 1;
 	}
-	verbose = vm.count("verbose");
+	verbose = vm.count("verbose") > 0;
 
 	FW::Events::EventHandler::Ptr eventHandler(new FW::Events::EventHandler());
 

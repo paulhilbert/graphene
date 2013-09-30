@@ -1,4 +1,4 @@
-#include "Log.h"
+#include "GUILog.h"
 
 namespace GUI {
 

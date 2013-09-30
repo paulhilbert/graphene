@@ -14,7 +14,7 @@
 #include <GUI/Property/File.h>
 #include <GUI/Property/Files.h>
 #include <GUI/Property/Folder.h>
-#include <GUI/Property/Group.h>
+#include <GUI/Property/PropGroup.h>
 #include <GUI/Property/Number.h>
 #include <GUI/Property/Range.h>
 #include <GUI/Property/Section.h>
@@ -64,13 +64,13 @@ class Qt5Container : public Container {
 
 	protected:
 		bool          m_scrollable;
-		QWidget*      m_outerArea     = nullptr;
-		QVBoxLayout*  m_outerBox      = nullptr;
-		QScrollArea*  m_scroll        = nullptr;
-		QWidget*      m_area          = new QWidget();
-		QVBoxLayout*  m_box           = new QVBoxLayout();
-		QWidget*      m_widget        = nullptr;
-		QGridLayout*  m_layout        = new QGridLayout();
+		QWidget*      m_outerArea;
+		QVBoxLayout*  m_outerBox;
+		QScrollArea*  m_scroll;
+		QWidget*      m_area;
+		QVBoxLayout*  m_box;
+		QWidget*      m_widget;
+		QGridLayout*  m_layout;
 		unsigned int  m_widgetCount;
 };
 

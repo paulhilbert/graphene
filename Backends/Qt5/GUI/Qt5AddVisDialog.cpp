@@ -52,7 +52,7 @@ std::string Qt5AddVisDialog::getActiveFactory() const {
 
 std::string Qt5AddVisDialog::getActiveVisName() const {
 	int crt = m_visSelection->currentRow();
-	return m_settings[crt]->get<String>({"__name__"})->value();
+	return m_settings[crt]->get<String>(std::vector<std::string>(1, "__name__"))->value();
 }
 
 Qt5FactorySettings::Ptr Qt5AddVisDialog::addFactory(std::string name) {

@@ -51,7 +51,7 @@ void Point::render(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMat
 	m_prog.setUniformMat4("prM", prMatrix.data());
 	m_prog.setUniformVec3("translation", m_position.data());
 
-	glLineWidth(m_lineWidth);
+	glLineWidth(static_cast<GLfloat>(m_lineWidth));
 
 	m_geom.bind();
 	glDrawArrays(GL_LINES, 0, 6);

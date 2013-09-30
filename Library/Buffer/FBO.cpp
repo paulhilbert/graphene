@@ -57,7 +57,7 @@ FBO::~FBO()
 }
 
 
-void FBO::AttachRender(GLenum iformat) throw (domain_error, invalid_argument)
+void FBO::AttachRender(GLenum iformat)
 {
 	GLenum attachment;
 	GLuint render_id;
@@ -95,7 +95,7 @@ void FBO::AttachRender(GLenum iformat) throw (domain_error, invalid_argument)
 }
 
 
-void FBO::AttachTexture(GLenum iformat, GLint filter) throw(domain_error, out_of_range, invalid_argument)
+void FBO::AttachTexture(GLenum iformat, GLint filter)
 {
 	GLenum format;
 	GLenum type;
@@ -110,7 +110,7 @@ void FBO::AttachTexture(GLenum iformat, GLint filter) throw(domain_error, out_of
 		throw out_of_range("FBO::AttachTexture - GL_MAX_COLOR_ATTACHMENTS exceeded");
 	}
 
-	attachment = GL_COLOR_ATTACHMENT0 + m_tex_id.size(); // common attachment for color textures
+	attachment = GL_COLOR_ATTACHMENT0 + static_cast<GLenum>(m_tex_id.size()); // common attachment for color textures
 	if (iformat == GL_RGBA16F_ARB || iformat == GL_RGBA32F_ARB) {
 		format = GL_RGBA;
 		type = GL_FLOAT;
@@ -194,7 +194,7 @@ void FBO::BindInput()
 }
 
 
-void FBO::BindOutput() throw(domain_error)
+void FBO::BindOutput()
 {
 	if (m_tex_id.empty()) {
 		throw domain_error("FBO::BindIn - no textures to bind");
@@ -205,12 +205,12 @@ void FBO::BindOutput() throw(domain_error)
 		glDrawBuffer(m_buffers[0]);
 	}
 	else {
-		glDrawBuffers(m_tex_id.size(), m_buffers);
+		glDrawBuffers(static_cast<GLsizei>(m_tex_id.size()), m_buffers);
 	}
 }
 
 
-void FBO::BindTex(int num) throw(out_of_range)
+void FBO::BindTex(int num)
 {
 	if (num + 1 > int(m_tex_id.size())) {
 		throw out_of_range("FBO::BindTex - texture vector size exceeded");

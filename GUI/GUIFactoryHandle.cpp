@@ -1,4 +1,4 @@
-#include "FactoryHandle.h"
+#include "GUIFactoryHandle.h"
 
 namespace GUI {
 

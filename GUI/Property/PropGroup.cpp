@@ -1,4 +1,4 @@
-#include "Group.h"
+#include "PropGroup.h"
 
 namespace GUI {
 namespace Property {

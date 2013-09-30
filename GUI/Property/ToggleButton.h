@@ -13,7 +13,7 @@ class ToggleButton : public Base, public Notify<void (bool)>, public Value<bool>
 	public:
 		typedef std::shared_ptr<ToggleButton> Ptr;
 		typedef std::weak_ptr<ToggleButton>   WPtr;
-		using typename Notify<void (bool)>::Callback;
+		using Notify<void (bool)>::Callback;
 
 	public:
 		ToggleButton(std::string label);

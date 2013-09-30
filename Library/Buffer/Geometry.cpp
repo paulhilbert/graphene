@@ -103,7 +103,7 @@ void Geometry::uploadVertices(AccessMethod method) {
 	m_vbo.upload(method);
 	m_vao.bind();
 	if (m_bufferIndexMap.find(VERTICES) == m_bufferIndexMap.end()) {
-		unsigned int idx = m_bufferIndexMap.size();
+		unsigned int idx = static_cast<unsigned int>(m_bufferIndexMap.size());
 		m_bufferIndexMap[VERTICES] = idx;
 	}
 	m_vao.setAttrib(m_bufferIndexMap[VERTICES],3);
@@ -118,7 +118,7 @@ void Geometry::uploadNormals(AccessMethod method) {
 	m_nbo.upload(method);
 	m_vao.bind();
 	if (m_bufferIndexMap.find(NORMALS) == m_bufferIndexMap.end()) {
-		unsigned int idx = m_bufferIndexMap.size();
+		unsigned int idx = static_cast<unsigned int>(m_bufferIndexMap.size());
 		m_bufferIndexMap[NORMALS] = idx;
 	}
 	m_vao.setAttrib(m_bufferIndexMap[NORMALS],3);
@@ -133,7 +133,7 @@ void Geometry::uploadColors(AccessMethod method) {
 	m_cbo.upload(method);
 	m_vao.bind();
 	if (m_bufferIndexMap.find(COLORS) == m_bufferIndexMap.end()) {
-		unsigned int idx = m_bufferIndexMap.size();
+		unsigned int idx = static_cast<unsigned int>(m_bufferIndexMap.size());
 		m_bufferIndexMap[COLORS] = idx;
 	}
 	m_vao.setAttrib(m_bufferIndexMap[COLORS],4);
@@ -148,7 +148,7 @@ void Geometry::uploadTexCoords(AccessMethod method) {
 	m_tbo.upload(method);
 	m_vao.bind();
 	if (m_bufferIndexMap.find(TEXCOORDS) == m_bufferIndexMap.end()) {
-		unsigned int idx = m_bufferIndexMap.size();
+		unsigned int idx = static_cast<unsigned int>(m_bufferIndexMap.size());
 		m_bufferIndexMap[TEXCOORDS] = idx;
 	}
 	m_vao.setAttrib(m_bufferIndexMap[TEXCOORDS],2);

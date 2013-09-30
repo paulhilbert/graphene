@@ -19,15 +19,15 @@ class FBO {
 		/// Set FBO size when using default constructor
 		void SetSize(int width, int height) { m_width = width; m_height = height; };
 		/// Attach a render target to the FBO
-		void AttachRender(GLenum iformat) throw(std::domain_error, std::invalid_argument);
+		void AttachRender(GLenum iformat);
 		/// Attach a texture to the FBO
-		void AttachTexture(GLenum iformat, GLint filter = GL_LINEAR) throw(std::domain_error, std::out_of_range, std::invalid_argument);
+		void AttachTexture(GLenum iformat, GLint filter = GL_LINEAR);
 		/// Bind the FBO as input, for reading from
 		void BindInput();
 		/// Bind the FBO as output, for writing into
-		void BindOutput() throw(std::domain_error);
+		void BindOutput();
 		/// Bind the specified FBO texture to the context
-		void BindTex(int num = 0) throw(std::out_of_range);
+		void BindTex(int num = 0);
 		/// Blit from an FBO to another
 		void BlitTo(FBO *dest, GLbitfield mask, GLenum filter = GL_LINEAR);
 		/// Check OpenGL status of the FBO

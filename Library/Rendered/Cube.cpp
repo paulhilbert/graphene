@@ -29,7 +29,21 @@ Cube::Cube(const Eigen::Affine3f& trafo, const Eigen::Vector4f& ambientColor, co
 		v = trafo * v;
 	}
 
-	vector<unsigned int> indices({0, 1, 2, 3, 4, 1, 5, 6, 4, 7, 2, 6, 0, 1});
+	vector<unsigned int> indices(14);
+	indices[ 0] = 0;
+	indices[ 1] = 1;
+	indices[ 2] = 2;
+	indices[ 3] = 3;
+	indices[ 4] = 4;
+	indices[ 5] = 1;
+	indices[ 6] = 5;
+	indices[ 7] = 6;
+	indices[ 8] = 4;
+	indices[ 9] = 7;
+	indices[10] = 2;
+	indices[11] = 6;
+	indices[12] = 0;
+	indices[13] = 1;
 
 	m_prog.addShaders("GLSL/mesh.vert", "GLSL/mesh.frag");
 	m_prog.link();

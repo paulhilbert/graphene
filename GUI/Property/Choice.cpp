@@ -13,7 +13,10 @@ Choice::~Choice() {
 }
 
 void Choice::add(std::string id, std::string label) {
-	add({id, label});
+	Option opt;
+	opt.id = id;
+	opt.label = label;
+	add(opt);
 }
 
 void Choice::add(const Option& option) {
@@ -35,7 +38,7 @@ std::string Choice::value() const {
 void Choice::setValue(std::string id) {
 	auto findIt = std::find(m_options.begin(), m_options.end(), id);
 	asserts(findIt != m_options.end(), "Trying to set choice property value/id that does not exist.");
-	setActiveOption(std::distance(m_options.begin(), findIt));
+	setActiveOption(static_cast<unsigned int>(std::distance(m_options.begin(), findIt)));
 }
 
 } // Property

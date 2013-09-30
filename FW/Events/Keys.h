@@ -20,7 +20,7 @@ struct Keys {
 		RETURN,
 		ENTER,
 		INSERT,
-		DELETE,
+		DEL,
 		PAUSE,
 		PRINT,
 		SYSREQ,

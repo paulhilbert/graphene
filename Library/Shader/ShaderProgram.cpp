@@ -94,7 +94,7 @@ void ShaderProgram::setUniformMat4(const GLchar* name, const float* values) {
 }
 
 bool ShaderProgram::isLinked() {
-	return static_cast<bool>(m_linkStatus);
+	return static_cast<bool>(m_linkStatus != 0);
 }
 
 GLint ShaderProgram::getUniformVarLocation(const GLchar* name) {

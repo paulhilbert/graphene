@@ -8,9 +8,9 @@
 #include <FW/Events/EventHandler.h>
 #include <FW/Events/Modifier.h>
 
-#include "FactoryHandle.h"
+#include "GUIFactoryHandle.h"
 #include <FW/Factory.h>
-#include "Log.h"
+#include "GUILog.h"
 
 
 namespace GUI {

@@ -12,7 +12,7 @@ class HdrFile {
 		int _height;
 		float *_image;
 
-		void LoadRgbe(const std::string& filename) throw(std::invalid_argument);
+		void LoadRgbe(const std::string& filename);
 		void LoadExr(const std::string& filename);
 	public:
 		/// Default Constructor
@@ -22,7 +22,7 @@ class HdrFile {
 		/// Destructor
 		~HdrFile() { Free(); };
 		/// Load a file in the buffer
-		void Load(const std::string& filename) throw(std::invalid_argument);
+		void Load(const std::string& filename);
 		/// Save the buffer to a Radiance file
 		void SaveRgbe(const std::string& filename);
 		/// Save the buffer to a OpenEXR file

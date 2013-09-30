@@ -6,8 +6,8 @@
 #include <map>
 #include <vector>
 
-#include "Group.h"
-#include "../Log.h"
+#include "ModeGroup.h"
+#include "../GUILog.h"
 
 namespace GUI {
 namespace Mode {

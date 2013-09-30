@@ -1,7 +1,7 @@
 #ifndef QT5GROUP_H_
 #define QT5GROUP_H_
 
-#include <GUI/Property/Group.h>
+#include <GUI/Property/PropGroup.h>
 #include "Qt5Container.h"
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QVBoxLayout>

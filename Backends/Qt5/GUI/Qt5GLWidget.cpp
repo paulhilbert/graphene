@@ -146,7 +146,7 @@ bool Qt5GLWidget::eventFilter(QObject*, QEvent* event) {
 				case Qt::Key_Return: special = FW::Events::Keys::RETURN; break;
 				case Qt::Key_Enter: special = FW::Events::Keys::ENTER; break;
 				case Qt::Key_Insert: special = FW::Events::Keys::INSERT; break;
-				case Qt::Key_Delete: special = FW::Events::Keys::DELETE; break;
+				case Qt::Key_Delete: special = FW::Events::Keys::DEL; break;
 				case Qt::Key_Pause: special = FW::Events::Keys::PAUSE; break;
 				case Qt::Key_Print: special = FW::Events::Keys::PRINT; break;
 				case Qt::Key_SysReq: special = FW::Events::Keys::SYSREQ; break;

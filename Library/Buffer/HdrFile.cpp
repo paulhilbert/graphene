@@ -17,7 +17,7 @@ using std::endl;
 namespace Buffer {
 
 
-void HdrFile::Load(const string& filename) throw(invalid_argument) {
+void HdrFile::Load(const string& filename) {
 	if (filename.compare(filename.length()-4, 4, string(".hdr")) == 0) {
 		LoadRgbe(filename);
 	}
@@ -30,7 +30,7 @@ void HdrFile::Load(const string& filename) throw(invalid_argument) {
 }
 
 
-void HdrFile::LoadRgbe(const string& filename) throw(invalid_argument) {
+void HdrFile::LoadRgbe(const string& filename) {
 	FILE *f;
 	rgbe_header_info header;
 

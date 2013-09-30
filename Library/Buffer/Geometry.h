@@ -64,7 +64,7 @@ class Geometry {
 		void addVertices (const std::vector<Eigen::Vector3f>& vertices);
 		void addColors   (const std::vector<Eigen::Vector4f>& colors);
 
-		void upload(std::set<Buffers> dynamicAccess = {});
+		void upload(std::set<Buffers> dynamicAccess = std::set<Buffers>());
 		void uploadVertices(AccessMethod method = STATIC_ACCESS);
 		void uploadNormals(AccessMethod method = STATIC_ACCESS);
 		void uploadColors(AccessMethod method = STATIC_ACCESS);

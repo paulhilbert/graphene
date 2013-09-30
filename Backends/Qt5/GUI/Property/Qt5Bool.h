@@ -38,7 +38,7 @@ class Qt5Bool : public QObject, public Bool {
 
 	protected:
 		QLabel*    m_labelWidget;
-		QCheckBox* m_checkBox = new QCheckBox();
+		QCheckBox* m_checkBox;
 };
 
 

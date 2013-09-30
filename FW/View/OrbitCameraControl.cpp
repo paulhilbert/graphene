@@ -29,13 +29,13 @@ Eigen::Vector3f OrbitCameraControl::getLookAt() {
 
 void OrbitCameraControl::update(int dX, int dY, int mod) {
 	switch (mod) {
-		case MOD_SHIFT:  zoom(0.005f * dY);
+		case MODIF_SHIFT:  zoom(0.005f * dY);
 		                 determineMatrix();
 		                 break;
-		case MOD_CTRL:   pan(-0.005f * dX, 0.005f * dY);
+		case MODIF_CTRL:   pan(-0.005f * dX, 0.005f * dY);
 		                 determineMatrix();
 		                 break;
-		case (MOD_CTRL | MOD_SHIFT):
+		case (MODIF_CTRL | MODIF_SHIFT):
 		                 pan(-0.005f * dX, 0.005f * dY, true);
 		                 determineMatrix();
 		                 break;
@@ -65,8 +65,8 @@ void OrbitCameraControl::moveTo(std::shared_ptr<CameraControl> other) {
 		return;
 	}
 	m_phi = atan2(dir[0], -dir[1]);
-	if (m_phi < 0.f) m_phi += 2.f*M_PI;
-	m_theta = acos(dir[2] / m_radius) - 0.5f*M_PI;
+	if (m_phi < 0.f) m_phi += static_cast<float>(2.f*M_PI);
+	m_theta = static_cast<float>(acos(dir[2] / m_radius) - 0.5f*M_PI);
 
 	determineMatrix();
 }
@@ -96,7 +96,7 @@ void OrbitCameraControl::rotP(float delta) {
 	m_phi += delta;
 	// constrain phi to [0,2*pi)
 	// by looping if interval bound is reached
-	float pi2 = 2.f * M_PI;
+	float pi2 = static_cast<float>(2.f * M_PI);
 	while (m_phi < 0) m_phi += pi2;
 	while (m_phi >= pi2) m_phi -= pi2;
 }
@@ -105,7 +105,7 @@ void OrbitCameraControl::rotT(float delta) {
 	m_theta += delta;
 	// constrain theta to [-pi/2,pi/2]
 	// by clamping
-	float pdiv2 = 0.5f * M_PI;
+	float pdiv2 = static_cast<float>(0.5f * M_PI);
 	if (m_theta < -pdiv2) m_theta = -pdiv2;
 	if (m_theta >  pdiv2) m_theta =  pdiv2;
 }

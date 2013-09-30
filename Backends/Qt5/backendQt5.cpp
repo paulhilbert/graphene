@@ -6,7 +6,7 @@
 using namespace GUI;
 
 extern "C"
-Backend* BOOST_EXTENSION_EXPORT_DECL getBackend() {
+BOOST_EXTENSION_EXPORT_DECL Backend* getBackend() {
 	Qt5Backend* be = new Qt5Backend();
 	return dynamic_cast<Backend*>(be);
 }

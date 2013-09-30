@@ -1,4 +1,4 @@
-#include "Qt5Group.h"
+#include "Qt5PropGroup.h"
 
 namespace GUI {
 namespace Property {

@@ -9,7 +9,7 @@
 #include "File.h"
 #include "Files.h"
 #include "Folder.h"
-#include "Group.h"
+#include "PropGroup.h"
 #include "Number.h"
 #include "Range.h"
 #include "Section.h"
@@ -157,7 +157,7 @@ bool Container::isContainer() const {
 
 void Container::add(Base::Ptr child, std::string id) {
 	asserts(m_idMap.find(id) == m_idMap.end(), "Child already exists");
-	if (id != "") m_idMap[id] = m_children.size();
+	if (id != "") m_idMap[id] = static_cast<int>(m_children.size());
 	m_children.push_back(child);
 }
 

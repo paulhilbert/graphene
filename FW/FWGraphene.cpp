@@ -1,4 +1,4 @@
-#include "Graphene.h"
+#include "FWGraphene.h"
 
 #include <map>
 #include <tuple>
@@ -45,7 +45,7 @@ struct Graphene::Impl {
 		void         addFactory(std::string name, Factory::Ptr factory);
 		Factory::Ptr getFactory(std::string name);
 		bool         hasFactory(std::string name);
-		bool         addVisualizer(std::string factoryName, std::string visName);
+		void         addVisualizer(std::string factoryName, std::string visName);
 		bool         hasVisualizer(std::string visName);
 		void         removeVisualizer(std::string visName);
 
@@ -181,25 +181,25 @@ bool Graphene::Impl::hasFactory(std::string name) {
 	return m_factories.find(name) != m_factories.end();
 }
 
-bool Graphene::Impl::addVisualizer(std::string factoryName, std::string visName) {
+void Graphene::Impl::addVisualizer(std::string factoryName, std::string visName) {
 	if (hasVisualizer(visName)) {
 		m_backend->getLog()->error("Visualizer already exists");
-		return false;
+		return;
 	}
 	if (!hasFactory(factoryName)) {
 		m_backend->getLog()->error("Factory does not exist");
-		return false;
+		return;
 	}
 	auto vis = getFactory(factoryName)->addVisualizer();
-	if (!vis) return false;
+	if (!vis) return;
 	View::Transforms::WPtr transforms(m_transforms);
 	VisualizerHandle::Ptr fwHandle(new VisualizerHandle(visName, transforms, m_eventHandler, m_camera->getPickRay()));
 	auto guiHandle = m_backend->addVisualizer(visName);
-	if (!guiHandle) return false;
+	if (!guiHandle) return;
 	vis->setHandles(fwHandle, guiHandle);
 	vis->init();
 	m_visualizer[visName] = vis;
-	return true;
+	return;
 }
 
 bool Graphene::Impl::hasVisualizer(std::string visName) {

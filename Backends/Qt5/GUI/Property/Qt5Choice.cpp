@@ -59,7 +59,7 @@ void Qt5Choice::addOption(std::string label) {
 	m_box->insertWidget(m_radioCount++, radioButton);
 	//QObject::connect(radioButton, SIGNAL(toggled(bool)), this, SLOT(optionChanged(m_radios.size())));
 	connect(radioButton, SIGNAL(clicked(bool)), m_signalMapper, SLOT(map())) ;
-	m_signalMapper->setMapping(radioButton, m_radios.size()) ;
+	m_signalMapper->setMapping(radioButton, static_cast<int>(m_radios.size())) ;
 	m_radios.push_back(radioButton);
 }
 

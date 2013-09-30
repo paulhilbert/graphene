@@ -5,7 +5,7 @@
 
 #include "Property/Container.h"
 #include "Mode/Handle.h"
-#include "Log.h"
+#include "GUILog.h"
 #include "Status.h"
 
 namespace GUI {

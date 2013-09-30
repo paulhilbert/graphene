@@ -5,22 +5,22 @@
 
 #include <Eigen/Dense>
 
-#ifdef MOD_CTRL
-#undef MOD_CTRL
+#ifdef MODIF_CTRL
+#undef MODIF_CTRL
 #endif
-#ifdef MOD_SHIFT
-#undef MOD_SHIFT
+#ifdef MODIF_SHIFT
+#undef MODIF_SHIFT
 #endif
-#ifdef MOD_ALT
-#undef MOD_ALT
+#ifdef MODIF_ALT
+#undef MODIF_ALT
 #endif
 
 namespace FW {
 namespace View {
 
-static const int MOD_CTRL  = 1 << 0;
-static const int MOD_SHIFT = 1 << 1;
-static const int MOD_ALT   = 1 << 2;
+static const int MODIF_CTRL  = 1 << 0;
+static const int MODIF_SHIFT = 1 << 1;
+static const int MODIF_ALT   = 1 << 2;
 
 class CameraControl {
 	public:

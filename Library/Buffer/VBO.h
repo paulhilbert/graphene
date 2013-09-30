@@ -16,7 +16,7 @@ class VBO : public DataBuffer<Type> {
 		virtual ~VBO() {}
 
 		void set(const std::vector<Vec>& data) {
-			unsigned int dataSize = VecDim * data.size();
+			unsigned int dataSize = static_cast<unsigned int>(VecDim * data.size());
 			if (dataSize != this->m_dataSize) this->allocate(dataSize);
 			for (unsigned int i=0; i < data.size(); ++i) {
 				for (unsigned int d=0; d < VecDim; ++d) {
@@ -26,7 +26,7 @@ class VBO : public DataBuffer<Type> {
 		}
 
 		void add(const std::vector<Vec>& data) {
-			unsigned int dataSize = VecDim * data.size();
+			unsigned int dataSize = static_cast<unsigned int>(VecDim * data.size());
 			unsigned int startIndex = this->allocateAdditional(dataSize);
 			for (unsigned int i=0; i < data.size(); ++i) {
 				for (unsigned int d=0; d < VecDim; ++d) {

@@ -10,7 +10,7 @@
 namespace fs = boost::filesystem;
 
 #include "Option.h"
-#include "../Log.h"
+#include "../GUILog.h"
 
 namespace GUI {
 namespace Mode {

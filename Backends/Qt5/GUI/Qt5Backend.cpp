@@ -2,7 +2,7 @@
 
 #include <GUI/Property/Button.h>
 #include <GUI/Property/Color.h>
-#include <GUI/Property/Group.h>
+#include <GUI/Property/PropGroup.h>
 using namespace GUI::Property;
 
 #include "Mode/Qt5Handle.h"
@@ -110,7 +110,10 @@ Eigen::Vector2i Qt5Backend::getGLSize() {
 }
 
 Eigen::Vector4f Qt5Backend::getBackgroundColor() const {
-	return m_mainSettings->get<Color>({"groupRendering", "background"})->value();
+	std::vector<std::string> p(2);
+	p[0] = "groupRendering";
+	p[1] = "background";
+	return m_mainSettings->get<Color>(p)->value();
 }
 
 std::vector<std::string> Qt5Backend::getActiveVisualizerNames() {
@@ -185,7 +188,7 @@ void Qt5Backend::initMainSettings() {
 	ccChoice->add("fly", "Fly Control");
 	ccChoice->setCallback([&] (std::string control) { if (m_onSetCamControl) m_onSetCamControl(control); });
 	auto groupRender = m_mainSettings->add<Group>("Rendering", "groupRendering");
-	groupRender->add<Color>("Background: ", "background")->setValue({0.f, 0.f, 0.f, 1.f});
+	groupRender->add<Color>("Background: ", "background")->setValue(Eigen::Vector4f(0.f, 0.f, 0.f, 1.f));
 	auto projection = groupRender->add<Choice>("Projection:");
 	projection->add("perspective", "Perspective");
 	projection->add("ortho", "Orthographic");

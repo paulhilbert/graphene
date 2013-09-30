@@ -26,10 +26,10 @@ Eigen::Vector3f FlyCameraControl::getLookAt() {
 
 void FlyCameraControl::update(int dX, int dY, int mod) {
 	switch (mod) {
-		case MOD_SHIFT:  zoom(-0.05f * dY);
+		case MODIF_SHIFT:  zoom(-0.05f * dY);
 		                 determineMatrix();
 		                 break;
-		case MOD_CTRL:   pan(0.005f * dX, -0.005f * dY);
+		case MODIF_CTRL:   pan(0.005f * dX, -0.005f * dY);
 		                 determineMatrix();
 		                 break;
 		default:         yaw(-0.01f * dX);
@@ -58,8 +58,8 @@ void FlyCameraControl::moveTo(std::shared_ptr<CameraControl> other) {
 		return;
 	}
 	m_yaw = atan2(-dir[0], dir[1]);
-	if (m_yaw < 0.f) m_yaw += 2.f*M_PI;
-	m_pitch = acos(-dir[2] / m_focalLength) - 0.5f*M_PI;
+	if (m_yaw < 0.f) m_yaw += static_cast<float>(2.f*M_PI);
+	m_pitch = static_cast<float>(acos(-dir[2] / m_focalLength) - 0.5f*M_PI);
 
 	determineMatrix();
 }
@@ -77,7 +77,7 @@ void FlyCameraControl::pitch(float delta) {
 	m_pitch += delta;
 	// constrain pitch to [-pi/2,pi/2]
 	// by clamping
-	float pidiv2 = 0.5f * M_PI;
+	float pidiv2 = static_cast<float>(0.5f * M_PI);
 	if (m_pitch < -pidiv2) m_pitch = -pidiv2;
 	if (m_pitch >  pidiv2) m_pitch = pidiv2;
 }
@@ -86,7 +86,7 @@ void FlyCameraControl::yaw(float delta) {
 	m_yaw += delta;
 	// constrain yaw to [0,2*pi)
 	// by looping if interval bound is reached
-	float pi2 = 2.f * M_PI;
+	float pi2 = static_cast<float>(2.f * M_PI);
 	while (m_yaw < 0) m_yaw += pi2;
 	while (m_yaw >= pi2) m_yaw -= pi2;
 }

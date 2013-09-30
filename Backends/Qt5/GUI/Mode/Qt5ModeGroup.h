@@ -1,7 +1,7 @@
 #ifndef QT5GROUP_H_
 #define QT5GROUP_H_
 
-#include <GUI/Mode/Group.h>
+#include <GUI/Mode/ModeGroup.h>
 #include <QtWidgets/QToolBar>
 
 namespace GUI {

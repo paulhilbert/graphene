@@ -1,6 +1,6 @@
 #include "Qt5Handle.h"
 
-#include "Qt5Group.h"
+#include "Qt5ModeGroup.h"
 
 namespace GUI {
 namespace Mode {

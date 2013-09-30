@@ -8,8 +8,8 @@
 #include <boost/lexical_cast.hpp>
 using boost::lexical_cast;
 
-#include <FW/VisualizerHandle.h>
-#include <GUI/VisualizerHandle.h>
+#include <FW/FWVisualizerHandle.h>
+#include <GUI/GUIVisualizerHandle.h>
 
 #include <GUI/Property/Bool.h>
 #include <GUI/Property/Button.h>
@@ -18,7 +18,7 @@ using boost::lexical_cast;
 #include <GUI/Property/File.h>
 #include <GUI/Property/Files.h>
 #include <GUI/Property/Folder.h>
-#include <GUI/Property/Group.h>
+#include <GUI/Property/PropGroup.h>
 #include <GUI/Property/Number.h>
 #include <GUI/Property/Range.h>
 #include <GUI/Property/Section.h>

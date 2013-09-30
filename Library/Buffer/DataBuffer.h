@@ -32,7 +32,7 @@ class DataBuffer {
 		}
 
 		virtual void set(std::vector<Type> data) {
-			if (!m_data) allocate(data.size());
+			if (!m_data) allocate(static_cast<unsigned int>(data.size()));
 			for (unsigned int i=0; i < data.size(); ++i) { m_data[i] = data[i]; }
 		}
 

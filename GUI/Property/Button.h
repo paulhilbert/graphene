@@ -12,7 +12,7 @@ class Button : public Base, public Notify<void (void)>, public Labeled {
 	public:
 		typedef std::shared_ptr<Button> Ptr;
 		typedef std::weak_ptr<Button>   WPtr;
-		using typename Notify<void (void)>::Callback;
+		using Notify<void (void)>::Callback;
 
 	public:
 		Button(std::string label);
