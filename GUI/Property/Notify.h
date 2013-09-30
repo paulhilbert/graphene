@@ -7,12 +7,12 @@
 namespace GUI {
 namespace Property {
 
-template <class... Params>
+template <class Sig>
 class Notify {
 	public:
 		typedef std::shared_ptr<Notify>      Ptr;
 		typedef std::weak_ptr<Notify>        WPtr;
-		typedef std::function<void (Params...)>  Callback;
+		typedef std::function<Sig>  Callback;
 
 	public:
 		Notify();
@@ -21,8 +21,11 @@ class Notify {
 		void setCallback(Callback onChange);
 		void unsetCallback();
 
-	protected:
-		void notify(Params... params) const;
+		void notify() const;
+		template <class Arg0>
+		void notify(Arg0 arg0) const;
+		template <class Arg0, class Arg1>
+		void notify(Arg0 arg0, Arg1 arg1) const;
 
 	protected:
 		Callback m_onChange;

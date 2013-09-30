@@ -12,11 +12,11 @@ namespace fs = boost::filesystem;
 namespace GUI {
 namespace Property {
 
-class File : public Base, public Notify<fs::path>, public Value<fs::path>, public Labeled {
+class File : public Base, public Notify<void (fs::path)>, public Value<fs::path>, public Labeled {
 	public:
 		typedef std::shared_ptr<File> Ptr;
 		typedef std::weak_ptr<File>   WPtr;
-		using Notify<fs::path>::Callback;
+		using Notify<void (fs::path)>::Callback;
 
 		typedef enum {OPEN, SAVE} Mode;
 

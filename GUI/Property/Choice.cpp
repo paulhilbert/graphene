@@ -6,7 +6,7 @@
 namespace GUI {
 namespace Property {
 
-Choice::Choice(std::string label) : Base(), Notify<std::string>(), Value<std::string>(), Labeled(label) {
+Choice::Choice(std::string label) : Base(), Notify<void (std::string)>(), Value<std::string>(), Labeled(label) {
 }
 
 Choice::~Choice() {

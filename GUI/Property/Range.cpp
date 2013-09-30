@@ -3,7 +3,7 @@
 namespace GUI {
 namespace Property {
 
-Range::Range(std::string label) : Base(), Notify<double>(), Value<double>(), Labeled(label) {
+Range::Range(std::string label) : Base(), Notify<void (double)>(), Value<double>(), Labeled(label) {
 }
 
 Range::~Range() {

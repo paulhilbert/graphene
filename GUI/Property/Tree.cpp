@@ -6,7 +6,7 @@
 namespace GUI {
 namespace Property {
 
-Tree::Tree(std::string label) : Base(), Labeled(label), Notify<std::string, bool>() {
+Tree::Tree(std::string label) : Base(), Labeled(label), Notify<void (std::string, bool)>() {
 }
 
 Tree::~Tree() {

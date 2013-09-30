@@ -3,7 +3,7 @@
 namespace GUI {
 namespace Property {
 
-Folder::Folder(std::string label) : Base(), Notify<fs::path>(), Value<fs::path>(), Labeled(label) {
+Folder::Folder(std::string label) : Base(), Notify<void (fs::path)>(), Value<fs::path>(), Labeled(label) {
 }
 
 Folder::~Folder() {

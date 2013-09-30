@@ -16,11 +16,11 @@ namespace Property {
 
 typedef std::vector<fs::path> Paths;
 
-class Files : public Base, public Notify<Paths>, public Value<Paths>, public Labeled {
+class Files : public Base, public Notify<void (Paths)>, public Value<Paths>, public Labeled {
 	public:
 		typedef std::shared_ptr<Files> Ptr;
 		typedef std::weak_ptr<Files>   WPtr;
-		using Notify<Paths>::Callback;
+		using Notify<void (Paths)>::Callback;
 
 	public:
 		Files(std::string label);

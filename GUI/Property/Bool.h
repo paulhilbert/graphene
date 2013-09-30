@@ -9,11 +9,11 @@
 namespace GUI {
 namespace Property {
 
-class Bool : public Base, public Value<bool>, public Notify<bool>, public Labeled {
+class Bool : public Base, public Value<bool>, public Notify<void (bool)>, public Labeled {
 	public:
 		typedef std::shared_ptr<Bool> Ptr;
 		typedef std::weak_ptr<Bool>   WPtr;
-		using Notify<bool>::Callback;
+		using Notify<void (bool)>::Callback;
 
 	public:
 		Bool(std::string label);

@@ -9,11 +9,11 @@
 namespace GUI {
 namespace Property {
 
-class String : public Base, public Notify<std::string>, public Value<std::string>, public Labeled {
+class String : public Base, public Notify<void (std::string)>, public Value<std::string>, public Labeled {
 	public:
 		typedef std::shared_ptr<String> Ptr;
 		typedef std::weak_ptr<String>   WPtr;
-		using Notify<std::string>::Callback;
+		using Notify<void (std::string)>::Callback;
 
 	public:
 		String(std::string label);

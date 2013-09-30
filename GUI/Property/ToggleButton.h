@@ -9,11 +9,11 @@
 namespace GUI {
 namespace Property {
 
-class ToggleButton : public Base, public Notify<bool>, public Value<bool>, public Labeled {
+class ToggleButton : public Base, public Notify<void (bool)>, public Value<bool>, public Labeled {
 	public:
 		typedef std::shared_ptr<ToggleButton> Ptr;
 		typedef std::weak_ptr<ToggleButton>   WPtr;
-		using typename Notify<bool>::Callback;
+		using typename Notify<void (bool)>::Callback;
 
 	public:
 		ToggleButton(std::string label);

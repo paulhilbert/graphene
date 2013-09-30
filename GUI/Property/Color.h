@@ -12,11 +12,11 @@
 namespace GUI {
 namespace Property {
 
-class Color : public Base, public Notify<Eigen::Vector4f>, public Value<Eigen::Vector4f>, public Labeled {
+class Color : public Base, public Notify<void (Eigen::Vector4f)>, public Value<Eigen::Vector4f>, public Labeled {
 	public:
 		typedef std::shared_ptr<Color> Ptr;
 		typedef std::weak_ptr<Color>   WPtr;
-		using Notify<Eigen::Vector4f>::Callback;
+		using Notify<void (Eigen::Vector4f)>::Callback;
 
 	public:
 		Color(std::string label);

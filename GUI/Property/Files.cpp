@@ -3,7 +3,7 @@
 namespace GUI {
 namespace Property {
 
-Files::Files(std::string label) : Base(), Notify<Paths>(), Value<Paths>(), Labeled(label) {
+Files::Files(std::string label) : Base(), Notify<void (Paths)>(), Value<Paths>(), Labeled(label) {
 }
 
 Files::~Files() {

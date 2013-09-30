@@ -11,11 +11,11 @@
 namespace GUI {
 namespace Property {
 
-class Choice : public Base, public Notify<std::string>, public Value<std::string>, public Labeled {
+class Choice : public Base, public Notify<void (std::string)>, public Value<std::string>, public Labeled {
 	public:
 		typedef std::shared_ptr<Choice> Ptr;
 		typedef std::weak_ptr<Choice>   WPtr;
-		using Notify<std::string>::Callback;
+		using Notify<void (std::string)>::Callback;
 
 		struct Option {
 			std::string  id;

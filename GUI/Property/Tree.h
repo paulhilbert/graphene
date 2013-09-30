@@ -13,7 +13,7 @@
 namespace GUI {
 namespace Property {
 
-class Tree : public Base, public Labeled, public Notify<std::string, bool> {
+class Tree : public Base, public Labeled, public Notify<void (std::string, bool)> {
 	public:
 		typedef std::shared_ptr<Tree> Ptr;
 		typedef std::weak_ptr<Tree> WPtr;

@@ -12,11 +12,11 @@ namespace fs = boost::filesystem;
 namespace GUI {
 namespace Property {
 
-class Folder : public Base, public Notify<fs::path>, public Value<fs::path>, public Labeled {
+class Folder : public Base, public Notify<void (fs::path)>, public Value<fs::path>, public Labeled {
 	public:
 		typedef std::shared_ptr<Folder> Ptr;
 		typedef std::weak_ptr<Folder>   WPtr;
-		using Notify<fs::path>::Callback;
+		using Notify<void (fs::path)>::Callback;
 
 	public:
 		Folder(std::string label);

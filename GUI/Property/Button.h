@@ -8,11 +8,11 @@
 namespace GUI {
 namespace Property {
 
-class Button : public Base, public Notify<>, public Labeled {
+class Button : public Base, public Notify<void (void)>, public Labeled {
 	public:
 		typedef std::shared_ptr<Button> Ptr;
 		typedef std::weak_ptr<Button>   WPtr;
-		using typename Notify<>::Callback;
+		using typename Notify<void (void)>::Callback;
 
 	public:
 		Button(std::string label);
