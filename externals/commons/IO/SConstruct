@@ -1,0 +1,5 @@
+env = Environment(CCFLAGS = "-Wall -g -O3 -DUSE_BOOST_RANDOM -D USE_BASH_COLORS -fPIC -std=c++11")
+#env = Environment(CCFLAGS = "-Wall -g -O3 -DUSE_BOOST_RANDOM -fPIC")
+lib = env.Library('IO', ['Log.cpp','Console.cpp','Types.cpp', 'ProgressBar.cpp'])
+env.Install('/usr/local/lib/commons', lib)
+env.Alias('install', '/usr/local/lib/commons')
