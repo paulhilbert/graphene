@@ -9,17 +9,17 @@ namespace Vis {
 
 struct ColorConversion {
 	template <class Scalar>
-	static RGB<Scalar>  hsv2rgb   (HSV<Scalar>  hsv);
+	static RGB  hsv2rgb   (HSV  hsv);
 	template <class Scalar>
-	static RGBA<Scalar> hsva2rgba (HSVA<Scalar> hsva);
+	static RGBA hsva2rgba (HSVA hsva);
 	template <class Scalar>
-	static HSV<Scalar>  rgb2hsv   (RGB<Scalar>  rgb);
+	static HSV  rgb2hsv   (RGB  rgb);
 	template <class Scalar>
-	static HSVA<Scalar> rgba2hsva (RGBA<Scalar> rgba);
+	static HSVA rgba2hsva (RGBA rgba);
 };
 
 template <class Scalar>
-RGB<Scalar> ColorConversion::hsv2rgb(HSV<Scalar> hsv) {
+RGB ColorConversion::hsv2rgb(HSV hsv) {
 	Scalar a = hsv[0] / (M_PI / 3.0);
 	Scalar c = std::floor(a);
 	Scalar f = a - c;
@@ -43,11 +43,11 @@ RGB<Scalar> ColorConversion::hsv2rgb(HSV<Scalar> hsv) {
 		r = hsv[2]; g = t; b = p;
 	}
 
-	return RGB<Scalar>(r,g,b);
+	return RGB(r,g,b);
 }
 
 template <class Scalar>
-RGBA<Scalar> ColorConversion::hsva2rgba(HSVA<Scalar> hsva) {
+RGBA ColorConversion::hsva2rgba(HSVA hsva) {
 	Scalar a = hsva[0] / (M_PI / 3.0);
 	Scalar c = std::floor(a);
 	Scalar f = a - c;
@@ -71,11 +71,11 @@ RGBA<Scalar> ColorConversion::hsva2rgba(HSVA<Scalar> hsva) {
 		r = hsva[2]; g = t; b = p;
 	}
 
-	return RGBA<Scalar>(r,g,b,hsva[3]);
+	return RGBA(r,g,b,hsva[3]);
 }
 
 template <class Scalar>
-HSV<Scalar> ColorConversion::rgb2hsv(RGB<Scalar> rgb) {
+HSV ColorConversion::rgb2hsv(RGB rgb) {
 	Scalar min = std::min(std::min(rgb[0], rgb[1]), rgb[2]);
 	Scalar max = std::max(std::max(rgb[0], rgb[1]), rgb[2]);
 
@@ -102,11 +102,11 @@ HSV<Scalar> ColorConversion::rgb2hsv(RGB<Scalar> rgb) {
 
 	Scalar v = max;
 
-	return HSV<Scalar>(h,s,v);
+	return HSV(h,s,v);
 }
 
 template <class Scalar>
-HSVA<Scalar> ColorConversion::rgba2hsva(RGBA<Scalar> rgba) {
+HSVA ColorConversion::rgba2hsva(RGBA rgba) {
 	Scalar min = std::min(std::min(rgba[0], rgba[1]), rgba[2]);
 	Scalar max = std::max(std::max(rgba[0], rgba[1]), rgba[2]);
 
@@ -121,7 +121,7 @@ HSVA<Scalar> ColorConversion::rgba2hsva(RGBA<Scalar> rgba) {
 		h = M_PI / 3.0 * (4.0 + (rgba[0]-rgba[1]) / (max-min));
 	}
 	if (h < 0.0) {
-		h += M_PI * 2.0;
+		h += static_cast<float>(M_PI * 2.0);
 	}
 
 	Scalar s;
@@ -133,7 +133,7 @@ HSVA<Scalar> ColorConversion::rgba2hsva(RGBA<Scalar> rgba) {
 
 	Scalar v = max;
 
-	return HSVA<Scalar>(h,s,v,rgba[3]);
+	return HSVA(h,s,v,rgba[3]);
 }
 
 } /* Vis */

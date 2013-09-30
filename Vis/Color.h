@@ -6,8 +6,8 @@
 
 namespace Vis {
 
-template <class Scalar=float, int Dim=3>
-using Color = Eigen::Matrix<Scalar, Dim, 1>;
+//template <class Scalar=float, int Dim=3>
+//using Color = Eigen::Matrix<Scalar, Dim, 1>;
 
 
 /*
@@ -79,6 +79,11 @@ struct HSVA : public Color<Scalar, 4> {
 };
 */
 
+typedef Eigen::Matrix<float, 3, 1> RGB;
+typedef Eigen::Matrix<float, 3, 1> HSV;
+typedef Eigen::Matrix<float, 4, 1> RGBA;
+typedef Eigen::Matrix<float, 4, 1> HSVA;
+/*
 template <class Scalar=float>
 using RGB  = Color<Scalar, 3>;
 
@@ -90,6 +95,7 @@ using RGBA = Color<Scalar, 4>;
 
 template <class Scalar=float>
 using HSVA = Color<Scalar, 4>;
+*/
 
 } // Vis
 

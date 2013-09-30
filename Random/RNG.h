@@ -113,7 +113,7 @@ inline void RNG::seed() {
 #ifdef DETERMINISTIC
 	seed(0);
 #else
-	seed(time(0));
+	seed(static_cast<unsigned int>(time(0)));
 #endif
 }
 inline void RNG::seed(unsigned int s) {

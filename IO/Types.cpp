@@ -8,6 +8,7 @@ Flags::PrintOptions Flags::END = 1<<2;
 Flags::PrintOptions Flags::UPDATE = Flags::CLEAR | Flags::FLUSH;
 Flags::PrintOptions Flags::LASTUPDATE = Flags::END | Flags::CLEAR | Flags::FLUSH;
 
+#ifdef USE_BASH_COLORS
 std::string Types::color(Color col) {
 	switch (col) {
 		case RED:    return std::string("\033[1;31m");
@@ -17,5 +18,6 @@ std::string Types::color(Color col) {
 		default: return std::string("\e[0m");
 	}
 }
+#endif
 
 } // IO

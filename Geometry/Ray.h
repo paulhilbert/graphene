@@ -21,7 +21,6 @@ class Ray {
 		typedef std::pair<float,float>   Limits;
 		typedef std::tuple<Vec,Vec,Vec>  Triangle;
 
-		static constexpr float inf = std::numeric_limits<float>::infinity();
 
 	public:
 		Ray(Vec direction = Vec(0,0,1), Vec origin = Vec(0,0,0));
@@ -36,9 +35,9 @@ class Ray {
 		void setPoints(Vec p0, Vec p1);
 
 		OptVec intersectRay(const Ray& other) const;
-		bool   intersectSphere(const Vec& c, float r, Vec& intersection, float& lambda, Limits limits = {0.f, inf}) const;
-		bool   intersectTriangle(const Triangle& t, Vec& intersection, float& lambda, Limits limits = {0.f, inf}) const;
-		float  distance( const Ray& other, Limits limitThis = {0.f, inf}, Limits limitOther = {0.f, inf}, Vec* pointThis = NULL, Vec* pointOther = NULL ) const;
+		bool   intersectSphere(const Vec& c, float r, Vec& intersection, float& lambda, Limits limits = Limits(0.f, std::numeric_limits<float>::infinity())) const;
+		bool   intersectTriangle(const Triangle& t, Vec& intersection, float& lambda, Limits limits = Limits(0.f, std::numeric_limits<float>::infinity())) const;
+		float  distance( const Ray& other, Limits limitThis = Limits(0.f, std::numeric_limits<float>::infinity()), Limits limitOther = Limits(0.f, std::numeric_limits<float>::infinity()), Vec* pointThis = NULL, Vec* pointOther = NULL ) const;
 
 	protected:
 		Vec  m_direction;

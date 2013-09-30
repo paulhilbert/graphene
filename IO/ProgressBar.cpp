@@ -9,13 +9,15 @@ ProgressBar::ProgressBar(int steps, int width, bool printPercent) : m_steps(step
 
 std::string ProgressBar::poll(float progress) {
 	if (progress >= 1.f) return std::string("Done.");
-	char sB[m_width+1]; sB[0] = sB[m_width-1] = '|'; sB[m_width] = '\0';
+	char* sB = new char[m_width+1]; sB[0] = sB[m_width-1] = '|'; sB[m_width] = '\0';
 	for (int i=1; i< m_width-1; ++i) 
 		sB[i] = (i<=static_cast<int>(progress*(m_width-2))?'=':' ');
 	if (!m_printPercent) return std::string(sB);
-	char s[m_width+6];
+	char* s = new char[m_width+6];
 	int pI = static_cast<int>(progress * 100.f);
 	sprintf(s, "%s %3d%%", sB, pI);
+	delete [] sB;
+	delete [] s;
 	return std::string(s);
 }
 

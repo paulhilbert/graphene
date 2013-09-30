@@ -12,5 +12,5 @@ inline std::string join(const std::vector<std::string>& strings, const std::stri
 
 inline std::vector<std::string> split(const std::string& str, const std::string& regex) {
 	boost::sregex_token_iterator first(str.begin(), str.end(), boost::basic_regex<char>(regex), -1), last;
-	return {first, last};
+	return std::vector<std::string>(first, last);
 }

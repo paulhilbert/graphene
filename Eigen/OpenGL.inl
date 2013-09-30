@@ -37,7 +37,7 @@ inline Matrix4f ortho(float left, float right, float bottom, float top) {
 }
 
 inline Matrix4f perspective( float fovy, float aspect,	float zNear, float zFar) {
-	float range = std::tan((fovy / 2.f) * M_PI / 180.f) * zNear;	
+	float range = static_cast<float>(std::tan((fovy / 2.f) * M_PI / 180.f) * zNear);	
 	float left = -range * aspect;
 	float right = range * aspect;
 	float bottom = -range;
