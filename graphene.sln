@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "graphene", "graphene.vcxproj", "{EC8063B0-ECC0-4CBA-A1AE-46924AD60661}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "graphene_lib", "graphene_lib.vcxproj", "{44F40F89-598B-473C-9ED8-8526FF48B885}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "graphene_qt5", "Backends\Qt5\graphene_qt5.vcxproj", "{FAE9ED6D-4D7C-37BF-8036-F757B78EF612}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC8063B0-ECC0-4CBA-A1AE-46924AD60661}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{EC8063B0-ECC0-4CBA-A1AE-46924AD60661}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{EC8063B0-ECC0-4CBA-A1AE-46924AD60661}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EC8063B0-ECC0-4CBA-A1AE-46924AD60661}.Debug|Win32.Build.0 = Debug|Win32
+		{EC8063B0-ECC0-4CBA-A1AE-46924AD60661}.Debug|x64.ActiveCfg = Debug|x64
+		{EC8063B0-ECC0-4CBA-A1AE-46924AD60661}.Debug|x64.Build.0 = Debug|x64
+		{EC8063B0-ECC0-4CBA-A1AE-46924AD60661}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{EC8063B0-ECC0-4CBA-A1AE-46924AD60661}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{EC8063B0-ECC0-4CBA-A1AE-46924AD60661}.Release|Win32.ActiveCfg = Release|Win32
+		{EC8063B0-ECC0-4CBA-A1AE-46924AD60661}.Release|Win32.Build.0 = Release|Win32
+		{EC8063B0-ECC0-4CBA-A1AE-46924AD60661}.Release|x64.ActiveCfg = Release|x64
+		{EC8063B0-ECC0-4CBA-A1AE-46924AD60661}.Release|x64.Build.0 = Release|x64
+		{44F40F89-598B-473C-9ED8-8526FF48B885}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{44F40F89-598B-473C-9ED8-8526FF48B885}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{44F40F89-598B-473C-9ED8-8526FF48B885}.Debug|Win32.ActiveCfg = Debug|Win32
+		{44F40F89-598B-473C-9ED8-8526FF48B885}.Debug|Win32.Build.0 = Debug|Win32
+		{44F40F89-598B-473C-9ED8-8526FF48B885}.Debug|x64.ActiveCfg = Debug|x64
+		{44F40F89-598B-473C-9ED8-8526FF48B885}.Debug|x64.Build.0 = Debug|x64
+		{44F40F89-598B-473C-9ED8-8526FF48B885}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{44F40F89-598B-473C-9ED8-8526FF48B885}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{44F40F89-598B-473C-9ED8-8526FF48B885}.Release|Win32.ActiveCfg = Release|Win32
+		{44F40F89-598B-473C-9ED8-8526FF48B885}.Release|Win32.Build.0 = Release|Win32
+		{44F40F89-598B-473C-9ED8-8526FF48B885}.Release|x64.ActiveCfg = Release|x64
+		{44F40F89-598B-473C-9ED8-8526FF48B885}.Release|x64.Build.0 = Release|x64
+		{FAE9ED6D-4D7C-37BF-8036-F757B78EF612}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{FAE9ED6D-4D7C-37BF-8036-F757B78EF612}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{FAE9ED6D-4D7C-37BF-8036-F757B78EF612}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FAE9ED6D-4D7C-37BF-8036-F757B78EF612}.Debug|Win32.Build.0 = Debug|Win32
+		{FAE9ED6D-4D7C-37BF-8036-F757B78EF612}.Debug|x64.ActiveCfg = Debug|x64
+		{FAE9ED6D-4D7C-37BF-8036-F757B78EF612}.Debug|x64.Build.0 = Debug|x64
+		{FAE9ED6D-4D7C-37BF-8036-F757B78EF612}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{FAE9ED6D-4D7C-37BF-8036-F757B78EF612}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{FAE9ED6D-4D7C-37BF-8036-F757B78EF612}.Release|Win32.ActiveCfg = Release|Win32
+		{FAE9ED6D-4D7C-37BF-8036-F757B78EF612}.Release|Win32.Build.0 = Release|Win32
+		{FAE9ED6D-4D7C-37BF-8036-F757B78EF612}.Release|x64.ActiveCfg = Release|x64
+		{FAE9ED6D-4D7C-37BF-8036-F757B78EF612}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

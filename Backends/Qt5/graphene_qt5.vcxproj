@@ -1,0 +1,792 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{FAE9ED6D-4D7C-37BF-8036-F757B78EF612}</ProjectGuid>
+    <RootNamespace>backendQt5</RootNamespace>
+    <Keyword>Qt4VSv1.0</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <PlatformToolSet>v110</PlatformToolSet>
+    <OutputDirectory>.\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <IntermediateDirectory>release\</IntermediateDirectory>
+    <PrimaryOutput>backendQt5</PrimaryOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <PlatformToolSet>v110</PlatformToolSet>
+    <OutputDirectory>.\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <IntermediateDirectory>release\</IntermediateDirectory>
+    <PrimaryOutput>backendQt5</PrimaryOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <PlatformToolSet>v110</PlatformToolSet>
+    <OutputDirectory>.\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <IntermediateDirectory>debug\</IntermediateDirectory>
+    <PrimaryOutput>backendQt5</PrimaryOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <PlatformToolSet>v110</PlatformToolSet>
+    <OutputDirectory>.\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <IntermediateDirectory>debug\</IntermediateDirectory>
+    <PrimaryOutput>backendQt5</PrimaryOutput>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)/Backends/</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)/obj/</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">backendQt5</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">backendQt5</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</IgnoreImportLibrary>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)/Backends/</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)/obj/</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">backendQt5</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">backendQt5</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IgnoreImportLibrary>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>$(SolutionDir)/obj/</IntDir>
+    <OutDir>$(SolutionDir)/Backends/</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(SolutionDir)/obj/</IntDir>
+    <OutDir>$(SolutionDir)/Backends/</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;GUI;GUI\Property;GUI\Mode;..\..;..\..\externals\commons;\usr\include\eigen3;\usr\include\qt;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore;$(EIGEN_INC);$(BOOST_ROOT);../../externals/commons;$(GLEW_ROOT)/$(PlatformArchitecture)bit/include;release;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>release\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_CRT_SECURE_NO_WARNINGS;UNICODE;WIN32;QT_NO_DEBUG;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;NDEBUG;QT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;gdi32.lib;user32.lib;$(SolutionDir)graphene.lib;$(QTDIR)\lib\Qt5OpenGL.lib;$(QTDIR)\lib\Qt5Widgets.lib;$(QTDIR)\lib\Qt5Gui.lib;$(QTDIR)\lib\Qt5Core.lib;Qt5Core.lib;Qt5Gui.lib;Qt5OpenGL.lib;Qt5Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)/stage/lib;$(GLEW_ROOT)/$(PlatformArchitecture)bit/lib;$(QTDIR)\lib;..\..\;C:\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkDLL>true</LinkDLL>
+      <LinkIncremental>false</LinkIncremental>
+      <OutputFile>$(OutDir)\backendQt5.dll</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(OutDir)$(TargetName).pgd</ProfileGuidedDatabase>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_NO_DEBUG;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;GUI;GUI\Property;GUI\Mode;..\..;..\..\externals\commons;\usr\include\eigen3;\usr\include\qt;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore;$(EIGEN_INC);$(BOOST_ROOT);../../externals/commons;$(GLEW_ROOT)/$(PlatformArchitecture)bit/include;release;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>release\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_CRT_SECURE_NO_WARNINGS;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_NO_DEBUG;QT_OPENGL_LIB;QT_WIDGETS_LIB;UNICODE;UNICODE;WIN32;WIN32;WIN64;QT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;gdi32.lib;user32.lib;$(SolutionDir)graphene.lib;$(QTDIR)\lib\Qt5OpenGL.lib;$(QTDIR)\lib\Qt5Widgets.lib;$(QTDIR)\lib\Qt5Gui.lib;$(QTDIR)\lib\Qt5Core.lib;Qt5Core.lib;Qt5Gui.lib;Qt5OpenGL.lib;Qt5Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)/stage/lib;$(GLEW_ROOT)/$(PlatformArchitecture)bit/lib;$(QTDIR)\lib;..\..\;C:\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkDLL>true</LinkDLL>
+      <LinkIncremental>false</LinkIncremental>
+      <OutputFile>$(OutDir)\backendQt5.dll</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+      <AdditionalOptions> /SUBSYSTEM:WINDOWS</AdditionalOptions>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(OutDir)$(TargetName).pgd</ProfileGuidedDatabase>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_NO_DEBUG;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;GUI;GUI\Property;GUI\Mode;..\..;..\..\externals\commons;\usr\include\eigen3;\usr\include\qt;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore;$(EIGEN_INC);$(BOOST_ROOT);../../externals/commons;$(GLEW_ROOT)/$(PlatformArchitecture)bit/include;debug;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>debug\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_CRT_SECURE_NO_WARNINGS;UNICODE;WIN32;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;QT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;gdi32.lib;user32.lib;$(SolutionDir)graphene.lib;$(QTDIR)\lib\Qt5OpenGLd.lib;$(QTDIR)\lib\Qt5Widgetsd.lib;$(QTDIR)\lib\Qt5Guid.lib;$(QTDIR)\lib\Qt5Cored.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5OpenGLd.lib;Qt5Widgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)/stage/lib;$(GLEW_ROOT)/$(PlatformArchitecture)bit/lib;$(QTDIR)\lib;..\..\;C:\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkDLL>true</LinkDLL>
+      <OutputFile>$(OutDir)\backendQt5.dll</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(OutDir)$(TargetName).pgd</ProfileGuidedDatabase>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;GUI;GUI\Property;GUI\Mode;..\..;..\..\externals\commons;\usr\include\eigen3;\usr\include\qt;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore;$(EIGEN_INC);$(BOOST_ROOT);../../externals/commons;$(GLEW_ROOT)/$(PlatformArchitecture)bit/include;debug;..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>debug\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_CRT_SECURE_NO_WARNINGS;QT_CORE_LIB;QT_GUI_LIB;QT_OPENGL_LIB;QT_WIDGETS_LIB;UNICODE;UNICODE;WIN32;WIN32;WIN64;QT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;gdi32.lib;user32.lib;$(SolutionDir)graphene.lib;$(QTDIR)\lib\Qt5OpenGLd.lib;$(QTDIR)\lib\Qt5Widgetsd.lib;$(QTDIR)\lib\Qt5Guid.lib;$(QTDIR)\lib\Qt5Cored.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5OpenGLd.lib;Qt5Widgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)/stage/lib;$(GLEW_ROOT)/$(PlatformArchitecture)bit/lib;$(QTDIR)\lib;..\..\;C:\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkDLL>true</LinkDLL>
+      <OutputFile>$(OutDir)\backendQt5.dll</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+      <AdditionalOptions> /SUBSYSTEM:WINDOWS</AdditionalOptions>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(OutDir)$(TargetName).pgd</ProfileGuidedDatabase>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Debug\moc_Qt5AddVisDialog.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5Backend.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5Bool.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5Button.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5Choice.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5Color.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5File.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5Files.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5Folder.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5GLWidget.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5LogDialog.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5Number.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5Option.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5Range.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5Section.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5String.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5ToggleButton.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_Qt5Tree.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="GUI\Qt5AddVisDialog.cpp" />
+    <ClCompile Include="GUI\Qt5Backend.cpp" />
+    <ClCompile Include="GUI\Property\Qt5Bool.cpp" />
+    <ClCompile Include="GUI\Property\Qt5Button.cpp" />
+    <ClCompile Include="GUI\Property\Qt5Choice.cpp" />
+    <ClCompile Include="GUI\Property\Qt5Color.cpp" />
+    <ClCompile Include="GUI\Property\Qt5Container.cpp" />
+    <ClCompile Include="GUI\Property\Qt5FactorySettings.cpp" />
+    <ClCompile Include="GUI\Property\Qt5File.cpp" />
+    <ClCompile Include="GUI\Property\Qt5Files.cpp" />
+    <ClCompile Include="GUI\Property\Qt5Folder.cpp" />
+    <ClCompile Include="GUI\Qt5GLWidget.cpp" />
+    <ClCompile Include="GUI\Mode\Qt5ModeGroup.cpp" />
+    <ClCompile Include="GUI\Property\Qt5PropGroup.cpp" />
+    <ClCompile Include="GUI\Mode\Qt5Handle.cpp" />
+    <ClCompile Include="GUI\Qt5Log.cpp" />
+    <ClCompile Include="GUI\Qt5LogDialog.cpp" />
+    <ClCompile Include="GUI\Property\Qt5Number.cpp" />
+    <ClCompile Include="GUI\Mode\Qt5Option.cpp" />
+    <ClCompile Include="GUI\Property\Qt5Range.cpp" />
+    <ClCompile Include="GUI\Property\Qt5Section.cpp" />
+    <ClCompile Include="GUI\Property\Qt5Separator.cpp" />
+    <ClCompile Include="GUI\Qt5Settings.cpp" />
+    <ClCompile Include="GUI\Qt5Status.cpp" />
+    <ClCompile Include="GUI\Property\Qt5String.cpp" />
+    <ClCompile Include="GUI\Property\Qt5ToggleButton.cpp" />
+    <ClCompile Include="GUI\Property\Qt5Tree.cpp" />
+    <ClCompile Include="GUI\Property\Qt5VisSettings.cpp" />
+    <ClCompile Include="backendQt5.cpp" />
+    <ClCompile Include="Release\moc_Qt5Tree.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="GUI\Qt5AddVisDialog.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5AddVisDialog.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5AddVisDialog.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5AddVisDialog.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5AddVisDialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="GUI\Qt5Backend.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5Backend.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5Backend.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5Backend.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5Backend.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="GUI\Property\Qt5Bool.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5Bool.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5Bool.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5Bool.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5Bool.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="GUI\Property\Qt5Button.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5Button.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5Button.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5Button.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5Button.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="GUI\Property\Qt5Choice.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5Choice.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5Choice.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5Choice.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5Choice.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="GUI\Property\Qt5Color.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5Color.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5Color.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5Color.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5Color.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <ClInclude Include="GUI\Property\Qt5Container.h" />
+    <ClInclude Include="GUI\Property\Qt5FactorySettings.h" />
+    <CustomBuild Include="GUI\Property\Qt5File.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5File.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5File.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5File.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5File.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="GUI\Property\Qt5Files.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5Files.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5Files.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5Files.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5Files.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="GUI\Property\Qt5Folder.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5Folder.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5Folder.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5Folder.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5Folder.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="GUI\Qt5GLWidget.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5GLWidget.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5GLWidget.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5GLWidget.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5GLWidget.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <ClInclude Include="GUI\Mode\Qt5ModeGroup.h" />
+    <ClInclude Include="GUI\Property\Qt5PropGroup.h" />
+    <ClInclude Include="GUI\Mode\Qt5Handle.h" />
+    <ClInclude Include="GUI\Qt5Log.h" />
+    <CustomBuild Include="GUI\Qt5LogDialog.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5LogDialog.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5LogDialog.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5LogDialog.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5LogDialog.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="GUI\Property\Qt5Number.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5Number.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5Number.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5Number.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5Number.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="GUI\Mode\Qt5Option.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5Option.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5Option.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5Option.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5Option.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="GUI\Property\Qt5Range.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5Range.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5Range.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5Range.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5Range.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="GUI\Property\Qt5Section.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5Section.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5Section.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5Section.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5Section.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <ClInclude Include="GUI\Property\Qt5Separator.h" />
+    <ClInclude Include="GUI\Qt5Settings.h" />
+    <ClInclude Include="GUI\Qt5Status.h" />
+    <CustomBuild Include="GUI\Property\Qt5String.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5String.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5String.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5String.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5String.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="GUI\Property\Qt5ToggleButton.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5ToggleButton.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5ToggleButton.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5ToggleButton.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5ToggleButton.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="GUI\Property\Qt5Tree.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\release" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing Qt5Tree.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing Qt5Tree.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -D_WINDLL  "-I." "-I.\GUI" "-I.\GUI\Property" "-I.\GUI\Mode" "-I.\..\.." "-I.\..\..\externals\commons" "-I\usr\include\eigen3" "-I\usr\include\qt" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtOpenGL" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtWidgets" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtGui" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\include\QtCore" "-I$(EIGEN_INC)\." "-I$(BOOST_ROOT)\." "-I.\..\..\externals\commons" "-I$(GLEW_ROOT)\$(PlatformArchitecture)bit\include" "-I.\debug" "-I.\..\..\..\..\..\..\lib\Qt\Qt5.1.1\5.1.1\msvc2012_64_opengl\mkspecs\win32-msvc2010" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Qt5Tree.h...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing Qt5Tree.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <ClInclude Include="GUI\Property\Qt5VisSettings.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Release\moc_Qt5AddVisDialog.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5Backend.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5Bool.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5Button.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5Choice.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5Color.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5File.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5Files.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5Folder.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5GLWidget.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5LogDialog.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5Number.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5Option.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5Range.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5Section.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5String.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Release\moc_Qt5ToggleButton.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Qt5Version_x0020_x64="5.5.1" UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

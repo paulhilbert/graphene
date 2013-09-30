@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{EC8063B0-ECC0-4CBA-A1AE-46924AD60661}</ProjectGuid>
+    <RootNamespace>graphene</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)/</OutDir>
+    <IntDir>$(SolutionDir)/obj/</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)/</OutDir>
+    <IntDir>$(SolutionDir)/obj/</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)/</OutDir>
+    <IntDir>$(SolutionDir)/obj/</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)/</OutDir>
+    <IntDir>$(SolutionDir)/obj/</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.;$(EIGEN_INC);$(BOOST_ROOT);externals/commons;$(GLEW_ROOT)/$(PlatformArchitecture)bit/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)/stage/lib;$(GLEW_ROOT)/$(PlatformArchitecture)bit/lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.;$(EIGEN_INC);$(BOOST_ROOT);externals/commons;$(GLEW_ROOT)/$(PlatformArchitecture)bit/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)/stage/lib;$(GLEW_ROOT)/$(PlatformArchitecture)bit/lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>.;$(EIGEN_INC);$(BOOST_ROOT);externals/commons;$(GLEW_ROOT)/$(PlatformArchitecture)bit/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)/stage/lib;$(GLEW_ROOT)/$(PlatformArchitecture)bit/lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>.;$(EIGEN_INC);$(BOOST_ROOT);externals/commons;$(GLEW_ROOT)/$(PlatformArchitecture)bit/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)/stage/lib;$(GLEW_ROOT)/$(PlatformArchitecture)bit/lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="externals\commons\IO\Console.cpp" />
+    <ClCompile Include="externals\commons\IO\Log.cpp" />
+    <ClCompile Include="externals\commons\IO\ProgressBar.cpp" />
+    <ClCompile Include="externals\commons\IO\Types.cpp" />
+    <ClCompile Include="externals\commons\Random\RNG.cpp" />
+    <ClCompile Include="FW\Events\EventHandler.cpp" />
+    <ClCompile Include="FW\Events\Modifier.cpp" />
+    <ClCompile Include="FW\Factory.cpp" />
+    <ClCompile Include="FW\FWVisualizerHandle.cpp" />
+    <ClCompile Include="FW\FWGraphene.cpp" />
+    <ClCompile Include="FW\View\Camera.cpp" />
+    <ClCompile Include="FW\View\CameraControl.cpp" />
+    <ClCompile Include="FW\View\FlyCameraControl.cpp" />
+    <ClCompile Include="FW\View\OrbitCameraControl.cpp" />
+    <ClCompile Include="FW\Visualizer.cpp" />
+    <ClCompile Include="graphene.cpp" />
+    <ClCompile Include="GUI\Backend.cpp" />
+    <ClCompile Include="GUI\GUIElement.cpp" />
+    <ClCompile Include="GUI\GUIFactoryHandle.cpp" />
+    <ClCompile Include="GUI\GUIVisualizerHandle.cpp" />
+    <ClCompile Include="GUI\GUILog.cpp" />
+    <ClCompile Include="GUI\Mode\ModeGroup.cpp" />
+    <ClCompile Include="GUI\Mode\Handle.cpp" />
+    <ClCompile Include="GUI\Mode\Option.cpp" />
+    <ClCompile Include="GUI\Property\Base.cpp" />
+    <ClCompile Include="GUI\Property\Bool.cpp" />
+    <ClCompile Include="GUI\Property\Button.cpp" />
+    <ClCompile Include="GUI\Property\Choice.cpp" />
+    <ClCompile Include="GUI\Property\Color.cpp" />
+    <ClCompile Include="GUI\Property\Container.cpp" />
+    <ClCompile Include="GUI\Property\File.cpp" />
+    <ClCompile Include="GUI\Property\Files.cpp" />
+    <ClCompile Include="GUI\Property\Folder.cpp" />
+    <ClCompile Include="GUI\Property\PropGroup.cpp" />
+    <ClCompile Include="GUI\Property\Labeled.cpp" />
+    <ClCompile Include="GUI\Property\Number.cpp" />
+    <ClCompile Include="GUI\Property\Range.cpp" />
+    <ClCompile Include="GUI\Property\Section.cpp" />
+    <ClCompile Include="GUI\Property\Separator.cpp" />
+    <ClCompile Include="GUI\Property\String.cpp" />
+    <ClCompile Include="GUI\Property\ToggleButton.cpp" />
+    <ClCompile Include="GUI\Property\Tree.cpp" />
+    <ClCompile Include="GUI\Status.cpp" />
+    <ClCompile Include="Library\Buffer\FBO.cpp" />
+    <ClCompile Include="Library\Buffer\Geometry.cpp" />
+    <ClCompile Include="Library\Buffer\HdrFile.cpp" />
+    <ClCompile Include="Library\Buffer\IBO.cpp" />
+    <ClCompile Include="Library\Buffer\rgbe\rgbe.c" />
+    <ClCompile Include="Library\Buffer\Texture.cpp" />
+    <ClCompile Include="Library\Buffer\VAO.cpp" />
+    <ClCompile Include="Library\Rendered\Cube.cpp" />
+    <ClCompile Include="Library\Rendered\Point.cpp" />
+    <ClCompile Include="Library\Shader\ShaderProgram.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FW\Events\EventHandler.h" />
+    <ClInclude Include="FW\Events\Handle.h" />
+    <ClInclude Include="FW\Events\Keys.h" />
+    <ClInclude Include="FW\Events\Modifier.h" />
+    <ClInclude Include="FW\Factory.h" />
+    <ClInclude Include="FW\FWFactoryHandle.h" />
+    <ClInclude Include="FW\FWGraphene.h" />
+    <ClInclude Include="FW\FWVisualizerHandle.h" />
+    <ClInclude Include="FW\View\Camera.h" />
+    <ClInclude Include="FW\View\CameraControl.h" />
+    <ClInclude Include="FW\View\FlyCameraControl.h" />
+    <ClInclude Include="FW\View\OrbitCameraControl.h" />
+    <ClInclude Include="FW\View\Transforms.h" />
+    <ClInclude Include="FW\Visualizer.h" />
+    <ClInclude Include="GUI\Backend.h" />
+    <ClInclude Include="GUI\GUIElement.h" />
+    <ClInclude Include="GUI\GUIFactoryHandle.h" />
+    <ClInclude Include="GUI\GUIVisualizerHandle.h" />
+    <ClInclude Include="GUI\GUILog.h" />
+    <ClInclude Include="GUI\Mode\ModeGroup.h" />
+    <ClInclude Include="GUI\Mode\Handle.h" />
+    <ClInclude Include="GUI\Mode\Option.h" />
+    <ClInclude Include="GUI\Property\Base.h" />
+    <ClInclude Include="GUI\Property\Bool.h" />
+    <ClInclude Include="GUI\Property\Button.h" />
+    <ClInclude Include="GUI\Property\Choice.h" />
+    <ClInclude Include="GUI\Property\Color.h" />
+    <ClInclude Include="GUI\Property\Container.h" />
+    <ClInclude Include="GUI\Property\File.h" />
+    <ClInclude Include="GUI\Property\Files.h" />
+    <ClInclude Include="GUI\Property\Folder.h" />
+    <ClInclude Include="GUI\Property\PropGroup.h" />
+    <ClInclude Include="GUI\Property\Labeled.h" />
+    <ClInclude Include="GUI\Property\Notify.h" />
+    <ClInclude Include="GUI\Property\Number.h" />
+    <ClInclude Include="GUI\Property\Range.h" />
+    <ClInclude Include="GUI\Property\Section.h" />
+    <ClInclude Include="GUI\Property\Separator.h" />
+    <ClInclude Include="GUI\Property\String.h" />
+    <ClInclude Include="GUI\Property\ToggleButton.h" />
+    <ClInclude Include="GUI\Property\Tree.h" />
+    <ClInclude Include="GUI\Property\Value.h" />
+    <ClInclude Include="GUI\Status.h" />
+    <ClInclude Include="Library\Buffer\DataBuffer.h" />
+    <ClInclude Include="Library\Buffer\FBO.h" />
+    <ClInclude Include="Library\Buffer\Geometry.h" />
+    <ClInclude Include="Library\Buffer\HdrFile.h" />
+    <ClInclude Include="Library\Buffer\IBO.h" />
+    <ClInclude Include="Library\Buffer\rgbe\rgbe.h" />
+    <ClInclude Include="Library\Buffer\Texture.h" />
+    <ClInclude Include="Library\Buffer\VAO.h" />
+    <ClInclude Include="Library\Buffer\VBO.h" />
+    <ClInclude Include="Library\Rendered\Cloud.h" />
+    <ClInclude Include="Library\Rendered\Cube.h" />
+    <ClInclude Include="Library\Rendered\Field.h" />
+    <ClInclude Include="Library\Rendered\Lines.h" />
+    <ClInclude Include="Library\Rendered\Point.h" />
+    <ClInclude Include="Library\Rendered\Vectors.h" />
+    <ClInclude Include="Library\Shader\Shader.h" />
+    <ClInclude Include="Library\Shader\ShaderProgram.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FW\Events\Handle.inl" />
+    <None Include="GUI\Property\Notify.inl" />
+    <None Include="GUI\Property\Value.inl" />
+    <None Include="Library\Buffer\Geometry.inl" />
+    <None Include="Library\Buffer\VAO.inl" />
+    <None Include="Library\Rendered\Cloud.inl" />
+    <None Include="Library\Rendered\Field.inl" />
+    <None Include="Library\Rendered\Lines.inl" />
+    <None Include="Library\Rendered\Vectors.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

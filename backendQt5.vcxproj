@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{AE5693B7-23A7-4B6F-82B8-8C433CBB4E41}</ProjectGuid>
+    <RootNamespace>backendQt5</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Backends\Qt5\backendQt5.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Mode\Qt5Group.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Mode\Qt5Handle.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Mode\Qt5Option.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5Bool.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5Button.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5Choice.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5Color.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5Container.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5FactorySettings.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5File.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5Files.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5Folder.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5Group.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5Number.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5Range.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5Section.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5Separator.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5String.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5ToggleButton.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5Tree.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Property\Qt5VisSettings.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Qt5AddVisDialog.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Qt5Backend.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Qt5GLWidget.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Qt5Log.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Qt5LogDialog.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Qt5Settings.cpp" />
+    <ClCompile Include="Backends\Qt5\GUI\Qt5Status.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Backends\Qt5\GUI\Mode\Qt5Group.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Mode\Qt5Handle.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Mode\Qt5Option.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5Bool.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5Button.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5Choice.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5Color.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5Container.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5FactorySettings.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5File.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5Files.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5Folder.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5Group.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5Number.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5Range.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5Section.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5Separator.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5String.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5ToggleButton.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5Tree.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Property\Qt5VisSettings.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Qt5AddVisDialog.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Qt5Backend.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Qt5GLWidget.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Qt5Log.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Qt5LogDialog.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Qt5Settings.h" />
+    <ClInclude Include="Backends\Qt5\GUI\Qt5Status.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
