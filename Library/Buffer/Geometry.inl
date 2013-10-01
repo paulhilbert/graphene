@@ -158,7 +158,7 @@ inline void Geometry::checkInitIndices() {
 
 inline int Geometry::getBufferIndex(Buffers buffer) {
 	if (m_bufferIndexMap.find(buffer) == m_bufferIndexMap.end()) {
-		Log::warn("Trying to get buffer index for uninitialized buffer.");
+		std::cout << "Trying to get buffer index for uninitialized buffer." << std::endl;
 		return -1;
 	}
 	return (int)m_bufferIndexMap[buffer];

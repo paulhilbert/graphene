@@ -1,6 +1,7 @@
 #ifndef SHADERPROGRAM_H_
 #define SHADERPROGRAM_H_
 
+#include <iostream>
 #include <memory>
 #include <vector>
 using std::vector;
@@ -59,7 +60,7 @@ inline void ShaderProgram::addShader(std::shared_ptr< Shader<ShaderType> > shade
 		case GL_VERTEX_SHADER:   m_vShader = std::dynamic_pointer_cast<VertexShader>(shader); break;
 		case GL_FRAGMENT_SHADER: m_fShader = std::dynamic_pointer_cast<FragmentShader>(shader); break;
 		case GL_GEOMETRY_SHADER: m_gShader = std::dynamic_pointer_cast<GeometryShader>(shader); break;
-		default: Log::error("Unknown shader type");
+		default: std::cout << "Unknown shader type" << std::endl;
 	}
 }
 
