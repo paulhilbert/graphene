@@ -1,5 +1,6 @@
 #include "FWGraphene.h"
 
+#include <iostream>
 #include <map>
 #include <tuple>
 #include <queue>
@@ -12,9 +13,6 @@
 #include <FW/View/FlyCameraControl.h>
 #include <FW/View/Transforms.h>
 using namespace FW::View;
-
-#include <IO/Log.h>
-using namespace IO;
 
 #include <FW/Visualizer.h>
 
@@ -269,7 +267,7 @@ void Graphene::Impl::updateState() {
 
 #ifdef ENABLE_SCREENCAST
 void Graphene::Impl::startScreencast(fs::path outputFile) {
-	Log::info("Recording to: " + outputFile.string() + "...");
+	std::cout << "Recording to: " + outputFile.string() + "..." << std::endl;
 	//updateState();
 	//TODO: m_backend->setResizable(false);
 	

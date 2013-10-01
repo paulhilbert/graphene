@@ -4,8 +4,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "graphene", "graphene.vcxproj", "{EC8063B0-ECC0-4CBA-A1AE-46924AD60661}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "graphene_lib", "graphene_lib.vcxproj", "{44F40F89-598B-473C-9ED8-8526FF48B885}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EC8063B0-ECC0-4CBA-A1AE-46924AD60661} = {EC8063B0-ECC0-4CBA-A1AE-46924AD60661}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "graphene_qt5", "Backends\Qt5\graphene_qt5.vcxproj", "{FAE9ED6D-4D7C-37BF-8036-F757B78EF612}"
+	ProjectSection(ProjectDependencies) = postProject
+		{44F40F89-598B-473C-9ED8-8526FF48B885} = {44F40F89-598B-473C-9ED8-8526FF48B885}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,5 +62,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		Qt5Version = Qt5
 	EndGlobalSection
 EndGlobal

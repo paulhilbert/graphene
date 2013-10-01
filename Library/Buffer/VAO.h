@@ -3,9 +3,6 @@
 
 #include <iostream>
 
-#include <IO/Log.h>
-using namespace IO;
-
 #ifndef GL_GLEXT_PROTOTYPES
 #define GL_GLEXT_PROTOTYPES
 #endif

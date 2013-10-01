@@ -150,7 +150,7 @@ inline Annotation::Ptr Field::annotate(const std::vector<int>& indices, std::str
 			const auto& other = a.second->indices();
 			for (const auto& idx : cleanedIndices) {
 				if (std::binary_search(other.begin(), other.end(), idx)) {
-					Log::error("Annotation contains index already included in other annotation.");
+					std::cout << "Annotation contains index already included in other annotation." << std::endl;
 					return Annotation::Ptr();
 				}
 			}

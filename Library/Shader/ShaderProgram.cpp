@@ -1,8 +1,6 @@
 #include "ShaderProgram.h"
 
-#include <IO/Log.h>
-using namespace IO;
-
+#include <string>
 
 namespace Shader {
 
@@ -28,7 +26,7 @@ void ShaderProgram::link() {
 	glGetProgramiv(m_ref, GL_LINK_STATUS, &m_linkStatus);
 	printProgramInfoLog();
 
-	if (!m_linkStatus) Log::error("Unable to link program");
+	if (!m_linkStatus) std::cout << "Unable to link program" << std::endl;
 }
 
 void ShaderProgram::use() {
@@ -102,7 +100,7 @@ GLint ShaderProgram::getUniformVarLocation(const GLchar* name) {
 
 	loc = glGetUniformLocation(m_ref, name);
 
-	if (loc == -1) Log::warn("No such uniform named "+std::string(name)+". Maybe this variable is not used inside any shader code.");
+	if (loc == -1) std::cout << "No such uniform named "+std::string(name)+". Maybe this variable is not used inside any shader code." << std::endl;
 
 	return loc;
 }
@@ -117,11 +115,11 @@ void ShaderProgram::printProgramInfoLog() {
 	if (infologLength > 1) {
 		infoLog = (GLchar *)malloc(infologLength);
 		if (infoLog == NULL) {
-			Log::error("Could not allocate InfoLog buffer");
+			std::cout << "Could not allocate InfoLog buffer" << std::endl;
 			return;
 		}
 		glGetProgramInfoLog(m_ref, infologLength, &charsWritten, infoLog);
-		Log::info("Program InfoLog:\n"+std::string(infoLog));
+		std::cout << "Program InfoLog:\n"+std::string(infoLog) << std::endl;
 		free(infoLog);
 	}
 }
