@@ -5,9 +5,13 @@
 #include <string>
 #include <functional>
 
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QDockWidget>
 #include <QtWidgets/QTextEdit>
 #include <QtCore/QString>
+
+#include "Qt5ProgressBarPool.h"
 
 namespace GUI {
 
@@ -28,13 +32,18 @@ class Qt5LogDialog : public QDockWidget {
 		void logVerbose(std::string text);
 		void clear();
 
+		IO::AbstractProgressBarPool::Ptr progressBarPool();
+
 	protected:
 		QString format(const std::string& text);
 		QString formatPrefix(const std::string& text, const std::string& color);
 		void append(const QString& string);
 	
 	protected:
-		QTextEdit*  m_text;
+		QWidget*                 m_area;
+		QVBoxLayout*             m_box;
+		QTextEdit*               m_text;
+		Qt5ProgressBarPool::Ptr  m_barPool;
 
 };
 

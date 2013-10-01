@@ -28,6 +28,8 @@ using boost::lexical_cast;
 #include <GUI/Property/Tree.h>
 using namespace GUI::Property;
 
+#include <IO/AbstractProgressBarPool.h>
+
 namespace FW {
 
 class Graphene;
@@ -36,7 +38,9 @@ class Visualizer {
 	public:
 		typedef std::shared_ptr<Visualizer>   Ptr;
 		typedef std::function<void (void)>    Job;
-		typedef std::pair<std::future<void>, Job> Task;
+		typedef std::function<void (IO::AbstractProgressBar::Ptr)>        JobWithBar;
+		typedef std::function<void (IO::AbstractProgressBarPool::Ptr)>    JobWithPool;
+		typedef std::pair<std::future<void>, Job>                         Task;
 		friend class Graphene;
 
 	public:
@@ -52,16 +56,20 @@ class Visualizer {
 		virtual void render() = 0;
 
 		void execute(Job task, Job finally);
+		void execute(JobWithBar task, Job finally, std::string taskName, int steps = 1);
+		void execute(JobWithPool task, Job finally);
 
 	protected:
 		void setHandles(FW::VisualizerHandle::Ptr fw, GUI::VisualizerHandle::Ptr gui);
+		void setProgressBarPool(IO::AbstractProgressBarPool::Ptr m_pool);
 		void waitForTasks();
 
 	protected:
-		std::string                 m_id;
-		FW::VisualizerHandle::Ptr   m_fw;
-		GUI::VisualizerHandle::Ptr  m_gui;
-		std::vector<Task>           m_tasks;
+		std::string                       m_id;
+		FW::VisualizerHandle::Ptr         m_fw;
+		GUI::VisualizerHandle::Ptr        m_gui;
+		std::vector<Task>                 m_tasks;
+		IO::AbstractProgressBarPool::Ptr  m_pool;
 };
 
 

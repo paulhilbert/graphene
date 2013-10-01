@@ -30,9 +30,23 @@ void Visualizer::execute(Job task, Job finally) {
 	m_tasks.push_back(std::make_pair(std::move(std::async(std::launch::async, task)), std::move(finally)));
 }
 
+void Visualizer::execute(JobWithBar task, Job finally, std::string taskName, int steps) {
+	if (!m_pool) return;
+	auto bar = m_pool->create(taskName, steps);
+	m_tasks.push_back(std::make_pair(std::async(std::launch::async, task, bar), finally));
+}
+
+void Visualizer::execute(JobWithPool task, Job finally) {
+	m_tasks.push_back(std::make_pair(std::move(std::async(std::launch::async, task, m_pool)), std::move(finally)));
+}
+
 void Visualizer::setHandles(FW::VisualizerHandle::Ptr fw, GUI::VisualizerHandle::Ptr gui) {
 	m_fw = fw;
 	m_gui = gui;
+}
+
+void Visualizer::setProgressBarPool(IO::AbstractProgressBarPool::Ptr pool) {
+	m_pool = pool;
 }
 
 void Visualizer::waitForTasks() {

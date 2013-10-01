@@ -3,9 +3,14 @@
 
 namespace GUI {
 
-Qt5LogDialog::Qt5LogDialog(std::string title) : QDockWidget(QString::fromStdString(title)), m_text(new QTextEdit()) {
+Qt5LogDialog::Qt5LogDialog(std::string title) : QDockWidget(QString::fromStdString(title)), m_area(new QWidget()), m_box(new QVBoxLayout()), m_text(new QTextEdit()) {
+	m_area->setLayout(m_box);
 	m_text->setReadOnly(true);
-	setWidget(m_text);
+	m_box->addWidget(m_text);
+	m_barPool = Qt5ProgressBarPool::Ptr(new Qt5ProgressBarPool());
+	m_barPool->setBarCountChangeCallback([&] (int count) { if (count) m_barPool->show(); else m_barPool->hide(); });
+	m_box->addWidget(m_barPool->widget());
+	setWidget(m_area);
 }
 
 Qt5LogDialog::~Qt5LogDialog() {
@@ -29,6 +34,10 @@ void Qt5LogDialog::logVerbose(std::string text) {
 
 void Qt5LogDialog::clear() {
 	m_text->setHtml("");
+}
+
+IO::AbstractProgressBarPool::Ptr Qt5LogDialog::progressBarPool() {
+	return std::dynamic_pointer_cast<IO::AbstractProgressBarPool>(m_barPool);
 }
 
 QString Qt5LogDialog::format(const std::string& text) {

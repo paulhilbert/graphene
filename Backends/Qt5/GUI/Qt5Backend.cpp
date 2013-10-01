@@ -97,6 +97,10 @@ Status::Ptr Qt5Backend::getStatus() {
 	return Qt5Status::Ptr(new Qt5Status(m_wnd));
 }
 
+IO::AbstractProgressBarPool::Ptr Qt5Backend::getProgressBarPool() {
+	return m_logDialog->progressBarPool();
+}
+
 void Qt5Backend::setWindowTitle(const char* title) {
 	if (m_wnd) m_wnd->setWindowTitle(title);
 }

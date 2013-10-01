@@ -197,6 +197,7 @@ void Graphene::Impl::addVisualizer(std::string factoryName, std::string visName)
 	auto guiHandle = m_backend->addVisualizer(visName);
 	if (!guiHandle) return;
 	vis->setHandles(fwHandle, guiHandle);
+	vis->setProgressBarPool(m_backend->getProgressBarPool());
 	vis->init();
 	m_visualizer[visName] = vis;
 	return;

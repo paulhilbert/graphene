@@ -12,6 +12,7 @@
 #include <FW/Factory.h>
 #include "GUILog.h"
 
+#include <IO/AbstractProgressBarPool.h>
 
 namespace GUI {
 
@@ -31,6 +32,7 @@ class Backend {
 
 		virtual Log::Ptr getLog() = 0;
 		virtual Status::Ptr getStatus() = 0;
+		virtual IO::AbstractProgressBarPool::Ptr getProgressBarPool() = 0;
 
 		virtual void setWindowTitle(const char* title) = 0;
 		virtual void setWindowSize(int width, int height) = 0;
