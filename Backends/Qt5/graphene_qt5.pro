@@ -7,14 +7,14 @@ DEPENDPATH += . \
 				  GUI/Property \
 				  GUI/Mode \
 				  ../../ \
-				  ../../externals/commons \
+				  $(COMMONS) \
 				  /usr/include/eigen3
 INCLUDEPATH += . \
               GUI \
 				  GUI/Property \
 				  GUI/Mode \
 				  ../../ \
-				  ../../externals/commons \
+				  $(COMMONS) \
 				  /usr/include/eigen3 \
 				  /usr/include/qt
 CONFIG += object_parallel_to_source

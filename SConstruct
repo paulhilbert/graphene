@@ -10,8 +10,8 @@ env['CPPPATH'] = ['.', commons,'/usr/include/eigen3']
 env['LIBS']    = ['dl', 'GL', 'GLU', 'boost_regex', 'boost_filesystem', 'boost_program_options', 'boost_system']
 
 obj = [Glob('GUI/*.cpp'), Glob('GUI/Property/*.cpp'), Glob('GUI/Mode/*.cpp'), Glob('FW/*.cpp'), Glob('FW/View/*.cpp'), Glob('FW/Events/*.cpp')]
-cmns = [Glob(commons+'/IO/*.cpp'), commons+'/Random/RNG.cpp']
+#cmns = [Glob(commons+'/IO/*.cpp'), commons+'/Random/RNG.cpp']
 lib = [Glob('Library/Buffer/*.cpp'), Glob('Library/Rendered/*.cpp'), Glob('Library/Shader/*.cpp')]
 
-env.Program("graphene", ["graphene.cpp"]+obj+cmns)
-env.Library("graphene", obj+lib+cmns)
+env.Program("graphene", ["graphene.cpp"]+obj)
+env.Library("graphene", obj+lib)

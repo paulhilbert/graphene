@@ -151,6 +151,18 @@ typename PropertyType::Ptr Container::get(const std::vector<std::string>& path) 
 	return std::dynamic_pointer_cast<Container>(child)->get<PropertyType>(rest);
 }
 
+template <class PropertyType>
+typename PropertyType::Ptr Container::get(const std::string& first) {
+	std::vector<std::string> path(1, first);
+	return get<PropertyType>(path);
+}
+
+template <class PropertyType>
+typename PropertyType::Ptr Container::get(const std::string& first, const std::string& second) {
+	std::vector<std::string> path(1, first); path.push_back(second);
+	return get<PropertyType>(path);
+}
+
 bool Container::isContainer() const {
 	return true;
 }

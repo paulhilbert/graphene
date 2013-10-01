@@ -27,10 +27,6 @@ using boost::regex;
 using boost::smatch;
 using boost::regex_match;
 
-// commons
-#include <IO/Log.h>
-using namespace IO;
-
 // graphene
 #include <FW/FWGraphene.h>
 using FW::Graphene;
@@ -75,7 +71,7 @@ int main( int argc, char *argv[] ) {
 		po::notify(vm);
 	} catch (std::exception& e) {
 		if (!vm.count("help")) {
-			Log::error(e.what());
+			std::cout << e.what() << "\n";
 		}
 		optionsException = true;
 	}
@@ -105,15 +101,15 @@ int main( int argc, char *argv[] ) {
 		std::string name = what[1];
 		ext::shared_library lib(p.string());
 		if (!lib.open()) {
-			Log::warn("Library failed to open: " + p.string());
+			backend->getLog()->warn("Library failed to open: " + p.string());
 			continue;
 		}
 		std::function<FW::Factory* ()> retrFactory(lib.get<FW::Factory*>("getFactory"));
 		if (!retrFactory) {
-			Log::warn("Function \"getFactory\" not found in \""+p.string()+"\". Try adding VIS_DLL_EXPORT(VIS) macro.");
+			backend->getLog()->warn("Function \"getFactory\" not found in \""+p.string()+"\". Try adding VIS_DLL_EXPORT(VIS) macro.");
 			continue;
 		}
-		Log::info("Adding visualizer type: " + name);
+		backend->getLog()->info("Adding visualizer type: " + name);
 		FW::Factory* factoryPtr = retrFactory();
 		std::shared_ptr<FW::Factory> factory(factoryPtr);
 		graphene.addFactory(name, factory);
@@ -125,12 +121,12 @@ int main( int argc, char *argv[] ) {
 GUI::Backend::Ptr getBackend(std::string path) {
 	ext::shared_library lib(path);
 	if (!lib.open()) {
-		Log::error("Could not open backend! Aborting.");
+		std::cout << "Error: Could not open backend! Aborting." << "\n";
 		return GUI::Backend::Ptr();
 	}
 	std::function<GUI::Backend* (void)> f(lib.get<GUI::Backend*>(std::string("getBackend")));
 	if (!f) {
-		Log::error("Function getBackend not found!");
+		std::cout << "Error: Function getBackend not found! Aborting." << "\n";
 		return GUI::Backend::Ptr();
 	}
 	GUI::Backend::Ptr backend(f());
