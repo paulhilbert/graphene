@@ -1,4 +1,0 @@
-env = Environment(CPPPATH = ['..'], CCFLAGS = "-std=c++0x -Wall -g -O3", LIBS = ['lapackpp'])
-lib = env.Library('UndirectedGraph', 'UndirectedGraph.cpp')
-env.Install('/usr/local/lib/commons', lib)
-env.Alias('install', '/usr/local/lib/commons')

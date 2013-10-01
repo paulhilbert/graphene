@@ -1,4 +1,0 @@
-env = Environment(CCFLAGS = "-Wall -Wno-unused-local-typedefs -Wno-attributes -g -O3 -std=c++11 -fPIC", CPPPATH=['/usr/include/eigen3', '/usr/include/pcl-1.7', '/usr/local/include/commons'])
-lib = env.Library('PC', 'PointCloud.cpp')
-env.Install('/usr/local/lib/commons', lib)
-env.Alias('install', '/usr/local/lib/commons')

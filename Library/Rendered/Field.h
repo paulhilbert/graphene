@@ -47,7 +47,7 @@ class Annotation {
 	public:
 		typedef std::shared_ptr<Annotation> Ptr;
 		typedef std::weak_ptr<Annotation>   WPtr;
-		typedef Vis::RGBA<float> Color;
+		typedef Vis::RGBA Color;
 		typedef std::vector<Color> Colors;
 		typedef Vis::ColorMap<Color, float> CMap;
 		typedef std::function<Color (int)> CAssign;
