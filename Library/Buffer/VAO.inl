@@ -12,7 +12,7 @@ inline void VAO::setAttrib(GLuint pos, GLuint dim, GLuint type) const {
 
 inline void VAO::enableAttrib(int pos) const {
 	if (pos < 0) {
-		Log::warn("Invalid attribute index in enableAttrib().");
+		std::cout << "Invalid attribute index in enableAttrib()." << std::endl;
 		return;
 	}
 	glEnableVertexAttribArray((GLuint)pos);
@@ -20,7 +20,7 @@ inline void VAO::enableAttrib(int pos) const {
 
 inline void VAO::disableAttrib(int pos) const {
 	if (pos < 0) {
-		Log::warn("Invalid attribute index in disableAttrib().");
+		std::cout << "Invalid attribute index in disableAttrib()." << std::endl;
 		return;
 	}
 	glDisableVertexAttribArray((GLuint)pos);

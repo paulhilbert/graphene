@@ -10,8 +10,6 @@
 #include <Eigen/Dense>
 #include <Testing/asserts.h>
 #include <Algorithm/Sets.h>
-#include <IO/Log.h>
-using namespace IO;
 
 #include <Vis/ColorMap.h>
 

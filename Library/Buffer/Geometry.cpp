@@ -97,7 +97,7 @@ void Geometry::upload(std::set<Buffers> dynamicAccess) {
 
 void Geometry::uploadVertices(AccessMethod method) {
 	if (!m_hasDataVertices) {
-		Log::warn("Trying to upload vertices without data! Skipping.");
+		std::cout << "Trying to upload vertices without data! Skipping." << std::endl;
 		return;
 	}
 	m_vbo.upload(method);
@@ -112,7 +112,7 @@ void Geometry::uploadVertices(AccessMethod method) {
 
 void Geometry::uploadNormals(AccessMethod method) {
 	if (!m_hasDataNormals) {
-		Log::warn("Trying to upload normals without data! Skipping.");
+		std::cout << "Trying to upload normals without data! Skipping." << std::endl;
 		return;
 	}
 	m_nbo.upload(method);
@@ -127,7 +127,7 @@ void Geometry::uploadNormals(AccessMethod method) {
 
 void Geometry::uploadColors(AccessMethod method) {
 	if (!m_hasDataColors) {
-		Log::warn("Trying to upload colors without data! Skipping.");
+		std::cout << "Trying to upload colors without data! Skipping." << std::endl;
 		return;
 	}
 	m_cbo.upload(method);
@@ -142,7 +142,7 @@ void Geometry::uploadColors(AccessMethod method) {
 
 void Geometry::uploadTexCoords(AccessMethod method) {
 	if (!m_hasDataTexCoords) {
-		Log::warn("Trying to upload tex coords without data! Skipping.");
+		std::cout << "Trying to upload tex coords without data! Skipping." << std::endl;
 		return;
 	}
 	m_tbo.upload(method);
@@ -157,7 +157,7 @@ void Geometry::uploadTexCoords(AccessMethod method) {
 
 void Geometry::uploadIndices(AccessMethod method) {
 	if (!m_hasDataIndices) {
-		Log::warn("Trying to upload indices without data! Skipping.");
+		std::cout << "Trying to upload indices without data! Skipping." << std::endl;
 		return;
 	}
 	m_ibo.upload(method);
