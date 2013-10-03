@@ -151,18 +151,6 @@ typename PropertyType::Ptr Container::get(const std::vector<std::string>& path) 
 	return std::dynamic_pointer_cast<Container>(child)->get<PropertyType>(rest);
 }
 
-template <class PropertyType>
-typename PropertyType::Ptr Container::get(const std::string& first) {
-	std::vector<std::string> path(1, first);
-	return get<PropertyType>(path);
-}
-
-template <class PropertyType>
-typename PropertyType::Ptr Container::get(const std::string& first, const std::string& second) {
-	std::vector<std::string> path(1, first); path.push_back(second);
-	return get<PropertyType>(path);
-}
-
 bool Container::isContainer() const {
 	return true;
 }
@@ -190,37 +178,6 @@ template String::Ptr         Container::get<String>(const std::vector<std::strin
 template ToggleButton::Ptr   Container::get<ToggleButton>(const std::vector<std::string>& path);
 template Tree::Ptr           Container::get<Tree>(const std::vector<std::string>& path);
 
-template Bool::Ptr           Container::get<Bool>(const std::string& first);
-template Button::Ptr         Container::get<Button>(const std::string& first);
-template Choice::Ptr         Container::get<Choice>(const std::string& first);
-template Color::Ptr          Container::get<Color>(const std::string& first);
-template File::Ptr           Container::get<File>(const std::string& first);
-template Files::Ptr          Container::get<Files>(const std::string& first);
-template Folder::Ptr         Container::get<Folder>(const std::string& first);
-template Group::Ptr          Container::get<Group>(const std::string& first);
-template Number::Ptr         Container::get<Number>(const std::string& first);
-template Range::Ptr          Container::get<Range>(const std::string& first);
-template Section::Ptr        Container::get<Section>(const std::string& first);
-template Separator::Ptr      Container::get<Separator>(const std::string& first);
-template String::Ptr         Container::get<String>(const std::string& first);
-template ToggleButton::Ptr   Container::get<ToggleButton>(const std::string& first);
-template Tree::Ptr           Container::get<Tree>(const std::string& first);
-
-template Bool::Ptr           Container::get<Bool>(const std::string& first, const std::string& second);
-template Button::Ptr         Container::get<Button>(const std::string& first, const std::string& second);
-template Choice::Ptr         Container::get<Choice>(const std::string& first, const std::string& second);
-template Color::Ptr          Container::get<Color>(const std::string& first, const std::string& second);
-template File::Ptr           Container::get<File>(const std::string& first, const std::string& second);
-template Files::Ptr          Container::get<Files>(const std::string& first, const std::string& second);
-template Folder::Ptr         Container::get<Folder>(const std::string& first, const std::string& second);
-template Group::Ptr          Container::get<Group>(const std::string& first, const std::string& second);
-template Number::Ptr         Container::get<Number>(const std::string& first, const std::string& second);
-template Range::Ptr          Container::get<Range>(const std::string& first, const std::string& second);
-template Section::Ptr        Container::get<Section>(const std::string& first, const std::string& second);
-template Separator::Ptr      Container::get<Separator>(const std::string& first, const std::string& second);
-template String::Ptr         Container::get<String>(const std::string& first, const std::string& second);
-template ToggleButton::Ptr   Container::get<ToggleButton>(const std::string& first, const std::string& second);
-template Tree::Ptr           Container::get<Tree>(const std::string& first, const std::string& second);
 
 } // Property
 } // GUI

@@ -9,7 +9,9 @@
 
 namespace GUI {
 
-class Qt5ProgressBarPool : public IO::AbstractProgressBarPool {
+class Qt5ProgressBarPool : public QObject, public IO::AbstractProgressBarPool {
+	Q_OBJECT
+
 	public:
 		typedef std::shared_ptr<Qt5ProgressBarPool> Ptr;
 		typedef std::weak_ptr<Qt5ProgressBarPool> WPtr;
@@ -22,19 +24,15 @@ class Qt5ProgressBarPool : public IO::AbstractProgressBarPool {
 		void      show();
 		void      hide();
 		QWidget*  widget();
-		void      setBarCountChangeCallback(std::function<void (int)> func);
-
-		void      notifyRemove();
 
 	protected:
 		IO::AbstractProgressBar::Ptr createProgressBar(std::string label, int steps);
-//		void removeProgressBar(int idx);
+		void removeProgressBar(int index);
 
 	protected:
 		QWidget*                          m_area;
 		QVBoxLayout*                      m_box;
-		unsigned int                      m_count;
-		std::function<void (int)>         m_onChange;
+		std::vector<Qt5ProgressBar::Ptr>  m_bars;
 };
 
 } // GUI

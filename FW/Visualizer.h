@@ -39,7 +39,7 @@ class Visualizer {
 		typedef std::shared_ptr<Visualizer>   Ptr;
 		typedef std::function<void (void)>    Job;
 		typedef std::function<void (IO::AbstractProgressBar::Ptr)>        JobWithBar;
-		typedef std::function<void (IO::AbstractProgressBarPool::Ptr)>    JobWithPool;
+//		typedef std::function<void (IO::AbstractProgressBarPool::Ptr)>    JobWithPool;
 		typedef std::pair<std::future<void>, Job>                         Task;
 		friend class Graphene;
 
@@ -57,7 +57,11 @@ class Visualizer {
 
 		void execute(Job task, Job finally);
 		void execute(JobWithBar task, Job finally, std::string taskName, int steps = 1);
-		void execute(JobWithPool task, Job finally);
+		//void execute(JobWithPool task, Job finally);
+
+		std::vector<std::string> path(std::string&& s0);
+		std::vector<std::string> path(std::string&& s0, std::string&& s1);
+		std::vector<std::string> path(std::string&& s0, std::string&& s1, std::string&& s2);
 
 	protected:
 		void setHandles(FW::VisualizerHandle::Ptr fw, GUI::VisualizerHandle::Ptr gui);

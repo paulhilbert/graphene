@@ -42,12 +42,6 @@ class Container : public Base {
 		template <class PropertyType>
 		typename PropertyType::Ptr get(const std::vector<std::string>& path);
 
-		template <class PropertyType>
-		typename PropertyType::Ptr get(const std::string& first);
-
-		template <class PropertyType>
-		typename PropertyType::Ptr get(const std::string& first, const std::string& second);
-
 		bool isContainer() const;
 
 	protected:
