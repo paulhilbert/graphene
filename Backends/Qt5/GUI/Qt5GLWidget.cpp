@@ -103,12 +103,12 @@ void Qt5GLWidget::mouseReleaseEvent(QMouseEvent* event) {
 			break;
 		case Qt::RightButton:
 			if (!m_mouseDragged) mouseClick(Right, m_startX, m_startY);
-			else mouseDragStop(Left, x, y);
+			else mouseDragStop(Right, x, y);
 			m_rightDown = false;
 			break;
 		case Qt::MiddleButton:
 			if (!m_mouseDragged) mouseClick(Middle, m_startX, m_startY);
-			else mouseDragStop(Left, x, y);
+			else mouseDragStop(Middle, x, y);
 			m_middleDown = false;
 			break;
 		default: break;
@@ -254,9 +254,9 @@ void Qt5GLWidget::mouseDragStop(MouseButton btn, int x, int y) {
 
 	FW::Events::EventType type;
 	switch (btn) {
-		case Left: type = "LEFT_DRAG_END"; break;
-		case Right: type = "RIGHT_DRAG_END"; break;
-		default: type = "MIDDLE_DRAG_END";
+		case Left: type = "LEFT_DRAG_STOP"; break;
+		case Right: type = "RIGHT_DRAG_STOP"; break;
+		default: type = "MIDDLE_DRAG_STOP";
 	}
 
 	FW::Events::Signal signal(type);

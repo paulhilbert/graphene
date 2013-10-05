@@ -22,10 +22,12 @@ void Qt5LogDialog::logInfo(std::string text) {
 
 void Qt5LogDialog::logWarn(std::string text) {
 	append(formatPrefix("[W]", "#dd8800") + "  " +  format(text));
+	show();
 }
 
 void Qt5LogDialog::logError(std::string text) {
 	append(formatPrefix("[E]", "#dd0000") + "  " +  format(text));
+	show();
 }
 
 void Qt5LogDialog::logVerbose(std::string text) {
@@ -50,7 +52,6 @@ QString Qt5LogDialog::formatPrefix(const std::string& text, const std::string& c
 
 void Qt5LogDialog::append(const QString& string) {
 	m_text->setHtml(m_text->toHtml() + "</ br>" + string);
-	show();
 }
 
 } // GUI

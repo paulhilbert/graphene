@@ -19,7 +19,10 @@ class Log {
 		virtual void warn(std::string text)  = 0;
 		virtual void error(std::string text) = 0;
 		virtual void verbose(std::string text) = 0;
+
 		virtual void clear() = 0;
+
+		virtual void fail(std::string text) = 0;
 
 	protected:
 		bool m_verbose;

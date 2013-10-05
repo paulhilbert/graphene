@@ -1,5 +1,7 @@
 #include "Qt5Log.h"
 
+#include <QtWidgets/QMessageBox>
+
 namespace GUI {
 
 Qt5Log::Qt5Log(Qt5LogDialog* log, bool verbose) : Log(verbose), m_log(log) {
@@ -26,6 +28,10 @@ void Qt5Log::verbose(std::string text) {
 
 void Qt5Log::clear() {
 	m_log->clear();
+}
+
+void Qt5Log::fail(std::string text) {
+    QMessageBox::critical(nullptr, "Critical Error", QString::fromStdString(text), QMessageBox::Ok);
 }
 
 } // GUI

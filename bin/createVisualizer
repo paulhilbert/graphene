@@ -1,85 +1,124 @@
 #!/bin/sh
 
-if [ $# -eq 0 ]
-  then
-    echo "Usage: createVisualizer VisualizerName [LinkPath [SkeletonPath]]"
-	 exit
-fi
 
-if [ $# -gt 3 ]
-	then
-   	echo "Usage: createVisualizer VisualizerName [LinkPath [SkeletonPath]]"
-		exit
-fi
+usage () {
+	echo "Usage:"
+	echo "createVisualizer [--skeleton,-s <skeleton_path>] [--link,-l <link_path>] [--base,-b <base_name>] <visualizer_names...>"
+	echo "createVisualizer --help,-h"
+	exit 1
+}
 
-if [ -z "$1" ]
-  then
-    echo "Name argument is an empty string"
-	 exit
-fi
+TEMP=`getopt -o s:l:b:h --long skeleton:,link:,base:,help \
+     -n 'createVisualizer' -- "$@"`
 
-if [ $# -gt 1 -a -z "$2" ]
-  then
-    echo "Link path argument is an empty string"
-	 exit
-fi
+if [ $? != 0 ] ; then usage; fi
 
-if [ $# -gt 2 -a -z "$3" ]
-  then
-    echo "Skeleton path argument is an empty string"
-	 exit
-fi
-
-if [ $# -lt 3 ]
-	then
-		SkelPath="$GRAPHENE_VIS/skeleton"
-	else
-		SkelPath=$2
-fi
-
-if [ ! -d "$SkelPath" ]
-	then
-		echo $SkelPath
-		echo "Skeleton path does not exist"
-fi
+eval set -- "$TEMP"
 
 
+SKEL="$GRAPHENE_VIS/skeleton"
+LINK=""
+BASE="Visualizer"
 
-Name=$1
-Current=$PWD
-
-if [ -d "$PWD/$Name" ]
-	then
-		echo "Path \"$PWD/$Name\" already exists."
-		exit
-fi
-
-mkdir "$PWD/$Name"
-cp "$SkelPath/Skeleton.cpp" "$PWD/$Name/$Name.cpp"
-cp "$SkelPath/Skeleton.h" "$PWD/$Name/$Name.h"
-cp "$SkelPath/visSkeleton.cpp" "$PWD/$Name/vis$Name.cpp"
-cp "$SkelPath/SConstruct" "$PWD/$Name/SConstruct"
-
-for File in $(ls -1 $PWD/$Name/)
-do
-	Path="$PWD/$Name/$File"
-	Upper=$(echo "$Name" | tr [a-z] [A-Z])
-	sed -i -r "s/Skeleton/$Name/g" "$Path"
-	sed -i -r "s/SKELETON/$Upper/g" "$Path"
+while true ; do
+        case "$1" in
+                -s|--skeleton) SKEL="$2"; shift 2 ;;
+                -l|--link) LINK="$2" ; shift 2 ;;
+                -b|--base) BASE="$2" ; shift 2 ;;
+                -h|--help) usage ;;
+                --) shift ; break ;;
+                *) echo "Internal error!" ; exit 1 ;;
+        esac
 done
 
-if [ $# -gt 1 ]
+if [ $OPTIND -gt $# ]; then
+	echo "No visualizer names given."
+	usage
+fi
+
+
+# check skel
+if [ -z "$SKEL" ]
+  then
+    echo "Skeleton path argument is an empty string"
+	 exit 1
+fi
+if [ ! -d "$SKEL" ]
+  then
+    echo "Skeleton path does not exist"
+	 exit 1
+fi
+
+# check link
+if [ "$LINK" != "" ]; then
+	if [ ! -d "$LINK" ]
+	  then
+		 echo "Link path does not exist"
+		 exit 1
+	fi
+fi
+
+# check base
+if [ -z "$BASE" ]
+  then
+    echo "Base name is an empty string"
+	 exit 1
+fi
+
+echo "Skeleton Path: $SKEL"
+echo "Base Name:     $BASE"
+if [ "$LINK" != "" ]; then
+	echo "Link Path:     $LINK"
+fi
+
+Current="$PWD"
+
+for arg do
+	if [ -z "$arg" ]
 	then
-		LinkPath="$2"
-		if [ ! -d "$LinkPath" ]
-			then
-				echo "Link path does not exist"
-				exit
-		fi
+		echo "Name argument is an empty string"
+		exit 1
+	fi
+	Name="$arg"
+	if [ -d "$PWD/$Name" ]
+	then
+		echo "Path \"$PWD/$Name\" already exists."
+		exit 1
+	fi
+	echo "Creating $PWD/$Name" ; 
+	mkdir "$PWD/$Name"
+	cp "$SKEL/Skeleton.cpp" "$PWD/$Name/$Name.cpp"
+	cp "$SKEL/Skeleton.h" "$PWD/$Name/$Name.h"
+	if [ -e "$SKEL/visSkeleton.cpp" ]; then
+		cp "$SKEL/visSkeleton.cpp" "$PWD/$Name/vis$Name.cpp"
+	fi
+	cp "$SKEL/SConstruct" "$PWD/$Name/SConstruct"
+
+	for File in $(ls -1 $PWD/$Name/)
+	do
+		Path="$PWD/$Name/$File"
+		Upper=$(echo "$Name" | tr [a-z] [A-Z])
+		sed -i -r "s/Skeleton/$Name/g" "$Path"
+		sed -i -r "s/SKELETON/$Upper/g" "$Path"
+	done
+	sed -i -r "s/Visualizer\(id\)/$BASE(id)/g" "$PWD/$Name/$Name.cpp"
+	sed -i -r "s/public Visualizer/public $BASE/g" "$PWD/$Name/$Name.h"
+	if [ "$BASE" != "Visualizer" ]; then
+		sed -i -r "s/(void $Name::init\(\) \{)/\1\n\t$BASE::init();/g" "$PWD/$Name/$Name.cpp"
+		sed -i -r "s/(void $Name::render\(\) \{)/\1\n\t$BASE::render();/g" "$PWD/$Name/$Name.cpp"
+		sed -i -r "s/(LIBPATH'].*)]/\1, visualizer+'\/Base\/$BASE']/g" "$PWD/$Name/SConstruct"
+		sed -i -r "s/(CPPPATH'].*)]/\1, visualizer+'\/Base\/$BASE']/g" "$PWD/$Name/SConstruct"
+		sed -i -r "s/(LIBS'].*)]/\1, '$BASE']/g" "$PWD/$Name/SConstruct"
+		sed -i -r "s/(Factory.h>)/\1\n#include <$BASE.h>/g" "$PWD/$Name/$Name.h"
+	fi
+	if [ "$LINK" != "" ]; then
 		cd "$Current/$Name"
 		scons
 		cd "$Current"
-		cd "$LinkPath"
-		ln -s "$Current/$Name/vis$Name.so"
+		if [ -e "$Current/$Name/vis$Name.so" ]; then
+			cd "$LINK"
+			ln -s "$Current/$Name/vis$Name.so"
+		fi
 		cd $Current
-fi
+	fi
+done

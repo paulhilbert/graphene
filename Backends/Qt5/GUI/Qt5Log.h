@@ -21,6 +21,8 @@ class Qt5Log : public Log {
 		void verbose(std::string text);
 		void clear();
 
+		void fail(std::string text);
+
 	protected:
 		Qt5LogDialog*  m_log;
 };
