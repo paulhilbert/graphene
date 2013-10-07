@@ -23,6 +23,8 @@ class Qt5Files : public QObject, public Files {
 		Qt5Files(std::string label);
 		virtual ~Qt5Files();
 
+		void setExtensions(std::vector<std::string> extensions);
+
 		void show();
 		void hide();
 		bool visible() const;
@@ -49,6 +51,7 @@ class Qt5Files : public QObject, public Files {
 		QLineEdit*    m_lineEdit;
 		QPushButton*  m_button;
 		Paths         m_value;
+		std::vector<std::string> m_extensions;
 };
 
 

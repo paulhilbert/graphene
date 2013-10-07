@@ -5,7 +5,7 @@
 namespace GUI {
 namespace Mode {
 
-Qt5Group::Qt5Group(QToolBar* toolbar, Log::Ptr log, const Callback& onChange) : Group(log, onChange), m_toolbar(toolbar) {
+Qt5Group::Qt5Group(QToolBar* toolbar, Log::Ptr log) : Group(log), m_toolbar(toolbar) {
 }
 
 Qt5Group::~Qt5Group() {

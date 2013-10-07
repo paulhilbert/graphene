@@ -85,9 +85,9 @@ void Qt5GLWidget::mousePressEvent(QMouseEvent* event) {
 	m_startY = m_y;
 
 	switch (event->button()) {
-		case Qt::LeftButton:  m_leftDown = true; break;
-		case Qt::RightButton: m_rightDown = true; break;
-		case Qt::MidButton:   m_middleDown = true; break;
+		case Qt::LeftButton:  m_leftDown = true; mousePress(Left, m_x, m_y); break;
+		case Qt::RightButton: m_rightDown = true; mousePress(Right, m_x, m_y); break;
+		case Qt::MidButton:   m_middleDown = true; mousePress(Middle, m_x, m_y); break;
 		default: break;
 	}
 }
@@ -97,16 +97,19 @@ void Qt5GLWidget::mouseReleaseEvent(QMouseEvent* event) {
 	int y = m_height - event->y() - 1;
 	switch (event->button()) {
 		case Qt::LeftButton:
+			mouseRelease(Left, x, y);
 			if (!m_mouseDragged) mouseClick(Left, m_startX, m_startY);
 			else mouseDragStop(Left, x, y);
 			m_leftDown = false;
 			break;
 		case Qt::RightButton:
+			mouseRelease(Right, x, y);
 			if (!m_mouseDragged) mouseClick(Right, m_startX, m_startY);
 			else mouseDragStop(Right, x, y);
 			m_rightDown = false;
 			break;
 		case Qt::MiddleButton:
+			mouseRelease(Middle, x, y);
 			if (!m_mouseDragged) mouseClick(Middle, m_startX, m_startY);
 			else mouseDragStop(Middle, x, y);
 			m_middleDown = false;
@@ -186,6 +189,38 @@ bool Qt5GLWidget::eventFilter(QObject*, QEvent* event) {
 		}
 	}
 	return false;
+}
+
+void Qt5GLWidget::mousePress(MouseButton btn, int x, int y) {
+	if (!m_eventHandler) return;
+
+	FW::Events::EventType type;
+	switch (btn) {
+		case Left: type = "LEFT_PRESS"; break;
+		case Right: type = "RIGHT_PRESS"; break;
+		default: type = "MIDDLE_PRESS";
+	}
+
+	FW::Events::Signal signal(type);
+	signal.addParam(x);
+	signal.addParam(y);
+	m_eventHandler->notify(signal);
+}
+
+void Qt5GLWidget::mouseRelease(MouseButton btn, int x, int y) {
+	if (!m_eventHandler) return;
+
+	FW::Events::EventType type;
+	switch (btn) {
+		case Left: type = "LEFT_RELEASE"; break;
+		case Right: type = "RIGHT_RELEASE"; break;
+		default: type = "MIDDLE_RELEASE";
+	}
+
+	FW::Events::Signal signal(type);
+	signal.addParam(x);
+	signal.addParam(y);
+	m_eventHandler->notify(signal);
 }
 
 void Qt5GLWidget::mouseClick(MouseButton btn, int x, int y) {

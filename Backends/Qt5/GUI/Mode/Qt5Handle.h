@@ -17,7 +17,7 @@ class Qt5Handle : public Handle {
 		virtual ~Qt5Handle();
 
 	protected:
-		Group::Ptr createGroup(const Group::Callback& onChange = nullptr);
+		Group::Ptr createGroup();
 
 	protected:
 		QToolBar* m_toolbar;

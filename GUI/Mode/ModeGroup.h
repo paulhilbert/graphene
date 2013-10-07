@@ -19,14 +19,16 @@ class Group {
 	public:
 		typedef std::shared_ptr<Group> Ptr;
 		typedef std::weak_ptr<Group> WPtr;
-		typedef std::function<void (std::string)> Callback;
+		typedef std::function<void (std::string, bool)> Callback;
 
 	public:
-		Group(Log::Ptr log, const Callback& onChange = nullptr);
+		Group(Log::Ptr log);
 		virtual ~Group();
 
 		Option::Ptr addOption(std::string id, std::string label, fs::path icon);
 		void removeOption(std::string id);
+
+		void setCallback(Callback onChange);
 
 		Option::Ptr mode(std::string id);
 		std::string getCurrentOption() const; // returns id

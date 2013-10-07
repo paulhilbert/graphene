@@ -9,12 +9,12 @@ Handle::Handle(Log::Ptr log) : m_log(log) {
 Handle::~Handle() {
 }
 
-Group::Ptr Handle::addGroup(std::string id, const Group::Callback& onChange) {
+Group::Ptr Handle::addGroup(std::string id) {
 	if (m_groups.find(id) != m_groups.end()) {
 		m_log->error("Mode group already exists");
 		return Group::Ptr();
 	}
-	auto group = createGroup(onChange);
+	auto group = createGroup();
 	m_groups[id] = group;
 	return group;
 }

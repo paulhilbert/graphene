@@ -1,4 +1,4 @@
-inline AreaSelect::AreaSelect(FW::VisualizerHandle::Ptr handle) : m_handle(handle), m_dragging(false) {
+inline AreaSelect::AreaSelect(FW::VisualizerHandle::Ptr handle) : SelectionMethod(handle) {
 }
 
 inline AreaSelect::~AreaSelect() {
@@ -11,11 +11,13 @@ inline void AreaSelect::init(const Eigen::Vector4f& color) {
 	m_geomArea.setColors({color, color, color, color});
 
 	m_handle->events()->connect<void (int, int)>("LEFT_DRAG_START", [&] (int x, int y) {
+		if (!m_enabled) return;
 		m_startX = x;
 		m_startY = y;
 		if (m_start) m_start();
 	});
 	m_handle->events()->connect<void (int, int, int, int)>("LEFT_DRAG", [&] (int dx, int dy, int x, int y) {
+		if (!m_enabled) return;
 		m_currX = x;
 		m_currY = y;
 		m_area.setEmpty();
@@ -36,8 +38,11 @@ inline void AreaSelect::init(const Eigen::Vector4f& color) {
 		if (m_drag) m_drag();
 	});
 	m_handle->events()->connect<void (int, int)>("LEFT_DRAG_STOP", [&] (int x, int y) {
+		if (!m_enabled) return;
 		m_dragging = false;
-		if (m_stop) m_stop();
+		if (m_stop) {
+			m_stop();
+		}
 	});
 	m_handle->events()->connect<void (int, int)>("LEFT_CLICK", [&] (int x, int y) {
 		if (m_unselect) m_unselect();
@@ -62,22 +67,6 @@ inline void AreaSelect::render() {
 	m_geomArea.release();
 
 	if (!blendEnabled) glDisable(GL_BLEND);
-}
-
-inline void AreaSelect::setStartCallback(std::function<void ()> func) {
-	m_start = std::move(func);
-}
-
-inline void AreaSelect::setDragCallback(std::function<void ()> func) {
-	m_drag = std::move(func);
-}
-
-inline void AreaSelect::setStopCallback(std::function<void ()> func) {
-	m_stop = std::move(func);
-}
-
-inline void AreaSelect::setUnselectCallback(std::function<void ()> func) {
-	m_unselect = std::move(func);
 }
 
 inline bool AreaSelect::pointInSelection(Eigen::Vector3f point) {

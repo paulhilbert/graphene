@@ -21,7 +21,7 @@ class Handle {
 		Handle(Log::Ptr log);
 		virtual ~Handle();
 
-		Group::Ptr addGroup(std::string id, const Group::Callback& onChange = nullptr);
+		Group::Ptr addGroup(std::string id);
 		void removeGroup(std::string id);
 
 		Group::Ptr group(std::string id);
@@ -30,7 +30,7 @@ class Handle {
 		void disable();
 
 	protected:
-		virtual Group::Ptr createGroup(const Group::Callback& onChange = nullptr) = 0;
+		virtual Group::Ptr createGroup() = 0;
 
 	protected:
 		Log::Ptr                          m_log;

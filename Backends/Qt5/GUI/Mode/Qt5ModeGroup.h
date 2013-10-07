@@ -14,7 +14,7 @@ class Qt5Group : public Group {
 		using Group::Callback;
 
 	public:
-		Qt5Group(QToolBar* toolbar, Log::Ptr log, const Callback& onChange = nullptr);
+		Qt5Group(QToolBar* toolbar, Log::Ptr log);
 		virtual ~Qt5Group();
 
 	protected:

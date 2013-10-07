@@ -25,6 +25,8 @@ class Files : public Base, public Notify<void (Paths)>, public Value<Paths>, pub
 	public:
 		Files(std::string label);
 		virtual ~Files();
+
+		virtual void setExtensions(std::vector<std::string> extensions) = 0;
 };
 
 } // Property

@@ -19,6 +19,10 @@ Qt5Files::Qt5Files(std::string label) : Files(label), m_outer(new QWidget()), m_
 Qt5Files::~Qt5Files() {
 }
 
+void Qt5Files::setExtensions(std::vector<std::string> extensions) {
+	m_extensions = extensions;
+}
+
 void Qt5Files::show() {
 	m_outer->show();
 }
@@ -65,7 +69,18 @@ QWidget* Qt5Files::widget() {
 }
 
 void Qt5Files::buttonClicked() {
-	QStringList files = QFileDialog::getOpenFileNames(nullptr, "Open Files...", QString(), tr("All Files (*.*)"), nullptr, 0);
+	QString filter;
+	if (!m_extensions.size()) {
+		filter = tr("All Files (*.*)");
+	} else {
+		filter = tr("Valid Files (");
+		for (unsigned int i=0; i<m_extensions.size(); ++i) {
+			if (i) filter += " ";
+			filter += "*."+QString::fromStdString(m_extensions[i]);
+		}
+		filter += tr(")");
+	}
+	QStringList files = QFileDialog::getOpenFileNames(nullptr, "Open Files...", filter, tr("All Files (*.*)"), nullptr, 0);
 	QStringList::Iterator it = files.begin();
 	m_value.clear();
 	QString text;

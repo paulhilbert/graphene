@@ -3,7 +3,7 @@
 namespace GUI {
 namespace Mode {
 
-Group::Group(Log::Ptr log, const Callback& onChange) : m_log(log), m_onChange(onChange) {
+Group::Group(Log::Ptr log) : m_log(log) {
 }
 
 Group::~Group() {
@@ -28,6 +28,10 @@ void Group::removeOption(std::string id) {
 		return;
 	}
 	m_modes.erase(findIt);
+}
+
+void Group::setCallback(Callback onChange) {
+	m_onChange = std::move(onChange);
 }
 
 Option::Ptr Group::mode(std::string id) {
@@ -80,7 +84,7 @@ void Group::notify(std::string modeId) {
 			if (m.first != modeId) m.second->setActive(false);
 		}
 	}
-	if (m_onChange) m_onChange(modeId);
+	if (m_onChange) m_onChange(modeId, m_modes[modeId]->active());
 }
 
 } // Mode
