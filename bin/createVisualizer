@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 
 usage () {
@@ -18,17 +18,37 @@ eval set -- "$TEMP"
 
 SKEL="$GRAPHENE_VIS/skeleton"
 LINK=""
-BASE="Visualizer"
+BASE=""
+INHERIT=""
+CONSTRUCT=""
+INIT=""
+RENDER=""
+INC=""
 
 while true ; do
-        case "$1" in
-                -s|--skeleton) SKEL="$2"; shift 2 ;;
-                -l|--link) LINK="$2" ; shift 2 ;;
-                -b|--base) BASE="$2" ; shift 2 ;;
-                -h|--help) usage ;;
-                --) shift ; break ;;
-                *) echo "Internal error!" ; exit 1 ;;
-        esac
+	case "$1" in
+		-s|--skeleton)	SKEL="$2"; shift 2 ;;
+		-l|--link)		LINK="$2" ; shift 2 ;;
+		-b|--base)		if [ "$BASE" != "" ];	then
+								BASE="${BASE}, "
+							fi
+							BASE="${BASE}$2"
+							if [ "$INHERIT" != "" ];	then
+								INHERIT="${INHERIT}, "
+							fi
+							INHERIT="${INHERIT}public $2"
+							CONSTRUCT="${CONSTRUCT}, $2(id)"
+							INIT="${INIT}\n\t$2::init();"
+							RENDER="${RENDER}\n\t$2::render();"
+							if [ "$INC" != "" ];	then
+								INC="${INC}\n"
+							fi
+							INC="${INC}#include <$2/$2.h>"
+							shift 2 ;;
+		-h|--help)		usage ;;
+		--) 				shift ; break ;;
+		*) 				echo "Internal error!" ; exit 1 ;;
+	esac
 done
 
 if [ $OPTIND -gt $# ]; then
@@ -58,15 +78,13 @@ if [ "$LINK" != "" ]; then
 	fi
 fi
 
-# check base
-if [ -z "$BASE" ]
-  then
-    echo "Base name is an empty string"
-	 exit 1
-fi
 
 echo "Skeleton Path: $SKEL"
-echo "Base Name:     $BASE"
+if [ "$BASE" == "" ]; then
+	echo "Base:          Visualizer"
+else
+	echo "Base:          $BASE"
+fi
 if [ "$LINK" != "" ]; then
 	echo "Link Path:     $LINK"
 fi
@@ -87,11 +105,9 @@ for arg do
 	fi
 	echo "Creating $PWD/$Name" ; 
 	mkdir "$PWD/$Name"
-	cp "$SKEL/Skeleton.cpp" "$PWD/$Name/$Name.cpp"
 	cp "$SKEL/Skeleton.h" "$PWD/$Name/$Name.h"
-	if [ -e "$SKEL/visSkeleton.cpp" ]; then
-		cp "$SKEL/visSkeleton.cpp" "$PWD/$Name/vis$Name.cpp"
-	fi
+	cp "$SKEL/Skeleton.cpp" "$PWD/$Name/$Name.cpp"
+	cp "$SKEL/visSkeleton.cpp" "$PWD/$Name/vis$Name.cpp"
 	cp "$SKEL/SConstruct" "$PWD/$Name/SConstruct"
 
 	for File in $(ls -1 $PWD/$Name/)
@@ -101,16 +117,22 @@ for arg do
 		sed -i -r "s/Skeleton/$Name/g" "$Path"
 		sed -i -r "s/SKELETON/$Upper/g" "$Path"
 	done
-	sed -i -r "s/Visualizer\(id\)/$BASE(id)/g" "$PWD/$Name/$Name.cpp"
-	sed -i -r "s/public Visualizer/public $BASE/g" "$PWD/$Name/$Name.h"
-	if [ "$BASE" != "Visualizer" ]; then
-		sed -i -r "s/(void $Name::init\(\) \{)/\1\n\t$BASE::init();/g" "$PWD/$Name/$Name.cpp"
-		sed -i -r "s/(void $Name::render\(\) \{)/\1\n\t$BASE::render();/g" "$PWD/$Name/$Name.cpp"
-		sed -i -r "s/(LIBPATH'].*)]/\1, visualizer+'\/Base\/$BASE']/g" "$PWD/$Name/SConstruct"
-		sed -i -r "s/(CPPPATH'].*)]/\1, visualizer+'\/Base\/$BASE']/g" "$PWD/$Name/SConstruct"
-		sed -i -r "s/(LIBS'].*)]/\1, '$BASE']/g" "$PWD/$Name/SConstruct"
-		sed -i -r "s/(Factory.h>)/\1\n#include <$BASE.h>/g" "$PWD/$Name/$Name.h"
+
+	if [ "$BASE" == "" ]; then
+		sed -i -r "s/_INHERIT_/public Visualizer/g" "$PWD/$Name/$Name.h"
+		sed -i -r "s/_CONSTRUCT_/Visualizer(id)/g" "$PWD/$Name/$Name.cpp"
+	else
+		sed -i -r "s/_INHERIT_/$INHERIT/g" "$PWD/$Name/$Name.h"
+		sed -i -r "s/_CONSTRUCT_/Visualizer(id)$CONSTRUCT/g" "$PWD/$Name/$Name.cpp"
+		sed -i -r "s/(void $Name::init\(\) \{)/\1$INIT/g" "$PWD/$Name/$Name.cpp"
+		sed -i -r "s/(void $Name::render\(\) \{)/\1$RENDER/g" "$PWD/$Name/$Name.cpp"
+		sed -i -r "s/(CPPPATH'].*)]/\1, visualizer+'\/Base']/g" "$PWD/$Name/SConstruct"
+		head -n 5 "$PWD/$Name/$Name.h" > concatenate
+		echo -e "$INC" >> concatenate
+		tail -n +6 "$PWD/$Name/$Name.h" >> concatenate
+		mv concatenate "$PWD/$Name/$Name.h"
 	fi
+
 	if [ "$LINK" != "" ]; then
 		cd "$Current/$Name"
 		scons

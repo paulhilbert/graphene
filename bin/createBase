@@ -1,0 +1,114 @@
+#!/bin/bash
+
+
+usage () {
+	echo "Usage:"
+	echo "createBase [--skeleton,-s <skeleton_path>] [--base,-b <base_name>] <base_names...>"
+	echo "createBase --help,-h"
+	exit 1
+}
+
+TEMP=`getopt -o s:b:h --long skeleton:,base:,help \
+     -n 'createBase' -- "$@"`
+
+if [ $? != 0 ] ; then usage; fi
+
+eval set -- "$TEMP"
+
+
+SKEL="$GRAPHENE_VIS/base_skeleton"
+BASE=""
+INHERIT=""
+CONSTRUCT=""
+INIT=""
+RENDER=""
+INC=""
+
+while true ; do
+	case "$1" in
+		-s|--skeleton)	SKEL="$2"; shift 2 ;;
+		-b|--base)		if [ "$BASE" != "" ];	then
+								BASE="${BASE}, "
+							fi
+							BASE="${BASE}$2"
+							if [ "$INHERIT" != "" ];	then
+								INHERIT="${INHERIT}, "
+							fi
+							INHERIT="${INHERIT}public $2"
+							CONSTRUCT="${CONSTRUCT}, $2(id)"
+							INIT="${INIT}\n\t$2::init();"
+							RENDER="${RENDER}\n\t$2::render();"
+							if [ "$INC" != "" ];	then
+								INC="${INC}\n"
+							fi
+							INC="${INC}#include <$2/$2.h>"
+							shift 2 ;;
+		-h|--help)		usage ;;
+		--)				shift ; break ;;
+		*)					echo "Internal error!" ; exit 1 ;;
+	esac
+done
+
+if [ $OPTIND -gt $# ]; then
+	echo "No base names given."
+	usage
+fi
+
+
+# check skel
+if [ -z "$SKEL" ]; then
+	echo "Skeleton path argument is an empty string"
+	exit 1
+fi
+if [ ! -d "$SKEL" ]; then
+	echo "Skeleton path does not exist"
+	exit 1
+fi
+
+echo "Skeleton Path: $SKEL"
+if [ "$BASE" == "" ]; then
+	echo "Base:          Visualizer"
+else
+	echo "Base:          $BASE"
+fi
+
+Current="$PWD"
+
+for arg do
+	if [ -z "$arg" ]
+	then
+		echo "Name argument is an empty string"
+		exit 1
+	fi
+	Name="$arg"
+	if [ -d "$PWD/$Name" ]
+	then
+		echo "Path \"$PWD/$Name\" already exists."
+		exit 1
+	fi
+	echo "Creating $PWD/$Name" ; 
+	mkdir "$PWD/$Name"
+	cp "$SKEL/Skeleton.h" "$PWD/$Name/$Name.h"
+	cp "$SKEL/Skeleton.inl" "$PWD/$Name/$Name.inl"
+
+	for File in $(ls -1 $PWD/$Name/)
+	do
+		Path="$PWD/$Name/$File"
+		Upper=$(echo "$Name" | tr [a-z] [A-Z])
+		sed -i -r "s/Skeleton/$Name/g" "$Path"
+		sed -i -r "s/SKELETON/$Upper/g" "$Path"
+	done
+	if [ "$BASE" == "" ]; then
+		sed -i -r "s/_INHERIT_/virtual public Visualizer/g" "$PWD/$Name/$Name.h"
+		sed -i -r "s/_CONSTRUCT_/Visualizer(id)/g" "$PWD/$Name/$Name.inl"
+	else
+		sed -i -r "s/_INHERIT_/$INHERIT/g" "$PWD/$Name/$Name.h"
+		sed -i -r "s/_CONSTRUCT_/Visualizer(id)$CONSTRUCT/g" "$PWD/$Name/$Name.inl"
+		sed -i -r "s/(void $Name::init\(\) \{)/\1$INIT/g" "$PWD/$Name/$Name.inl"
+		sed -i -r "s/(void $Name::render\(\) \{)/\1$RENDER/g" "$PWD/$Name/$Name.inl"
+		head -n 4 "$PWD/$Name/$Name.h" > concatenate
+		echo -e "$INC" >> concatenate
+		tail -n +5 "$PWD/$Name/$Name.h" >> concatenate
+		mv concatenate "$PWD/$Name/$Name.h"
+	fi
+done
