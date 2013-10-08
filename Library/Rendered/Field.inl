@@ -94,7 +94,7 @@ inline bool Field::getVisible() const {
 }
 
 inline void Field::set(const std::vector<Eigen::Vector3f>& points) {
-	m_pointCount = points.size();
+	m_pointCount = static_cast<unsigned int>(points.size());
 	m_colors = Annotation::Colors(m_pointCount, m_color);
 	m_geometry.reset();
 	m_geometry = std::shared_ptr<Buffer::Geometry>(new Buffer::Geometry());
@@ -109,7 +109,7 @@ inline void Field::set(const std::vector<Eigen::Vector3f>& points) {
 }
 
 inline void Field::render(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix) {
-	if (!m_visible) return;
+	if (!m_visible || !m_geometry) return;
 	m_kernel->program().use();
 	m_kernel->program().setUniformMat4("mvM", mvMatrix.data());
 	m_kernel->program().setUniformMat4("prM", prMatrix.data());

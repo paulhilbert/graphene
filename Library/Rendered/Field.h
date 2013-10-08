@@ -6,6 +6,7 @@
 #include <map>
 #include <memory>
 #include <functional>
+#include <numeric>
 
 #include <Eigen/Dense>
 #include <Testing/asserts.h>
@@ -47,7 +48,7 @@ class Annotation {
 		typedef std::weak_ptr<Annotation>   WPtr;
 		typedef Vis::RGBA Color;
 		typedef std::vector<Color> Colors;
-		typedef Vis::ColorMap<Color, float> CMap;
+		typedef std::function<Color (float)> CMap;
 		typedef std::function<Color (int)> CAssign;
 		typedef std::vector<float> Scalars;
 		typedef std::function<float (int)> ScalarField;
