@@ -97,7 +97,8 @@ int main( int argc, char *argv[] ) {
 		fs::path p = dirIt->path();
 		if (fs::is_directory(p)) continue;
 		smatch what;
-		if (!regex_match(p.filename().string(), what, pattern)) continue;
+		std::string filename = p.filename().string();
+		if (!regex_match(filename, what, pattern)) continue;
 		std::string name = what[1];
 		ext::shared_library lib(p.string());
 		if (!lib.open()) {
