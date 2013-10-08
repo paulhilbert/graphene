@@ -51,8 +51,8 @@ int main( int argc, char *argv[] ) {
 		("visExt",  po::value<std::string>(&visExt)  ->required(), "File extension of visualizer shared libraries")
 		("backend", po::value<std::string>(&backendPath) ->required(), "Path to backend library")
 		("width",   po::value<int>(&wndWidth)  ->default_value(1024), "Path to backend library")
-		("height",  po::value<int>(&wndHeight) ->default_value(768), "Path to backend library")
-		("fps",     po::value<int>(&fps) ->default_value(32), "Frames Per Second")
+		("height",  po::value<int>(&wndHeight) ->default_value(576), "Path to backend library")
+		("fps",     po::value<int>(&fps) ->default_value(60), "Frames Per Second")
 		("verbose", "Output additional debug messages")
 	;
 
@@ -92,12 +92,12 @@ int main( int argc, char *argv[] ) {
 	Graphene graphene(backend, eventHandler);
 
 	fs::directory_iterator dirIt(visPath), endIt;
-	regex pattern(".*/vis(\\w+)"+visExt);
+	regex pattern("vis(\\w+)"+visExt);
 	for (; dirIt != endIt; ++dirIt) {
 		fs::path p = dirIt->path();
 		if (fs::is_directory(p)) continue;
 		smatch what;
-		if (!regex_match(p.string(), what, pattern)) continue;
+		if (!regex_match(p.filename().string(), what, pattern)) continue;
 		std::string name = what[1];
 		ext::shared_library lib(p.string());
 		if (!lib.open()) {
@@ -115,7 +115,7 @@ int main( int argc, char *argv[] ) {
 		graphene.addFactory(name, factory);
 	}
 
-	return graphene.run(60);
+	return graphene.run(fps);
 }
 
 GUI::Backend::Ptr getBackend(std::string path) {

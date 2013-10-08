@@ -34,7 +34,7 @@ class Factory {
 
 #define VIS_DLL_EXPORT(VIS) \
 extern "C" \
-FW::Factory* BOOST_EXTENSION_EXPORT_DECL getFactory() { \
+BOOST_EXTENSION_EXPORT_DECL FW::Factory* getFactory() { \
 	FW::Factory* factory = new VIS::Factory(); \
 	return factory; \
 }
