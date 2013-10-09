@@ -62,7 +62,7 @@ std::string Qt5Settings::remove(int index) {
 	auto itTab = m_tabs.begin();
 	std::advance(itTab, index);
 	m_tabs.erase(itTab);
-	return m_indexMap[index];
+	return name;
 }
 
 QWidget* Qt5Settings::widget() {

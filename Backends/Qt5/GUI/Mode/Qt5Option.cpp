@@ -13,6 +13,7 @@ Qt5Option::Qt5Option(std::string id, std::string label, fs::path icon, Qt5Group*
 }
 
 Qt5Option::~Qt5Option() {
+	delete m_button;
 }
 
 bool Qt5Option::active() const {

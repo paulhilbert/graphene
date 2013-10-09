@@ -40,6 +40,7 @@ inline void PaintSelect::init(const Eigen::Vector4f& color) {
 		if (m_stop) m_stop();
 	});
 	m_handle->events()->connect<void (int, int)>("RIGHT_CLICK", [&] (int x, int y) {
+		if (!m_enabled) return;
 		if (m_unselect) m_unselect();
 	});
 }

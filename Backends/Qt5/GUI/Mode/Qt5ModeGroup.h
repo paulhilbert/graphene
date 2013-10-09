@@ -3,6 +3,7 @@
 
 #include <GUI/Mode/ModeGroup.h>
 #include <QtWidgets/QToolBar>
+#include <QtWidgets/QAction>
 
 namespace GUI {
 namespace Mode {
@@ -22,6 +23,7 @@ class Qt5Group : public Group {
 
 	protected:
 		QToolBar*  m_toolbar;
+		QAction*   m_separator;
 
 };
 
