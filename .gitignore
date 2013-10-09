@@ -16,3 +16,7 @@
 # misc
 *.dblite
 *.swp
+*moc*.cpp
+Probes*
+graphene
+graphene.conf
