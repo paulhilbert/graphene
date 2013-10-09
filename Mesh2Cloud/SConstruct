@@ -1,0 +1,14 @@
+import os
+env = Environment(ENV = {'PATH' : os.environ['PATH'],
+                         'TERM' : os.environ['TERM'],
+                         'HOME' : os.environ['HOME']})
+
+graphene = os.environ['GRAPHENE_ROOT']
+commons = os.environ['COMMONS']
+env['CCFLAGS'] += ['-g', '-Wall', '-std=c++11', '-O2', '-D GL_GLEXT_PROTOTYPES', '-D USE_BOOST_RANDOM', '-D NDEBUG', '-DUSE_PCL', '-Wno-unknown-pragmas', '-Wno-deprecated-declarations', '-Wno-strict-aliasing', '-Wno-attributes', '-Wno-unused-local-typedefs']
+env['CPPPATH'] = ['.', "/usr/include/eigen3", graphene, commons, '/usr/include/pcl-1.7']
+env['LIBPATH'] = [graphene, '/usr/lib/OpenMesh', '/usr/local/lib/commons']
+env['LIBS']    = ['RNG', 'boost_system','boost_filesystem','GLEW', 'glut', 'graphene', 'OpenMeshCore', 'OpenMeshTools', 'pcl_common', 'pcl_io']
+env['SHLIBPREFIX'] = ''
+
+env.SharedLibrary('visMesh2Cloud', ['visMesh2Cloud.cpp','Mesh2Cloud.cpp'])

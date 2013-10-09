@@ -1,3 +1,0 @@
-[submodule "externals/commons"]
-	path = externals/commons
-	url = git://github.com/paulhilbert/commons.git
