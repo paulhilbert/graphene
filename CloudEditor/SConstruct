@@ -1,0 +1,15 @@
+import os
+env = Environment(ENV = {'PATH' : os.environ['PATH'],
+                         'TERM' : os.environ['TERM'],
+                         'HOME' : os.environ['HOME']})
+
+graphene = os.environ['GRAPHENE_ROOT']
+visualizer = os.environ['GRAPHENE_VIS']
+commons = os.environ['COMMONS']
+env['CCFLAGS'] += ['-g', '-Wall', '-std=c++11', '-O2', '-D GL_GLEXT_PROTOTYPES', '-D USE_BOOST_RANDOM', '-D NDEBUG', '-Wno-unknown-pragmas', '-Wno-deprecated-declarations', '-Wno-strict-aliasing', '-Wno-attributes', '-Wno-unused-local-typedefs']
+env['CPPPATH'] = ['.', '/usr/include/eigen3', '/usr/include/pcl-1.7', graphene, commons, visualizer+'/Base']
+env['LIBPATH'] = [graphene]
+env['LIBS']    = ['pcl_common', 'pcl_io', 'pcl_keypoints', 'pcl_features', 'boost_system','boost_filesystem','GLEW', 'glut', 'graphene']
+env['SHLIBPREFIX'] = ''
+
+env.SharedLibrary('visCloudEditor', ['visCloudEditor.cpp','CloudEditor.cpp'])

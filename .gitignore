@@ -1,10 +1,18 @@
-*.conf
-*.swp
-*sconsign*
+# Compiled Object files
+*.slo
+*.lo
 *.o
-*.a
-*.os
+
+# Compiled Dynamic libraries
 *.so
-moc_*
-graphene
-Probes
+*.os
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# misc
+*.dblite
+*.swp
