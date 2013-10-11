@@ -55,8 +55,6 @@ void Qt5Backend::init(int argc, char* argv[], FW::Events::EventHandler::Ptr even
 	m_glWidget = new Qt5GLWidget(eventHandler, 1);
 	m_wnd->setCentralWidget(m_glWidget);
 	QCoreApplication::instance()->installEventFilter(m_glWidget);
-
-	m_wnd->show();
 }
 
 int Qt5Backend::run(int fps) {
@@ -65,6 +63,7 @@ int Qt5Backend::run(int fps) {
 	int timeout = 1000 / fps;
 	if (!timeout) timeout = 1;
 	timer->start(timeout);
+	m_wnd->show();
 	return m_app->exec();
 }
 
