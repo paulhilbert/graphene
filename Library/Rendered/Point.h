@@ -10,6 +10,10 @@ namespace Rendered {
 
 class Point {
 	public:
+		typedef std::shared_ptr<Point> Ptr;
+		typedef std::weak_ptr<Point>   WPtr;
+	
+	public:
 		Point(const Eigen::Vector3f& position = Eigen::Vector3f(0.f, 0.f, 0.f), const Eigen::Vector4f& color = Eigen::Vector4f(1.f, 1.f, 1.f, 1.f), int lineWidth = 1);
 
 		void setPosition(const Eigen::Vector3f& position);
