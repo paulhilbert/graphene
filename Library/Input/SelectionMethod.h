@@ -19,7 +19,7 @@ class SelectionMethod {
 		SelectionMethod(FW::VisualizerHandle::Ptr handle);
 		virtual ~SelectionMethod();
 
-		virtual void init(const Eigen::Vector4f& color) = 0;
+		virtual void init() = 0;
 		virtual void render() = 0;
 
 		void enable();

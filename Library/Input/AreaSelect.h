@@ -6,6 +6,10 @@
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include <Eigen/OpenGL>
+
+#include <Vis/Color.h>
+using Vis::RGBA;
+
 #include <Library/Buffer/Geometry.h>
 #include <Library/Shader/ShaderProgram.h>
 
@@ -19,15 +23,21 @@ class AreaSelect : public SelectionMethod {
 		typedef std::weak_ptr<AreaSelect> WPtr;
 
 	public:
-		AreaSelect(FW::VisualizerHandle::Ptr handle);
+		AreaSelect(FW::VisualizerHandle::Ptr handle, const RGBA& color = RGBA(0.f, 0.4f, 1.f, 0.4f));
 		virtual ~AreaSelect();
 
-		void init(const Eigen::Vector4f& color);
+		void init();
 		void render();
+
+		void setColor(const RGBA& color);
 
 		bool pointInSelection(Eigen::Vector3f point);
 
 	protected:
+		void uploadColors();
+
+	protected:
+		RGBA m_color;
 		int  m_startX;
 		int  m_startY;
 		int  m_currX;

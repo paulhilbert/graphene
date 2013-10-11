@@ -1,14 +1,14 @@
-inline AreaSelect::AreaSelect(FW::VisualizerHandle::Ptr handle) : SelectionMethod(handle) {
+inline AreaSelect::AreaSelect(FW::VisualizerHandle::Ptr handle, const RGBA& color) : SelectionMethod(handle), m_color(color) {
 }
 
 inline AreaSelect::~AreaSelect() {
 }
 
-inline void AreaSelect::init(const Eigen::Vector4f& color) {
+inline void AreaSelect::init() {
 	m_progArea.addShaders("GLSL/points.vert", "GLSL/points.frag");
 	m_progArea.link();
 	m_geomArea.init();
-	m_geomArea.setColors({color, color, color, color});
+	uploadColors();
 
 	m_handle->events()->connect<void (int, int)>("LEFT_DRAG_START", [&] (int x, int y) {
 		if (!m_enabled) return;
@@ -45,8 +45,14 @@ inline void AreaSelect::init(const Eigen::Vector4f& color) {
 		}
 	});
 	m_handle->events()->connect<void (int, int)>("LEFT_CLICK", [&] (int x, int y) {
+		if (!m_enabled) return;
 		if (m_unselect) m_unselect();
 	});
+}
+
+inline void AreaSelect::setColor(const RGBA& color) {
+	m_color = color;
+	uploadColors();
 }
 
 inline void AreaSelect::render() {
@@ -72,4 +78,8 @@ inline void AreaSelect::render() {
 inline bool AreaSelect::pointInSelection(Eigen::Vector3f point) {
 	auto proj = Eigen::project(point, m_handle->transforms()->modelview(), m_handle->transforms()->projection(), m_handle->transforms()->viewport());
 	return m_area.contains(proj.head(2).cast<int>());
+}
+
+inline void AreaSelect::uploadColors() {
+	m_geomArea.setColors({m_color, m_color, m_color, m_color});
 }
