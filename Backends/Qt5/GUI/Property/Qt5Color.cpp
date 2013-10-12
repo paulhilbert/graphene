@@ -72,7 +72,8 @@ void Qt5Color::setButtonColor() {
 }
 
 void Qt5Color::buttonClicked() {
-	QColor color = QColorDialog::getColor(Qt::white, nullptr, "Select Background Color", QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
+	QColor initial = QColor::fromRgbF(m_color[0], m_color[1], m_color[2], m_color[3]);
+	QColor color = QColorDialog::getColor(initial, nullptr, "Select Color", QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
 	m_color << color.redF(), color.greenF(), color.blueF(), color.alphaF();
 	setButtonColor();
 	notify(m_color);
