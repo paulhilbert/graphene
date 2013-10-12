@@ -22,10 +22,9 @@ Qt5AddVisDialog::Qt5AddVisDialog(std::string title, bool singleMode) : m_singleM
 
 	QHBoxLayout *horizontalLayout = new QHBoxLayout;
 
-	m_visSelection = new QListWidget;
-	horizontalLayout->addWidget(m_visSelection);
-	if (singleMode) {
-		m_visSelection->hide();
+	if (!m_singleMode) {
+		m_visSelection = new QListWidget;
+		horizontalLayout->addWidget(m_visSelection);
 	}
 	horizontalLayout->addWidget(m_settingPages, 2);
 
@@ -62,10 +61,12 @@ std::string Qt5AddVisDialog::getActiveVisName() const {
 
 Qt5FactorySettings::Ptr Qt5AddVisDialog::addFactory(std::string name) {
 	// add selection
-	QListWidgetItem *factorySelection = new QListWidgetItem(m_visSelection);
-	factorySelection->setText(QString::fromStdString(m_singleMode ? "Settings" : name));
-	factorySelection->setTextAlignment(Qt::AlignLeft);
-	factorySelection->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	if (!m_singleMode) {
+		QListWidgetItem *factorySelection = new QListWidgetItem(m_visSelection);
+		factorySelection->setText(QString::fromStdString(m_singleMode ? "Settings" : name));
+		factorySelection->setTextAlignment(Qt::AlignLeft);
+		factorySelection->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	}
 	// add settings
 	Qt5FactorySettings::Ptr settings(new Qt5FactorySettings(name));
 	auto nameProp = settings->add<String>("Visualizer Name: ", "__name__");
