@@ -53,7 +53,7 @@ int main( int argc, char *argv[] ) {
 		("visPath", po::value<std::string>(&visPath) ->required(), "Path to visualizer shared libraries")
 		("visExt",  po::value<std::string>(&visExt)  ->required(), "File extension of visualizer shared libraries")
 		("backend", po::value<std::string>(&backendPath) ->required(), "Path to backend library")
-		("single",  po::value<std::string>(&single) ->default_value(""), "Path to backend library")
+		("single",  po::value<std::string>(&single) ->default_value(""), "Use the given name as single mode visualizer")
 		("title",   po::value<std::string>(&title) ->default_value("graphene"), "Window title")
 		("width",   po::value<int>(&wndWidth)  ->default_value(1024), "Path to backend library")
 		("height",  po::value<int>(&wndHeight) ->default_value(576), "Path to backend library")
