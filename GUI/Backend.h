@@ -24,17 +24,19 @@ class Backend {
 		Backend();
 		virtual ~Backend();
 
-		virtual void init(int argc, char* argv[], FW::Events::EventHandler::Ptr eventHandler, bool verbose) = 0;
+		virtual void init(int argc, char* argv[], FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool verbose) = 0;
 		virtual int  run(int fps) = 0;
 
 		virtual FactoryHandle::Ptr addFactory(std::string name) = 0;
 		virtual VisualizerHandle::Ptr addVisualizer(std::string name) = 0;
 
+		virtual bool initSingleVisualizer() = 0;
+
 		virtual Log::Ptr getLog() = 0;
 		virtual Status::Ptr getStatus() = 0;
 		virtual IO::AbstractProgressBarPool::Ptr getProgressBarPool() = 0;
 
-		virtual void setWindowTitle(const char* title) = 0;
+		virtual void setWindowTitle(std::string) = 0;
 		virtual void setWindowSize(int width, int height) = 0;
 		virtual Eigen::Vector2i getGLSize() = 0;
 

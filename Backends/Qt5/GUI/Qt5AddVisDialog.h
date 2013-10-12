@@ -23,7 +23,7 @@ class Qt5AddVisDialog : public QDialog {
 		typedef std::weak_ptr<Qt5AddVisDialog> WPtr;
 
 	public:
-		Qt5AddVisDialog(std::string title);
+		Qt5AddVisDialog(std::string title, bool singleMode);
 		virtual ~Qt5AddVisDialog();
 
 		Qt5FactorySettings::Ptr addFactory(std::string name);
@@ -35,6 +35,7 @@ class Qt5AddVisDialog : public QDialog {
 		void changeVis(QListWidgetItem* current, QListWidgetItem* previous);
 
 	protected:
+		bool                       m_singleMode;
 		QListWidget*               m_visSelection;
 		QStackedWidget*            m_settingPages;
 		std::vector<std::string>   m_factoryNames;
