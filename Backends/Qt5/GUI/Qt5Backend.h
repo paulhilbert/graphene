@@ -30,7 +30,6 @@ class Qt5Backend : public QObject, public Backend {
 
 		void init(int argc, char* argv[], FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool verbose);
 		int  run(int fps);
-		void exitApplication();
 
 		FactoryHandle::Ptr addFactory(std::string name);
 		VisualizerHandle::Ptr addVisualizer(std::string name);
@@ -50,13 +49,13 @@ class Qt5Backend : public QObject, public Backend {
 		void setExitCallback(std::function<void ()> func);
 
 	protected:
-		void initSingleVisualizer();
+		bool initSingleVisualizer();
 		void addToolbar();
 		void initMainSettings();
 
 	public slots:
 		void update();
-		void onAddVis();
+		bool onAddVis();
 		void onExit();
 		void onClearLog();
 		void tabClose(int idx);

@@ -30,7 +30,7 @@ class Backend {
 		virtual FactoryHandle::Ptr addFactory(std::string name) = 0;
 		virtual VisualizerHandle::Ptr addVisualizer(std::string name) = 0;
 
-		virtual void initSingleVisualizer() = 0;
+		virtual bool initSingleVisualizer() = 0;
 
 		virtual Log::Ptr getLog() = 0;
 		virtual Status::Ptr getStatus() = 0;

@@ -70,13 +70,10 @@ int Qt5Backend::run(int fps) {
 	if (!timeout) timeout = 1;
 	timer->start(timeout);
 	m_wnd->show();
-	if (m_singleMode) initSingleVisualizer();
+	if (m_singleMode) {
+		if (!initSingleVisualizer()) return 0;
+	}
 	return m_app->exec();
-}
-
-void Qt5Backend::exitApplication() {
-	if (m_onExit) m_onExit();
-	m_app->quit();
 }
 
 FactoryHandle::Ptr Qt5Backend::addFactory(std::string name) {
@@ -138,8 +135,8 @@ void Qt5Backend::setExitCallback(std::function<void ()> func) {
 	m_onExit = func;
 }
 
-void Qt5Backend::initSingleVisualizer() {
-	onAddVis();
+bool Qt5Backend::initSingleVisualizer() {
+	return onAddVis();
 }
 
 void Qt5Backend::addToolbar() {
@@ -221,12 +218,13 @@ void Qt5Backend::update() {
 	m_glWidget->updateGL();
 }
 
-void Qt5Backend::onAddVis() {
+bool Qt5Backend::onAddVis() {
 	if (m_addVisDialog->exec() == QDialog::Accepted) {
 		if (m_onAddVis) m_onAddVis(m_addVisDialog->getActiveFactory(), m_addVisDialog->getActiveVisName());
 	} else {
-		if (m_singleMode) exitApplication();
+		if (m_singleMode) return false;
 	}
+	return true;
 }
 
 void Qt5Backend::onExit() {
