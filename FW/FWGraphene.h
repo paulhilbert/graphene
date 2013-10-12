@@ -32,7 +32,7 @@ class Graphene {
 		friend class ::GUI::Backend;
 
 	public:
-		Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler);
+		Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode);
 		virtual ~Graphene();
 
 		int run(int fps);

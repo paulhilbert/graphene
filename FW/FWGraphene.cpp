@@ -32,7 +32,7 @@ struct ScreencastInfo {
 
 
 struct Graphene::Impl {
-		Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler);
+		Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode);
 		virtual ~Impl();
 
 		void initTransforms();
@@ -64,11 +64,13 @@ struct Graphene::Impl {
 		void setOrtho(bool ortho);
 
 
-		GUI::Backend::Ptr                      m_backend;
-		FW::Events::EventHandler::Ptr          m_eventHandler;
+		GUI::Backend::Ptr                         m_backend;
+		FW::Events::EventHandler::Ptr             m_eventHandler;
 
-		std::map<std::string, Factory::Ptr>    m_factories;
-		std::map<std::string, Visualizer::Ptr> m_visualizer;
+		bool                                      m_singleMode;
+
+		std::map<std::string, Factory::Ptr>       m_factories;
+		std::map<std::string, Visualizer::Ptr>    m_visualizer;
 
 		Transforms::Ptr                           m_transforms;
 		std::map<std::string, CameraControl::Ptr> m_camControls;
@@ -86,8 +88,8 @@ struct Graphene::Impl {
 /// GRAPHENE ///
 
 
-Graphene::Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler) {
-	m_impl = std::shared_ptr<Impl>(new Impl(backend, eventHandler));
+Graphene::Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode) {
+	m_impl = std::shared_ptr<Impl>(new Impl(backend, eventHandler, singleMode));
 }
 
 Graphene::~Graphene() {
@@ -109,7 +111,7 @@ Factory::Ptr Graphene::getFactory(std::string name) {
 /// GRAPHENE IMPL ///
 
 
-Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler) : m_backend(backend), m_eventHandler(eventHandler) {
+Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode) : m_backend(backend), m_eventHandler(eventHandler), m_singleMode(singleMode) {
 	backend->setRenderCallback(std::bind(&Graphene::Impl::render, this));
 	backend->setExitCallback(std::bind(&Graphene::Impl::exit, this));
 	backend->setAddVisCallback(std::bind(&Graphene::Impl::addVisualizer, this, std::placeholders::_1, std::placeholders::_2));
@@ -218,10 +220,17 @@ void Graphene::Impl::render() {
 	glClearColor(bg[0], bg[1], bg[2], bg[3]);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	auto names = m_backend->getActiveVisualizerNames();
-	for (const auto& name : names) {
-		m_visualizer[name]->waitForTasks();
-		m_visualizer[name]->render();
+	if (m_singleMode) {
+		for (const auto& vis : m_visualizer) {
+			vis.second->waitForTasks();
+			vis.second->render();
+		}
+	} else {
+		auto names = m_backend->getActiveVisualizerNames();
+		for (const auto& name : names) {
+			m_visualizer[name]->waitForTasks();
+			m_visualizer[name]->render();
+		}
 	}
 
 #ifdef ENABLE_SCREENCAST

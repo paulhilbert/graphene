@@ -18,7 +18,7 @@ class VisualizerHandle {
 		typedef std::weak_ptr<VisualizerHandle>   WPtr;
 
 	public:
-		VisualizerHandle(Property::Container::Ptr properties, Mode::Handle::Ptr modes, Log::Ptr log, Status::Ptr status);
+		VisualizerHandle(Property::Container::Ptr properties, Mode::Handle::Ptr modes, Log::Ptr log, Status::Ptr status, bool alwaysActive = false);
 		virtual ~VisualizerHandle();
 
 		Property::Container::Ptr properties();
