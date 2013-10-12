@@ -23,7 +23,8 @@ Qt5Backend::~Qt5Backend() {
 	delete m_app;
 }
 
-void Qt5Backend::init(int argc, char* argv[], FW::Events::EventHandler::Ptr eventHandler, bool verbose) {
+void Qt5Backend::init(int argc, char* argv[], FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool verbose) {
+	m_singleMode = singleMode;
 	m_app = new QApplication(argc, argv);
 	m_wnd = new QMainWindow();
 
@@ -38,14 +39,19 @@ void Qt5Backend::init(int argc, char* argv[], FW::Events::EventHandler::Ptr even
 	m_dock = new QDockWidget();
 	m_dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 	m_dock->setMinimumSize(QSize(400, 400));
-	m_settings = Qt5Settings::Ptr(new Qt5Settings(m_log));
-	m_dock->setWidget(m_settings->widget());
-	QObject::connect(m_settings->widget(), SIGNAL(tabCloseRequested(int)), this, SLOT(tabClose(int)));
+	if (singleMode) {
+		m_mainSettings = Qt5VisSettings::Ptr(new Qt5VisSettings());
+		m_dock->setWidget(std::dynamic_pointer_cast<Qt5VisSettings>(m_mainSettings)->widget());
+	} else {
+		m_settings = Qt5Settings::Ptr(new Qt5Settings(m_log));
+		m_dock->setWidget(m_settings->widget());
+		QObject::connect(m_settings->widget(), SIGNAL(tabCloseRequested(int)), this, SLOT(tabClose(int)));
+	}
 	m_wnd->addDockWidget(Qt::RightDockWidgetArea, m_dock);
 	initMainSettings();
 
 	// setup add visualizer dialog
-	m_addVisDialog = new Qt5AddVisDialog("Add Visualizer");
+	m_addVisDialog = new Qt5AddVisDialog("Add Visualizer", singleMode);
 
 	// toolbar and status bar
 	addToolbar();
@@ -64,6 +70,7 @@ int Qt5Backend::run(int fps) {
 	if (!timeout) timeout = 1;
 	timer->start(timeout);
 	m_wnd->show();
+	if (m_singleMode) initSingleVisualizer();
 	return m_app->exec();
 }
 
@@ -78,14 +85,14 @@ FactoryHandle::Ptr Qt5Backend::addFactory(std::string name) {
 }
 
 VisualizerHandle::Ptr Qt5Backend::addVisualizer(std::string name) {
-	Container::Ptr properties = m_settings->add(name);
+	Container::Ptr properties = m_singleMode ? m_mainSettings : m_settings->add(name);
 	if (!properties) {
 		m_log->error("Could not add visualizer");
 		return VisualizerHandle::Ptr();
 	}
 	Mode::Qt5Handle::Ptr modes(new Mode::Qt5Handle(m_tbar, m_log));
 	Qt5Status::Ptr status(new Qt5Status(m_wnd));
-	return VisualizerHandle::Ptr(new VisualizerHandle(properties, std::dynamic_pointer_cast<Mode::Handle>(modes), m_log, status));
+	return VisualizerHandle::Ptr(new VisualizerHandle(properties, std::dynamic_pointer_cast<Mode::Handle>(modes), m_log, status, m_singleMode));
 }
 
 Log::Ptr Qt5Backend::getLog() {
@@ -100,8 +107,8 @@ IO::AbstractProgressBarPool::Ptr Qt5Backend::getProgressBarPool() {
 	return m_logDialog->progressBarPool();
 }
 
-void Qt5Backend::setWindowTitle(const char* title) {
-	if (m_wnd) m_wnd->setWindowTitle(title);
+void Qt5Backend::setWindowTitle(std::string title) {
+	if (m_wnd) m_wnd->setWindowTitle(title.c_str());
 }
 
 void Qt5Backend::setWindowSize(int width, int height) {
@@ -131,6 +138,10 @@ void Qt5Backend::setExitCallback(std::function<void ()> func) {
 	m_onExit = func;
 }
 
+void Qt5Backend::initSingleVisualizer() {
+	onAddVis();
+}
+
 void Qt5Backend::addToolbar() {
 	m_tbar = m_wnd->addToolBar("Application");
 	m_tbar->setFloatable(false);
@@ -138,11 +149,13 @@ void Qt5Backend::addToolbar() {
 	m_tbar->show();
 
 	// actions
-	auto* addVisAction = new QAction(QIcon("Icons/add.png"), "Add Visualizer", m_wnd);
+	if (!m_singleMode) {
+		auto* addVisAction = new QAction(QIcon("Icons/add.png"), "Add Visualizer", m_wnd);
+		QObject::connect(addVisAction, SIGNAL(triggered()), this, SLOT(onAddVis()));
+		m_tbar->addAction(addVisAction);
+	}
 	auto* exitAction = new QAction(QIcon("Icons/exit.png"), "Exit", m_wnd);
-	QObject::connect(addVisAction, SIGNAL(triggered()), this, SLOT(onAddVis()));
 	QObject::connect(exitAction, SIGNAL(triggered()), this, SLOT(onExit()));
-	m_tbar->addAction(addVisAction);
 	m_tbar->addAction(exitAction);
 	m_tbar->addSeparator();
 
@@ -180,22 +193,28 @@ void Qt5Backend::addToolbar() {
 }
 
 void Qt5Backend::initMainSettings() {
-	m_mainSettings = m_settings->add("Global", false);
-	if (!m_mainSettings) {
-		m_log->error("Could not add global settings page");
-		return;
+	if (!m_singleMode) {
+		m_mainSettings = m_settings->add("Global", false);
+		if (!m_mainSettings) {
+			m_log->error("Could not add global settings page");
+			return;
+		}
 	}
-	auto groupNav = m_mainSettings->add<Group>("Navigation", "groupNavigation");
+	auto groupNav = m_mainSettings->add<Section>("Navigation", "groupNavigation");
 	auto ccChoice = groupNav->add<Choice>("Camera Control:", "camControl");
 	ccChoice->add("orbit", "Orbit Control");
 	ccChoice->add("fly", "Fly Control");
 	ccChoice->setCallback([&] (std::string control) { if (m_onSetCamControl) m_onSetCamControl(control); });
-	auto groupRender = m_mainSettings->add<Group>("Rendering", "groupRendering");
+	auto groupRender = m_mainSettings->add<Section>("Rendering", "groupRendering");
 	groupRender->add<Color>("Background: ", "background")->setValue(Eigen::Vector4f(0.f, 0.f, 0.f, 1.f));
 	auto projection = groupRender->add<Choice>("Projection:");
 	projection->add("perspective", "Perspective");
 	projection->add("ortho", "Orthographic");
 	projection->setCallback([&] (std::string proj) { if (m_onSetOrtho) m_onSetOrtho(proj == "ortho"); });
+	if (m_singleMode) {
+		groupNav->collapse();
+		groupRender->collapse();
+	}
 }
 
 void Qt5Backend::update() {
@@ -205,6 +224,8 @@ void Qt5Backend::update() {
 void Qt5Backend::onAddVis() {
 	if (m_addVisDialog->exec() == QDialog::Accepted) {
 		if (m_onAddVis) m_onAddVis(m_addVisDialog->getActiveFactory(), m_addVisDialog->getActiveVisName());
+	} else {
+		if (m_singleMode) exitApplication();
 	}
 }
 

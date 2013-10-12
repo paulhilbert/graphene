@@ -28,7 +28,7 @@ class Qt5Backend : public QObject, public Backend {
 		Qt5Backend();
 		virtual ~Qt5Backend();
 
-		void init(int argc, char* argv[], FW::Events::EventHandler::Ptr eventHandler, bool verbose);
+		void init(int argc, char* argv[], FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool verbose);
 		int  run(int fps);
 		void exitApplication();
 
@@ -39,7 +39,7 @@ class Qt5Backend : public QObject, public Backend {
 		Status::Ptr getStatus();
 		IO::AbstractProgressBarPool::Ptr getProgressBarPool();
 
-		void setWindowTitle(const char* title);
+		void setWindowTitle(std::string title);
 		void setWindowSize(int width, int height);
 		Eigen::Vector2i getGLSize();
 
@@ -50,6 +50,7 @@ class Qt5Backend : public QObject, public Backend {
 		void setExitCallback(std::function<void ()> func);
 
 	protected:
+		void initSingleVisualizer();
 		void addToolbar();
 		void initMainSettings();
 
@@ -65,16 +66,17 @@ class Qt5Backend : public QObject, public Backend {
 		void onStop();
 
 	protected:
-		QApplication*     m_app;
-		QMainWindow*      m_wnd;
-		QToolBar*         m_tbar;
-		Qt5GLWidget*      m_glWidget;
-		QDockWidget*      m_dock;
-		Qt5Settings::Ptr  m_settings;
-		Container::Ptr    m_mainSettings;
-		Qt5AddVisDialog*  m_addVisDialog;
-		Qt5LogDialog*     m_logDialog;
-		Log::Ptr          m_log;
+		bool                 m_singleMode;
+		QApplication*        m_app;
+		QMainWindow*         m_wnd;
+		QToolBar*            m_tbar;
+		Qt5GLWidget*         m_glWidget;
+		QDockWidget*         m_dock;
+		Qt5Settings::Ptr     m_settings;
+		Container::Ptr       m_mainSettings;
+		Qt5AddVisDialog*     m_addVisDialog;
+		Qt5LogDialog*        m_logDialog;
+		Log::Ptr             m_log;
 		std::function<void (void)> m_onExit;
 
 #ifdef ENABLE_SCREENCAST
