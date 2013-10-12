@@ -22,9 +22,10 @@ Qt5AddVisDialog::Qt5AddVisDialog(std::string title, bool singleMode) : m_singleM
 
 	QHBoxLayout *horizontalLayout = new QHBoxLayout;
 
-	if (!singleMode) {
-		m_visSelection = new QListWidget;
-		horizontalLayout->addWidget(m_visSelection);
+	m_visSelection = new QListWidget;
+	horizontalLayout->addWidget(m_visSelection);
+	if (singleMode) {
+		m_visSelection->hide();
 	}
 	horizontalLayout->addWidget(m_settingPages, 2);
 
