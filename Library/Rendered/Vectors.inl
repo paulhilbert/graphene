@@ -7,7 +7,7 @@ inline VectorRenderKernel::~VectorRenderKernel() {
 }
 
 inline void VectorRenderKernel::initShader() {
-	m_prog.addShaders("GLSL/vectors.vert", "GLSL/vectors.frag", "GLSL/vectors.geom");
+	m_prog.addShaders("Library/GLSL/vectors.vert", "Library/GLSL/vectors.frag", "Library/GLSL/vectors.geom");
 }
 
 inline void VectorRenderKernel::renderElements(int pointCount) {

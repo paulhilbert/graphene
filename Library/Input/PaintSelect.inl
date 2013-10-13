@@ -5,7 +5,7 @@ inline PaintSelect::~PaintSelect() {
 }
 
 inline void PaintSelect::init() {
-	m_progCircle.addShaders("GLSL/points.vert", "GLSL/points.frag");
+	m_progCircle.addShaders("Library/GLSL/points.vert", "Library/GLSL/points.frag");
 	m_progCircle.link();
 	m_geomCircle.init();
 	uploadCircle();

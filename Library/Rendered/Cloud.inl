@@ -7,7 +7,7 @@ inline CloudRenderKernel::~CloudRenderKernel() {
 }
 
 inline void CloudRenderKernel::initShader() {
-	m_prog.addShaders("GLSL/points.vert", "GLSL/points.frag");
+	m_prog.addShaders("Library/GLSL/points.vert", "Library/GLSL/points.frag");
 }
 
 inline void CloudRenderKernel::renderElements(int pointCount) {

@@ -9,7 +9,7 @@ Point::Point(const Eigen::Vector3f& position, const Eigen::Vector4f& color, int 
 	setPosition(position);
 	setLineWidth(lineWidth);
 
-	m_prog.addShaders("GLSL/translatedPoints.vert", "GLSL/constant.frag");
+	m_prog.addShaders("Library/GLSL/translatedPoints.vert", "Library/GLSL/constant.frag");
 	m_prog.link();
 	setColor(color);
 

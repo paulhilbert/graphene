@@ -7,7 +7,7 @@ inline LineRenderKernel::~LineRenderKernel() {
 }
 
 inline void LineRenderKernel::initShader() {
-	m_prog.addShaders("GLSL/points.vert", "GLSL/points.frag");
+	m_prog.addShaders("Library/GLSL/points.vert", "Library/GLSL/points.frag");
 }
 
 inline void LineRenderKernel::renderElements(int pointCount) {
