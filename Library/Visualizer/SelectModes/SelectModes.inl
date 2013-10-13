@@ -1,5 +1,5 @@
 template <class Entities, class Entity>
-inline SelectModes<Entities, Entity>::SelectModes(std::string id, EntitiesPtr entities, Methods exclude) : Visualizer(id), m_entities(entities), m_exclude(exclude), m_activeMethod(METHOD_NONE) {
+inline SelectModes<Entities, Entity>::SelectModes(std::string id, Methods exclude) : Visualizer(id), m_exclude(exclude), m_activeMethod(METHOD_NONE) {
 }
 
 template <class Entities, class Entity>
@@ -7,7 +7,9 @@ inline SelectModes<Entities, Entity>::~SelectModes() {
 }
 
 template <class Entities, class Entity>
-inline void SelectModes<Entities, Entity>::init() {
+inline void SelectModes<Entities, Entity>::init(EntitiesPtr entities) {
+	m_entities = entities;
+	
 	addProperties();
 	registerEvents();
 	addModes();

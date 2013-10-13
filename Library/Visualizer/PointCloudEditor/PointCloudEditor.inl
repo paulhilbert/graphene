@@ -1,4 +1,4 @@
-inline PointCloudEditor::PointCloudEditor(std::string id, const Paths& paths) : Visualizer(id), SinglePointCloud(id, paths), SelectModes<Cloud,Point>(id, m_cloud) {
+inline PointCloudEditor::PointCloudEditor(std::string id, const Paths& paths) : Visualizer(id), SinglePointCloud(id, paths), SelectModes<Cloud,Point>(id) {
 }
 
 inline PointCloudEditor::~PointCloudEditor() {
@@ -6,7 +6,7 @@ inline PointCloudEditor::~PointCloudEditor() {
 
 inline void PointCloudEditor::init() {
 	SinglePointCloud::init();
-	SelectModes::init();
+	SelectModes::init(m_cloud);
 	addProperties();
 	registerEvents();
 }
