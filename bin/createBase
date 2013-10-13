@@ -16,7 +16,7 @@ if [ $? != 0 ] ; then usage; fi
 eval set -- "$TEMP"
 
 
-SKEL="$GRAPHENE_VIS/base_skeleton"
+SKEL="$GRAPHENE_ROOT/Library/Visualizer/skeleton/base"
 BASE=""
 INHERIT=""
 CONSTRUCT=""
@@ -41,7 +41,7 @@ while true ; do
 							if [ "$INC" != "" ];	then
 								INC="${INC}\n"
 							fi
-							INC="${INC}#include <$2/$2.h>"
+							INC="${INC}#include <Library/Visualizer/$2/$2.h>"
 							shift 2 ;;
 		-h|--help)		usage ;;
 		--)				shift ; break ;;

@@ -3,12 +3,12 @@
 
 usage () {
 	echo "Usage:"
-	echo "createVisualizer [--skeleton,-s <skeleton_path>] [--link,-l <link_path>] [--base,-b <base_name>] <visualizer_names...>"
+	echo "createVisualizer [--skeleton,-s <skeleton_path>] [--link,-l[<link_path>]] [--base,-b <base_name>] <visualizer_names...>"
 	echo "createVisualizer --help,-h"
 	exit 1
 }
 
-TEMP=`getopt -o s:l:b:h --long skeleton:,link:,base:,help \
+TEMP=`getopt -o s:l::b:h --long skeleton:,link::,base:,help \
      -n 'createVisualizer' -- "$@"`
 
 if [ $? != 0 ] ; then usage; fi
@@ -16,7 +16,7 @@ if [ $? != 0 ] ; then usage; fi
 eval set -- "$TEMP"
 
 
-SKEL="$GRAPHENE_VIS/skeleton"
+SKEL="$GRAPHENE_ROOT/Library/Visualizer/skeleton/vis"
 LINK=""
 BASE=""
 INHERIT=""
@@ -28,7 +28,10 @@ INC=""
 while true ; do
 	case "$1" in
 		-s|--skeleton)	SKEL="$2"; shift 2 ;;
-		-l|--link)		LINK="$2" ; shift 2 ;;
+		-l|--link)		case "$2" in
+								"") LINK="$GRAPHENE_VIS" ; shift 2 ;;
+								*)  LINK="$2" ; shift 2 ;;
+							esac ;;
 		-b|--base)		if [ "$BASE" != "" ];	then
 								BASE="${BASE}, "
 							fi
@@ -43,7 +46,7 @@ while true ; do
 							if [ "$INC" != "" ];	then
 								INC="${INC}\n"
 							fi
-							INC="${INC}#include <$2/$2.h>"
+							INC="${INC}#include <Library/Visualizer/$2/$2.h>"
 							shift 2 ;;
 		-h|--help)		usage ;;
 		--) 				shift ; break ;;
@@ -126,7 +129,7 @@ for arg do
 		sed -i -r "s/_CONSTRUCT_/Visualizer(id)$CONSTRUCT/g" "$PWD/$Name/$Name.cpp"
 		sed -i -r "s/(void $Name::init\(\) \{)/\1$INIT/g" "$PWD/$Name/$Name.cpp"
 		sed -i -r "s/(void $Name::render\(\) \{)/\1$RENDER/g" "$PWD/$Name/$Name.cpp"
-		sed -i -r "s/(CPPPATH'].*)]/\1, visualizer+'\/Base']/g" "$PWD/$Name/SConstruct"
+#sed -i -r "s/(CPPPATH'].*)]/\1, visualizer+'\/Base']/g" "$PWD/$Name/SConstruct"
 		head -n 5 "$PWD/$Name/$Name.h" > concatenate
 		echo -e "$INC" >> concatenate
 		tail -n +6 "$PWD/$Name/$Name.h" >> concatenate
