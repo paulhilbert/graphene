@@ -8,20 +8,18 @@ inline SelectModes<Entities, Entity>::~SelectModes() {
 
 template <class Entities, class Entity>
 inline void SelectModes<Entities, Entity>::init(EntitiesPtr entities) {
-	m_entities = entities;
-	
 	addProperties();
 	registerEvents();
 	addModes();
 
 	if (!(m_exclude & METHOD_AREA)) {
 		m_areaSelect = Input::AreaSelect::Ptr(new Input::AreaSelect(fw()));
-		m_areaSelect->setStopCallback([&] () {
-			if (!m_entities) return;
+		m_areaSelect->setStopCallback([&, entities] () {
+			if (!entities) return;
 			if (!resetSelectionRender()) return;
 			int idx = 0;
 			IdxSet selection;
-			for (const Entity& entity : *m_entities) {
+			for (const Entity& entity : *entities) {
 				if (isInsideSelection(entity, std::dynamic_pointer_cast<Input::SelectionMethod>(m_areaSelect), m_activeMethod)) {
 					selection.push_back(idx);
 				}
@@ -48,12 +46,12 @@ inline void SelectModes<Entities, Entity>::init(EntitiesPtr entities) {
 				resetSelection();
 			}
 		});
-		m_paintSelect->setDragCallback([&] () {
-			if (!m_entities) return;
+		m_paintSelect->setDragCallback([&, entities] () {
+			if (!entities) return;
 			if (!resetSelectionRender()) return;
 			int idx = 0;
 			IdxSet selection;
-			for (const Entity& entity : *m_entities) {
+			for (const Entity& entity : *entities) {
 				if (isInsideSelection(entity, std::dynamic_pointer_cast<Input::SelectionMethod>(m_paintSelect), m_activeMethod)) {
 					selection.push_back(idx);
 				}
@@ -67,12 +65,12 @@ inline void SelectModes<Entities, Entity>::init(EntitiesPtr entities) {
 			}
 			if (m_selection.size()) updateSelectionRender(m_selection);
 		});
-		m_paintSelect->setStopCallback([&] () {
-			if (!m_entities) return;
+		m_paintSelect->setStopCallback([&, entities] () {
+			if (!entities) return;
 			if (!resetSelectionRender()) return;
 			int idx = 0;
 			IdxSet selection;
-			for (const Entity& entity : *m_entities) {
+			for (const Entity& entity : *entities) {
 				if (isInsideSelection(entity, std::dynamic_pointer_cast<Input::SelectionMethod>(m_paintSelect), m_activeMethod)) {
 					selection.push_back(idx);
 				}

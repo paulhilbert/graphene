@@ -39,8 +39,6 @@ class SelectModes : virtual public Visualizer {
 		virtual void updateSelectionRender(const IdxSet& selection) = 0;
 
 	protected:
-		EntitiesPtr              m_entities;
-
 		Methods                  m_exclude;
 		Methods                  m_activeMethod;
 		IdxSet                   m_selection;
