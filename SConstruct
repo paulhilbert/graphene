@@ -13,5 +13,9 @@ obj = [Glob('GUI/*.cpp'), Glob('GUI/Property/*.cpp'), Glob('GUI/Mode/*.cpp'), Gl
 #cmns = [Glob(commons+'/IO/*.cpp'), commons+'/Random/RNG.cpp']
 lib = [Glob('Library/Buffer/*.cpp'), Glob('Library/Rendered/*.cpp'), Glob('Library/Shader/*.cpp')]
 
-env.Program("graphene", ["graphene.cpp"]+obj)
+# library
 env.Library("graphene", obj+lib)
+# executable
+env['LIBS'] += ['graphene']
+env['LIBPATH'] = ['.']
+env.Program("graphene", ["graphene.cpp"])

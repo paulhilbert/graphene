@@ -2,8 +2,8 @@
 #define POINTCLOUDEDITORVIS_H_
 
 #include <FW/Visualizer.h>
-#include <SinglePointCloud/SinglePointCloud.h>
-#include <SelectModes/SelectModes.h>
+#include <Library/Visualizer/SinglePointCloud/SinglePointCloud.h>
+#include <Library/Visualizer/SelectModes/SelectModes.h>
 
 #include <Vis/Colors.h>
 using namespace Vis::Colors;
