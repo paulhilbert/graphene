@@ -37,6 +37,7 @@ class Qt5Backend : public QObject, public Backend {
 		Log::Ptr getLog();
 		Status::Ptr getStatus();
 		IO::AbstractProgressBarPool::Ptr getProgressBarPool();
+		Container::Ptr getMainSettings();
 
 		void setWindowTitle(std::string title);
 		void setWindowSize(int width, int height);
@@ -51,7 +52,6 @@ class Qt5Backend : public QObject, public Backend {
 	protected:
 		bool initSingleVisualizer();
 		void addToolbar();
-		void initMainSettings();
 
 	public slots:
 		void update();

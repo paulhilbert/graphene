@@ -145,8 +145,23 @@ void Graphene::Impl::initTransforms() {
 	m_camControls["orbit"] = OrbitCameraControl::Ptr(new OrbitCameraControl());
 	m_camControls["fly"]   = FlyCameraControl::Ptr(new FlyCameraControl());
 	m_camera = Camera::Ptr(new Camera(m_camControls["orbit"], m_eventHandler, Transforms::WPtr(m_transforms)));
-	m_backend->setCamControlCallback(std::bind(&Graphene::Impl::setCameraControl, this, std::placeholders::_1));
-	m_backend->setOrthoCallback(std::bind(&Graphene::Impl::setOrtho, this, std::placeholders::_1));
+	// init settings
+	auto main = m_backend->getMainSettings();
+	auto groupNav = main->add<Section>("Navigation", "groupNavigation");
+	auto ccChoice = groupNav->add<Choice>("Camera Control:", "camControl");
+	ccChoice->add("orbit", "Orbit Control");
+	ccChoice->add("fly", "Fly Control");
+	ccChoice->setCallback(std::bind(&Graphene::Impl::setCameraControl, this, std::placeholders::_1));
+	auto groupRender = main->add<Section>("Rendering", "groupRendering");
+	groupRender->add<Color>("Background: ", "background")->setValue(Eigen::Vector4f(0.f, 0.f, 0.f, 1.f));
+	auto projection = groupRender->add<Choice>("Projection:");
+	projection->add("perspective", "Perspective");
+	projection->add("ortho", "Orthographic");
+	projection->setCallback([&] (std::string mode) { setOrtho(mode == "ortho"); });
+	if (m_singleMode) {
+		groupNav->collapse();
+		groupRender->collapse();
+	}
 }
 
 int Graphene::Impl::run(int fps) {

@@ -46,9 +46,13 @@ void Qt5Backend::init(int argc, char* argv[], FW::Events::EventHandler::Ptr even
 		m_settings = Qt5Settings::Ptr(new Qt5Settings(m_log));
 		m_dock->setWidget(m_settings->widget());
 		QObject::connect(m_settings->widget(), SIGNAL(tabCloseRequested(int)), this, SLOT(tabClose(int)));
+		m_mainSettings = m_settings->add("Global", false);
+		if (!m_mainSettings) {
+			m_log->error("Could not add global settings page");
+			return;
+		}
 	}
 	m_wnd->addDockWidget(Qt::RightDockWidgetArea, m_dock);
-	initMainSettings();
 
 	// setup add visualizer dialog
 	m_addVisDialog = new Qt5AddVisDialog("Add Visualizer", singleMode);
@@ -102,6 +106,10 @@ Status::Ptr Qt5Backend::getStatus() {
 
 IO::AbstractProgressBarPool::Ptr Qt5Backend::getProgressBarPool() {
 	return m_logDialog->progressBarPool();
+}
+
+Container::Ptr Qt5Backend::getMainSettings() {
+	return m_mainSettings;
 }
 
 void Qt5Backend::setWindowTitle(std::string title) {
@@ -187,31 +195,6 @@ void Qt5Backend::addToolbar() {
 	m_tbar->addAction(m_startScreencastAction);
 	m_tbar->addAction(m_stopScreencastAction);
 #endif // ENABLE_SCREENCAST
-}
-
-void Qt5Backend::initMainSettings() {
-	if (!m_singleMode) {
-		m_mainSettings = m_settings->add("Global", false);
-		if (!m_mainSettings) {
-			m_log->error("Could not add global settings page");
-			return;
-		}
-	}
-	auto groupNav = m_mainSettings->add<Section>("Navigation", "groupNavigation");
-	auto ccChoice = groupNav->add<Choice>("Camera Control:", "camControl");
-	ccChoice->add("orbit", "Orbit Control");
-	ccChoice->add("fly", "Fly Control");
-	ccChoice->setCallback([&] (std::string control) { if (m_onSetCamControl) m_onSetCamControl(control); });
-	auto groupRender = m_mainSettings->add<Section>("Rendering", "groupRendering");
-	groupRender->add<Color>("Background: ", "background")->setValue(Eigen::Vector4f(0.f, 0.f, 0.f, 1.f));
-	auto projection = groupRender->add<Choice>("Projection:");
-	projection->add("perspective", "Perspective");
-	projection->add("ortho", "Orthographic");
-	projection->setCallback([&] (std::string proj) { if (m_onSetOrtho) m_onSetOrtho(proj == "ortho"); });
-	if (m_singleMode) {
-		groupNav->collapse();
-		groupRender->collapse();
-	}
 }
 
 void Qt5Backend::update() {

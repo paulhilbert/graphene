@@ -33,6 +33,7 @@ class Backend {
 		virtual Log::Ptr getLog() = 0;
 		virtual Status::Ptr getStatus() = 0;
 		virtual IO::AbstractProgressBarPool::Ptr getProgressBarPool() = 0;
+		virtual Container::Ptr getMainSettings() = 0;
 
 		virtual void setWindowTitle(std::string) = 0;
 		virtual void setWindowSize(int width, int height) = 0;
