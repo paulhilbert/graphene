@@ -1,6 +1,6 @@
 #include "Qt5ProgressBar.h"
 
-#include <iostream>
+#include <include/common.h>
 
 namespace GUI {
 

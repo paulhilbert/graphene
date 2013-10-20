@@ -1,8 +1,7 @@
 #ifndef QT5SETTINGS_H_
 #define QT5SETTINGS_H_
 
-#include <vector>
-#include <memory>
+#include <include/common.h>
 #include <QtWidgets/QTabWidget>
 
 #include "Property/Qt5VisSettings.h"

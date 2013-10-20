@@ -1,9 +1,5 @@
 #include "Visualizer.h"
 
-#include <chrono>
-#include <Testing/asserts.h>
-#include <Algorithm/Sets.h>
-
 namespace FW {
 
 Visualizer::Visualizer(std::string id) : m_id(id) {

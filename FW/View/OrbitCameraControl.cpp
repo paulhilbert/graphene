@@ -1,7 +1,5 @@
 #include "OrbitCameraControl.h"
 
-#include <iostream>
-
 namespace FW {
 namespace View {
 

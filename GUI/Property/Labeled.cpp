@@ -1,6 +1,5 @@
 #include "Labeled.h"
 
-
 namespace GUI {
 namespace Property {
 

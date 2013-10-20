@@ -1,10 +1,5 @@
 #include "FlyCameraControl.h"
 
-#include <iostream> // for graphics
-
-#include <Eigen/Geometry>
-#include <Eigen/OpenGL>
-
 namespace FW {
 namespace View {
 

@@ -1,8 +1,8 @@
 #ifndef QT5GLWIDGET_H_
 #define QT5GLWIDGET_H_
 
-#include <Eigen/Dense>
-#include <GL/glew.h>
+#include <include/common.h>
+#include <include/ogl.h>
 #include <QtOpenGL/QGLWidget>
 #include <QtGui/QMouseEvent>
 

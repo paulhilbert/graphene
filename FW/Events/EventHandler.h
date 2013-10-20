@@ -1,15 +1,7 @@
 #ifndef FWEVENTHANDLER_H_
 #define FWEVENTHANDLER_H_
 
-#include <iostream>
-#include <string>
-using std::string;
-
-#include <map>
-using std::pair;
-using std::map;
-
-#include <memory>
+#include <include/common.h>
 
 #include <Generic/Command.h>
 using Generic::Command;
@@ -51,10 +43,10 @@ class EventHandler {
 		EventHandler();
 
 		template <class Sig>
-		void registerReceiver(EventType eventType, string id, std::function<Sig> receiver);
+		void registerReceiver(EventType eventType, std::string id, std::function<Sig> receiver);
 
-		void unregisterReceiver(EventType eventType, string id);
-		void unregisterReceiver(string id);
+		void unregisterReceiver(EventType eventType, std::string id);
+		void unregisterReceiver(std::string id);
 
 		void notify(Signal signal);
 
@@ -63,10 +55,10 @@ class EventHandler {
 		// blocks are ignored by general events and window events (pre/post/resize)
 		void allowAll();
 		void blockAll();
-		void allow(string id);
-		void block(string id);
-		void blockAllBut(string id);
-		void allowAllBut(string id);
+		void allow(std::string id);
+		void block(std::string id);
+		void blockAllBut(std::string id);
+		void allowAllBut(std::string id);
 
 	protected:
 		std::shared_ptr<Impl> m_impl;

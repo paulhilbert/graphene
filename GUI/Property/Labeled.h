@@ -1,7 +1,7 @@
 #ifndef PROPERTYLABELED_H_
 #define PROPERTYLABELED_H_
 
-#include <string>
+#include <include/common.h>
 
 namespace GUI {
 namespace Property {

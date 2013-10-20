@@ -1,9 +1,7 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
-#include <cstring>
-#include <memory>
-#include <Eigen/Dense>
+#include <include/common.h>
 
 #include <FW/Events/EventHandler.h>
 #include <FW/View/CameraControl.h>

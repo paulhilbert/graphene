@@ -1,10 +1,7 @@
 #ifndef TREE_H_
 #define TREE_H_
 
-#include <vector>
-#include <string>
-#include <memory>
-#include <map>
+#include <include/common.h>
 
 #include "Base.h"
 #include "Labeled.h"

@@ -1,7 +1,7 @@
 #ifndef QT5BACKEND_H_
 #define QT5BACKEND_H_
 
-#include <memory>
+#include <include/common.h>
 
 #include <QtCore/QObject>
 #include <QtWidgets/QAction>

@@ -1,6 +1,5 @@
 #include "EventHandler.h"
 
-#include <Algorithm/Sets.h>
 #include <FW/Events/Keys.h>
 
 namespace FW {
@@ -22,20 +21,20 @@ class EventHandler::Impl {
 	public:
 		typedef std::shared_ptr<BaseCommand>  CmdPtr;
 		struct Receiver {
-			string id;
+			std::string id;
 			bool blocked;
 			CmdPtr receiver;
 		};
 		typedef vector<Receiver> Receivers;
-		typedef map<EventType, Receivers> ReceiverMap;
+		typedef std::map<EventType, Receivers> ReceiverMap;
 
 		Impl();
 
 		template <class Sig>
-		void registerReceiver(EventType eventType, string id, std::function<Sig> receiver);
+		void registerReceiver(EventType eventType, std::string id, std::function<Sig> receiver);
 
-		void unregisterReceiver(EventType eventType, string id);
-		void unregisterReceiver(string id);
+		void unregisterReceiver(EventType eventType, std::string id);
+		void unregisterReceiver(std::string id);
 
 		void notify(Signal signal);
 
@@ -44,8 +43,8 @@ class EventHandler::Impl {
 		// blocks are ignored by general events and window events (pre/post/resize)
 		void allowAll();
 		void blockAll();
-		void allow(string id);
-		void block(string id);
+		void allow(std::string id);
+		void block(std::string id);
 
 		ReceiverMap  m_receivers;
 		Modifier::Ptr m_modifier;
@@ -98,30 +97,30 @@ EventHandler::EventHandler() {
 }
 
 template <class Sig>
-void EventHandler::registerReceiver(EventType eventType, string id, std::function<Sig> receiver) {
+void EventHandler::registerReceiver(EventType eventType, std::string id, std::function<Sig> receiver) {
 	m_impl->registerReceiver<Sig>(eventType, id, receiver);
 }
 
 //template <>
-//void EventHandler::registerReceiver(EventType eventType, string id, std::function<void (void)> receiver) {
+//void EventHandler::registerReceiver(EventType eventType, std::string id, std::function<void (void)> receiver) {
 //	m_impl->registerReceiver<void (void)>(eventType, id, receiver);
 //}
 //
 //template <>
-//void EventHandler::registerReceiver(EventType eventType, string id, std::function<void (int, int)> receiver) {
+//void EventHandler::registerReceiver(EventType eventType, std::string id, std::function<void (int, int)> receiver) {
 //	m_impl->registerReceiver<void (int, int)>(eventType, id, receiver);
 //}
 //
 //template <>
-//void EventHandler::registerReceiver(EventType eventType, string id, std::function<void (int, int, int, int)> receiver) {
+//void EventHandler::registerReceiver(EventType eventType, std::string id, std::function<void (int, int, int, int)> receiver) {
 //	m_impl->registerReceiver<void (int, int, int, int)>(eventType, id, receiver);
 //}
 
-void EventHandler::unregisterReceiver(EventType eventType, string id) {
+void EventHandler::unregisterReceiver(EventType eventType, std::string id) {
 	m_impl->unregisterReceiver(eventType, id);
 }
 
-void EventHandler::unregisterReceiver(string id) {
+void EventHandler::unregisterReceiver(std::string id) {
 	m_impl->unregisterReceiver(id);
 }
 
@@ -141,20 +140,20 @@ void EventHandler::blockAll() {
 	m_impl->blockAll();
 }
 
-void EventHandler::allow(string id) {
+void EventHandler::allow(std::string id) {
 	m_impl->allow(id);
 }
 
-void EventHandler::block(string id) {
+void EventHandler::block(std::string id) {
 	m_impl->block(id);
 }
 
-void EventHandler::blockAllBut(string id) {
+void EventHandler::blockAllBut(std::string id) {
 	blockAll();
 	allow(id);
 }
 
-void EventHandler::allowAllBut(string id) {
+void EventHandler::allowAllBut(std::string id) {
 	allowAll();
 	block(id);
 }
@@ -167,7 +166,7 @@ EventHandler::Impl::Impl() : m_modifier(new Modifier()) {
 }
 
 template <class Sig>
-void EventHandler::Impl::registerReceiver(EventType eventType, string id, std::function<Sig> receiver) {
+void EventHandler::Impl::registerReceiver(EventType eventType, std::string id, std::function<Sig> receiver) {
 	if (m_receivers.find(eventType) == m_receivers.end()) {
 		Receivers newReceivers;
 		m_receivers[eventType] = newReceivers;
@@ -176,7 +175,7 @@ void EventHandler::Impl::registerReceiver(EventType eventType, string id, std::f
 	m_receivers[eventType].push_back(newReceiver);
 }
 
-void EventHandler::Impl::unregisterReceiver(EventType eventType, string id) {
+void EventHandler::Impl::unregisterReceiver(EventType eventType, std::string id) {
 	ReceiverMap::iterator findIt = m_receivers.find(eventType);
 	if (findIt == m_receivers.end()) return;
 
@@ -191,7 +190,7 @@ void EventHandler::Impl::unregisterReceiver(EventType eventType, string id) {
 	if (!findIt->second.size()) m_receivers.erase(findIt);
 }
 
-void EventHandler::Impl::unregisterReceiver(string id) {
+void EventHandler::Impl::unregisterReceiver(std::string id) {
 	std::vector<std::string> toErase;
 	for (ReceiverMap::iterator eventIt = m_receivers.begin(); eventIt != m_receivers.end(); ++eventIt) {
 		Algorithm::remove(eventIt->second, [&](const Receiver& r) { return r.id == id; });
@@ -256,7 +255,7 @@ void EventHandler::Impl::blockAll() {
 	}
 }
 
-void EventHandler::Impl::allow(string id) {
+void EventHandler::Impl::allow(std::string id) {
 	for (ReceiverMap::iterator eventIt = m_receivers.begin(); eventIt != m_receivers.end(); ++eventIt) {
 		for (Receivers::iterator it = eventIt->second.begin(); it != eventIt->second.end(); ++it) {
 			if ( it->id == id ) it->blocked = false;
@@ -264,7 +263,7 @@ void EventHandler::Impl::allow(string id) {
 	}
 }
 
-void EventHandler::Impl::block(string id) {
+void EventHandler::Impl::block(std::string id) {
 	for (ReceiverMap::iterator eventIt = m_receivers.begin(); eventIt != m_receivers.end(); ++eventIt) {
 		for (Receivers::iterator it = eventIt->second.begin(); it != eventIt->second.end(); ++it) {
 			if ( it->id == id ) it->blocked = true;
@@ -273,14 +272,14 @@ void EventHandler::Impl::block(string id) {
 }
 
 
-template void EventHandler::registerReceiver<void (void)>(EventType eventType, string id, std::function<void (void)> receiver);
-template void EventHandler::registerReceiver<void (int)>(EventType eventType, string id, std::function<void (int)> receiver);
-template void EventHandler::registerReceiver<void (int, int)>(EventType eventType, string id, std::function<void (int, int)> receiver);
-template void EventHandler::registerReceiver<void (int, int, int)>(EventType eventType, string id, std::function<void (int, int, int)> receiver);
-template void EventHandler::registerReceiver<void (int, int, int, int)>(EventType eventType, string id, std::function<void (int, int, int, int)> receiver);
-template void EventHandler::registerReceiver<void (std::string)>(EventType eventType, string id, std::function<void (std::string)> receiver);
-template void EventHandler::registerReceiver<void (FW::Events::Keys::Special)>(EventType eventType, string id, std::function<void (FW::Events::Keys::Special)> receiver);
-template void EventHandler::registerReceiver<void (FW::Events::Keys::Modifier)>(EventType eventType, string id, std::function<void (FW::Events::Keys::Modifier)> receiver);
+template void EventHandler::registerReceiver<void (void)>(EventType eventType, std::string id, std::function<void (void)> receiver);
+template void EventHandler::registerReceiver<void (int)>(EventType eventType, std::string id, std::function<void (int)> receiver);
+template void EventHandler::registerReceiver<void (int, int)>(EventType eventType, std::string id, std::function<void (int, int)> receiver);
+template void EventHandler::registerReceiver<void (int, int, int)>(EventType eventType, std::string id, std::function<void (int, int, int)> receiver);
+template void EventHandler::registerReceiver<void (int, int, int, int)>(EventType eventType, std::string id, std::function<void (int, int, int, int)> receiver);
+template void EventHandler::registerReceiver<void (std::string)>(EventType eventType, std::string id, std::function<void (std::string)> receiver);
+template void EventHandler::registerReceiver<void (FW::Events::Keys::Special)>(EventType eventType, std::string id, std::function<void (FW::Events::Keys::Special)> receiver);
+template void EventHandler::registerReceiver<void (FW::Events::Keys::Modifier)>(EventType eventType, std::string id, std::function<void (FW::Events::Keys::Modifier)> receiver);
 
 } // Events
 } // FW

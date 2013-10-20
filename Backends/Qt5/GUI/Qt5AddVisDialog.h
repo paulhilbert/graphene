@@ -1,9 +1,7 @@
 #ifndef QT5ADDVISDIALOG_H_
 #define QT5ADDVISDIALOG_H_
 
-#include <memory>
-#include <string>
-#include <vector>
+#include <include/common.h>
 
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QListWidget>

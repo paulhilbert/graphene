@@ -1,8 +1,7 @@
 #ifndef GUISTATUS_H_
 #define GUISTATUS_H_
 
-#include <string>
-#include <memory>
+#include <include/common.h>
 
 namespace GUI {
 

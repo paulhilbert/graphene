@@ -1,7 +1,6 @@
 #include "Qt5Tree.h"
 
-#include <algorithm>
-#include <Testing/asserts.h>
+#include <include/common.h>
 #include <QtWidgets/QHeaderView>
 
 namespace GUI {

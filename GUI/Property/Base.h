@@ -1,8 +1,7 @@
 #ifndef PROPERTYBASE_H_
 #define PROPERTYBASE_H_
 
-#include <iostream> // for graphics
-#include <memory>
+#include <include/common.h>
 
 #include "../GUIElement.h"
 

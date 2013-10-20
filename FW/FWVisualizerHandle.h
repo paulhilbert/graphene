@@ -1,7 +1,7 @@
 #ifndef FWVISUALIZERHANDLE_H_
 #define FWVISUALIZERHANDLE_H_
 
-#include <memory>
+#include <include/common.h>
 
 #include <Geometry/Ray.h>
 #include <FW/View/Transforms.h>

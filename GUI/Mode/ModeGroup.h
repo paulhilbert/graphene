@@ -1,10 +1,7 @@
 #ifndef GUIMODEGROUP_H_
 #define GUIMODEGROUP_H_
 
-#include <iostream>
-#include <memory>
-#include <functional>
-#include <map>
+#include <include/common.h>
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;

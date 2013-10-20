@@ -1,7 +1,6 @@
 #include "Tree.h"
 
-#include <Testing/asserts.h>
-#include <Algorithm/Strings.h>
+#include <include/common.h>
 
 namespace GUI {
 namespace Property {

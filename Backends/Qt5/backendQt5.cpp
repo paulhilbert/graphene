@@ -1,4 +1,5 @@
-#include <memory>
+#include <include/common.h>
+#include <include/ogl.h>
 #include <boost/extension/extension.hpp>
 
 #include "GUI/Qt5Backend.h"

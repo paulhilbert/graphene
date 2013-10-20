@@ -1,7 +1,7 @@
 #ifndef FWFACTORYHANDLE_H_
 #define FWFACTORYHANDLE_H_
 
-#include <memory>
+#include <include/common.h>
 
 namespace FW {
 

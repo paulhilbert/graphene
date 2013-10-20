@@ -1,7 +1,7 @@
 #ifndef QT5PROGRESSBAR_H_
 #define QT5PROGRESSBAR_H_
 
-#include <memory>
+#include <include/common.h>
 
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QHBoxLayout>

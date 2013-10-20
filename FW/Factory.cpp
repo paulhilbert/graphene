@@ -1,7 +1,5 @@
 #include "Factory.h"
 
-#include <Testing/asserts.h>
-
 namespace FW {
 
 Factory::Factory() {

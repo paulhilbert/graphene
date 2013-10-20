@@ -1,7 +1,7 @@
 #ifndef GUIFACTORYHANDLE_H_
 #define GUIFACTORYHANDLE_H_
 
-#include <memory>
+#include <include/common.h>
 
 #include "Property/Container.h"
 

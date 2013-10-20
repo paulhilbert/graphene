@@ -1,9 +1,7 @@
 #ifndef QT5LOGDIALOG_H_
 #define QT5LOGDIALOG_H_
 
-#include <memory>
-#include <string>
-#include <functional>
+#include <include/common.h>
 
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QVBoxLayout>

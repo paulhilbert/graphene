@@ -1,7 +1,7 @@
 #ifndef GUIELEMENT_H_
 #define GUIELEMENT_H_
 
-#include <memory>
+#include <include/common.h>
 
 namespace GUI {
 

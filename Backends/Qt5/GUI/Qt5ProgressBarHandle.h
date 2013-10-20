@@ -1,7 +1,6 @@
 #ifndef QT5PROGRESSBARHANDLE_H_
 #define QT5PROGRESSBARHANDLE_H_
 
-
 #include <QtCore/QObject>
 
 #include <IO/AbstractProgressBar.h>

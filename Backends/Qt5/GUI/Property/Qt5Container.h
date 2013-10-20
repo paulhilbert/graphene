@@ -6,22 +6,8 @@
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QGridLayout>
 
-#include <GUI/Property/Bool.h>
-#include <GUI/Property/Button.h>
-#include <GUI/Property/Choice.h>
-#include <GUI/Property/Color.h>
+#include <include/visualizer.h>
 #include <GUI/Property/Container.h>
-#include <GUI/Property/File.h>
-#include <GUI/Property/Files.h>
-#include <GUI/Property/Folder.h>
-#include <GUI/Property/PropGroup.h>
-#include <GUI/Property/Number.h>
-#include <GUI/Property/Range.h>
-#include <GUI/Property/Section.h>
-#include <GUI/Property/Separator.h>
-#include <GUI/Property/String.h>
-#include <GUI/Property/ToggleButton.h>
-#include <GUI/Property/Tree.h>
 
 namespace GUI {
 namespace Property {

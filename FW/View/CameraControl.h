@@ -1,9 +1,7 @@
 #ifndef CAMERACONTROL_H_
 #define CAMERACONTROL_H_
 
-#include <memory>
-
-#include <Eigen/Dense>
+#include <include/common.h>
 
 #ifdef MODIF_CTRL
 #undef MODIF_CTRL

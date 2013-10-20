@@ -1,14 +1,9 @@
 #ifndef ORBITCAMERACONTROL_H_
 #define ORBITCAMERACONTROL_H_
 
-#include <memory>
-#include <Eigen/Dense>
+#include <include/common.h>
 
 #include "CameraControl.h"
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846f
-#endif
 
 namespace FW {
 namespace View {

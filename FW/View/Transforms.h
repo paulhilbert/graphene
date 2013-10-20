@@ -1,8 +1,7 @@
 #ifndef FWTRANSFORMS_H_
 #define FWTRANSFORMS_H_
 
-#include <memory>
-#include <Eigen/Dense>
+#include <include/common.h>
 
 namespace FW {
 namespace View {

@@ -1,9 +1,7 @@
 #ifndef FLYCAMERACONTROL_H_
 #define FLYCAMERACONTROL_H_
 
-#include <memory>
-
-#include <Eigen/Dense>
+#include <include/common.h>
 
 #include "CameraControl.h"
 

@@ -1,7 +1,7 @@
 #ifndef FWMODIFIER_H_
 #define FWMODIFIER_H_
 
-#include <memory>
+#include <include/common.h>
 
 namespace FW {
 namespace Events {

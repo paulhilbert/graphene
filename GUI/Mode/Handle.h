@@ -1,10 +1,7 @@
 #ifndef GUIMODEHANDLE_H_
 #define GUIMODEHANDLE_H_
 
-#include <iostream>
-#include <memory>
-#include <map>
-#include <vector>
+#include <include/common.h>
 
 #include "ModeGroup.h"
 #include "../GUILog.h"

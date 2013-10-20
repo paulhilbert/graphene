@@ -1,8 +1,7 @@
 #ifndef PROPERTYCONTAINER_H_
 #define PROPERTYCONTAINER_H_
 
-#include <map>
-#include <vector>
+#include <include/common.h>
 
 #include "Base.h"
 

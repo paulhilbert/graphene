@@ -1,7 +1,7 @@
 #ifndef FWFACTORY_H_
 #define FWFACTORY_H_
 
-#include <memory>
+#include <include/common.h>
 #include <boost/extension/extension.hpp>
 
 #include "Visualizer.h"

@@ -1,7 +1,7 @@
 #ifndef PROPERTYFILES_H_
 #define PROPERTYFILES_H_
 
-#include <vector>
+#include <include/common.h>
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;

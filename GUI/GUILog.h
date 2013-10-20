@@ -1,8 +1,7 @@
 #ifndef GUILOG_H_
 #define GUILOG_H_
 
-#include <string>
-#include <memory>
+#include <include/common.h>
 
 namespace GUI {
 

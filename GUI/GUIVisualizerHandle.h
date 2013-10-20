@@ -1,7 +1,8 @@
 #ifndef GUIVISUALIZERHANDLE_H_
 #define GUIVISUALIZERHANDLE_H_
 
-#include <memory>
+#include <include/common.h>
+#include <include/visualizer.h>
 
 #include "Property/Container.h"
 #include "Mode/Handle.h"

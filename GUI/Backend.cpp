@@ -1,5 +1,4 @@
 #include "Backend.h"
-#include <Testing/asserts.h>
 
 namespace GUI {
 

@@ -1,22 +1,7 @@
 #include "Container.h"
 
-#include <Testing/asserts.h>
-
-#include "Bool.h"
-#include "Button.h"
-#include "Choice.h"
-#include "Color.h"
-#include "File.h"
-#include "Files.h"
-#include "Folder.h"
-#include "PropGroup.h"
-#include "Number.h"
-#include "Range.h"
-#include "Section.h"
-#include "Separator.h"
-#include "String.h"
-#include "ToggleButton.h"
-#include "Tree.h"
+#include <include/common.h>
+#include <include/visualizer.h>
 
 namespace GUI {
 namespace Property {

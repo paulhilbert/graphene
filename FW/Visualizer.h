@@ -1,32 +1,12 @@
 #ifndef FWVISUALIZER_H_
 #define FWVISUALIZER_H_
 
-#include <memory>
+#include <include/common.h>
+#include <include/ogl.h>
 #include <future>
-#include <vector>
-
-#include <boost/lexical_cast.hpp>
-using boost::lexical_cast;
 
 #include <FW/FWVisualizerHandle.h>
 #include <GUI/GUIVisualizerHandle.h>
-
-#include <GUI/Property/Bool.h>
-#include <GUI/Property/Button.h>
-#include <GUI/Property/Choice.h>
-#include <GUI/Property/Color.h>
-#include <GUI/Property/File.h>
-#include <GUI/Property/Files.h>
-#include <GUI/Property/Folder.h>
-#include <GUI/Property/PropGroup.h>
-#include <GUI/Property/Number.h>
-#include <GUI/Property/Range.h>
-#include <GUI/Property/Section.h>
-#include <GUI/Property/String.h>
-#include <GUI/Property/Separator.h>
-#include <GUI/Property/ToggleButton.h>
-#include <GUI/Property/Tree.h>
-using namespace GUI::Property;
 
 #include <IO/AbstractProgressBarPool.h>
 

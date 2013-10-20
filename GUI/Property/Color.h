@@ -1,8 +1,7 @@
 #ifndef PROPERTYCOLOR_H_
 #define PROPERTYCOLOR_H_
 
-
-#include <Eigen/Dense>
+#include <include/common.h>
 
 #include "Base.h"
 #include "Notify.h"

@@ -1,7 +1,6 @@
 #include "Choice.h"
 
-#include <algorithm>
-#include <Testing/asserts.h>
+#include <include/common.h>
 
 namespace GUI {
 namespace Property {

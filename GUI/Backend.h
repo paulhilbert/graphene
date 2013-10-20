@@ -1,9 +1,7 @@
 #ifndef BACKEND_H_
 #define BACKEND_H_
 
-#include <memory>
-#include <functional>
-#include <tuple>
+#include <include/common.h>
 
 #include <FW/Events/EventHandler.h>
 #include <FW/Events/Modifier.h>

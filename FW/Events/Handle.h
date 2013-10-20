@@ -1,7 +1,7 @@
 #ifndef EVENTSVISUALIZERHANDLE_H_
 #define EVENTSVISUALIZERHANDLE_H_
 
-#include <memory>
+#include <include/common.h>
 #include "EventHandler.h"
 
 namespace FW {

@@ -1,7 +1,7 @@
 #ifndef PROPERTYCHOICE_H_
 #define PROPERTYCHOICE_H_
 
-#include <vector>
+#include <include/common.h>
 
 #include "Base.h"
 #include "Notify.h"

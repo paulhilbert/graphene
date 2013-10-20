@@ -1,8 +1,7 @@
 #ifndef PROPERTYNOTIFY_H_
 #define PROPERTYNOTIFY_H_
 
-#include <memory>
-#include <functional>
+#include <include/common.h>
 
 namespace GUI {
 namespace Property {
