@@ -6,7 +6,6 @@
 
 namespace FW {
 
-
 class Skeleton : _INHERIT_ {
 	public:
 		typedef std::shared_ptr<Skeleton> Ptr;
