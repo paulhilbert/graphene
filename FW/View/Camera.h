@@ -38,7 +38,7 @@ class Camera {
 		void             updateTransforms();
 
 	protected:
-		Eigen::Matrix4f  getProjectionMatrix(int w, int h);
+		Eigen::Matrix4f  getProjectionMatrix(int w, int h, float near, float far);
 		void registerEvents();
 
 		CameraControl::Ptr         m_control;

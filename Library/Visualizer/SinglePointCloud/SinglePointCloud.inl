@@ -7,7 +7,7 @@ inline SinglePointCloud::~SinglePointCloud() {
 inline void SinglePointCloud::init() {
 	addProperties();
 	registerEvents();
-	m_rendered = Rendered::Cloud::Ptr(new Rendered::Cloud(Eigen::Vector4f(0.4f, 0.4f, 0.4f, 1.f)));
+	m_rendered = Rendered::Cloud::Ptr(new Rendered::Cloud(Eigen::Vector4f(0.4f, 0.4f, 0.4f, 1.f), 4.f));
 	addClouds(m_paths);
 	uploadCloud();
 }

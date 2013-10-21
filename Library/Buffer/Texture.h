@@ -1,13 +1,16 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <stdexcept>
-
+#include <include/common.h>
 #include <include/ogl.h>
 
 namespace Buffer {
 
 class Texture {
+	public:
+		typedef std::shared_ptr<Texture> Ptr;
+		typedef std::weak_ptr<Texture>   WPtr;
+
 	private:
 		GLuint m_id;
 		void Load(GLenum iformat, int width, int height, GLfloat *pixels);

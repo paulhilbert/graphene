@@ -1,14 +1,16 @@
 #ifndef FBO_H
 #define FBO_H
 
-#include <stdexcept>
-#include <vector>
-
-#include <GL/glew.h>
+#include <include/common.h>
+#include <include/ogl.h>
 
 namespace Buffer {
 
 class FBO {
+	public:
+		typedef std::shared_ptr<FBO> Ptr;
+		typedef std::weak_ptr<FBO>   WPtr;
+
 	public:
 		/// Default Constructor
 		FBO();
