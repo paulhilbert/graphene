@@ -39,9 +39,9 @@ class Visualizer {
 		void execute(JobWithBar task, Job finally, std::string taskName, int steps = 1);
 		//void execute(JobWithPool task, Job finally);
 
-		std::vector<std::string> path(std::string&& s0);
-		std::vector<std::string> path(std::string&& s0, std::string&& s1);
-		std::vector<std::string> path(std::string&& s0, std::string&& s1, std::string&& s2);
+		static std::vector<std::string> path(std::string&& s0);
+		static std::vector<std::string> path(std::string&& s0, std::string&& s1);
+		static std::vector<std::string> path(std::string&& s0, std::string&& s1, std::string&& s2);
 
 	protected:
 		void setHandles(FW::VisualizerHandle::Ptr fw, GUI::VisualizerHandle::Ptr gui);
