@@ -406,6 +406,7 @@ void Graphene::Impl::renderBlur(float ratio) {
 	auto main = m_backend->getMainSettings();
 	float focalPoint = main->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->value();
 	float focalArea  = main->get<Range>({"groupEffects", "groupFOD", "focalArea"})->value();
+	int ortho = static_cast<int>(m_camera->getOrtho());
 	glDisable(GL_DEPTH_TEST);
 
 	// horizontal gauss
@@ -434,6 +435,7 @@ void Graphene::Impl::renderBlur(float ratio) {
 	glActiveTexture(GL_TEXTURE2);
 	m_fbos[0].BindTex(1);
 	m_compose.use();
+	m_compose.setUniformVar1i("ortho", ortho);
 	m_compose.setUniformVar1f("ratio", ratio);
 	m_compose.setUniformVar1f("focalPoint", focalPoint);
 	m_compose.setUniformVar1f("focalArea", focalArea);

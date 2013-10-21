@@ -1,5 +1,6 @@
 #version 140
 
+uniform int   ortho;
 uniform float ratio;
 uniform float focalPoint;
 uniform float focalArea;
@@ -17,9 +18,14 @@ void main(void) {
 	vec4 colorMap = texture2D(Tex0, tc);
 	vec4 blurMap = texture2D(Tex1, tc);
 	float depth = texture2D(Tex2, tc).r;
-	float r = far - near;
-	float z = near * far / ((depth * r) - far);
-	z = (z+near) / (-r);
+	float z;
+	if (ortho == 0) {
+		float r = far - near;
+		z = near * far / ((depth * r) - far);
+		z = (z+near) / (-r);
+	} else {
+		z = depth;
+	}
 
 	//fragColor = toneMap(colorMap + factor*(bloomMap-colorMap), exposure);//colorMap + factor * (bloomMap - colorMap);
 	float blur = abs(z - focalPoint) / focalArea;

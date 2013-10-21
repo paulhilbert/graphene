@@ -8,8 +8,8 @@ namespace FW {
 
 class Skeleton : _INHERIT_ {
 	public:
-		std::shared_ptr<Skeleton> Ptr;
-		std::weak_ptr<Skeleton>   WPtr;
+		typedef std::shared_ptr<Skeleton> Ptr;
+		typedef std::weak_ptr<Skeleton>   WPtr;
 
 	public:
 		Skeleton(std::string id);
