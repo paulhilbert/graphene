@@ -20,7 +20,7 @@
 obj/
 
 # doc
-html/
+doc/
 
 # misc
 *.dblite

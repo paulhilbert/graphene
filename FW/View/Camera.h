@@ -12,7 +12,9 @@ namespace FW {
 namespace View {
 
 /**
- *  Management class for camera parameters and transformations.
+ *  @internal Camera
+ *
+ *  @brief Management class for camera parameters and transformations.
  *
  *  This class uses the CameraControl class in order to manage
  *  camera transformation modules.

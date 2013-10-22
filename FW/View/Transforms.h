@@ -7,7 +7,7 @@ namespace FW {
 namespace View {
 
 /**
- *  Access class for OpenGL transformation parameters.
+ *  @brief Access class for OpenGL transformation parameters.
  *
  *  A shared_ptr to this class is supplied to all visualizer handles in order
  *  to access transformation matrices and viewport information.
