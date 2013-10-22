@@ -19,6 +19,9 @@
 *.exp
 obj/
 
+# doc
+html/
+
 # misc
 *.dblite
 *.swp
