@@ -75,7 +75,7 @@ inline void MultiPointCloud::addClouds(const GUI::Property::Paths& paths) {
 }
 
 inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA color, const std::vector<Vector3f>& points, bool visible) {
-	RC::Ptr rc(new RC(color));
+	RC::Ptr rc(new RC(color, 3.f));
 	rc->set(points);
 	rc->setVisible(visible);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
@@ -85,7 +85,7 @@ inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA col
 }
 
 inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA color, Cloud::Ptr cloud, bool visible) {
-	RC::Ptr rc(new RC(color));
+	RC::Ptr rc(new RC(color, 3.f));
 	rc->setFromPCLCloud(cloud->begin(), cloud->end());
 	rc->setVisible(visible);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
