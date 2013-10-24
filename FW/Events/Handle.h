@@ -1,8 +1,16 @@
 #ifndef EVENTSVISUALIZERHANDLE_H_
 #define EVENTSVISUALIZERHANDLE_H_
 
+/**
+ *  @file Handle.h
+ *
+ *  Specifies access class to event management system.
+ *
+ */
+
 #include <include/common.h>
 #include "EventHandler.h"
+
 
 namespace FW {
 
@@ -91,14 +99,14 @@ class Handle {
 		 *  @see disconnect(EventType type)
 		 */
 		template <class Sig>
-		void connect(EventType type, std::function<Sig> receiver);
+		void connect(std::string type, std::function<Sig> receiver);
 
 		/**
 		 * Disconnect callback(s).
 		 * @param type Type of event to disconnect. Defaults to disconnect all signals. This function is automatically called on Visualizer destruction.
 		 * @see connect(EventType type, std::function<Sig> receiver)
 		 */
-		void disconnect(EventType type = "__all__");
+		void disconnect(std::string type = "__all__");
 
 	protected:
 		std::string       m_id;

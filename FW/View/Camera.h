@@ -1,6 +1,13 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
+/** 
+ *  @internal @file Camera.h
+ *
+ *  @brief Contains main camera management class.
+ *
+ */
+
 #include <include/common.h>
 
 #include <FW/Events/EventHandler.h>

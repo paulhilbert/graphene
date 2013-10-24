@@ -4,8 +4,8 @@
 #include <include/common.h>
 #include <include/visualizer.h>
 
-#include "Property/Container.h"
-#include "Mode/Handle.h"
+#include <GUI/Property/Container.h>
+#include <GUI/Mode/Handle.h>
 #include "GUILog.h"
 #include "Status.h"
 

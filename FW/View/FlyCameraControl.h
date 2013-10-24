@@ -1,6 +1,13 @@
 #ifndef FLYCAMERACONTROL_H_
 #define FLYCAMERACONTROL_H_
 
+/**
+ *  @internal @file FlyCameraControl.h
+ *
+ *  @brief Implementation of fly-style camera control mode.
+ *
+ */
+
 #include <include/common.h>
 
 #include "CameraControl.h"

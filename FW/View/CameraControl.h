@@ -1,6 +1,13 @@
 #ifndef CAMERACONTROL_H_
 #define CAMERACONTROL_H_
 
+/**
+ *  @internal @file CameraControl.h
+ *
+ *  @brief Contains base class for view control modes.
+ *
+ */
+
 #include <include/common.h>
 
 #ifdef MODIF_CTRL

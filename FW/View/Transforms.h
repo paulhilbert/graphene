@@ -1,6 +1,13 @@
 #ifndef FWTRANSFORMS_H_
 #define FWTRANSFORMS_H_
 
+/**
+ *  @file Transforms.h
+ *
+ *  @brief Contains access class for OpenGL transformation parameters.
+ *
+ */
+
 #include <include/common.h>
 
 namespace FW {

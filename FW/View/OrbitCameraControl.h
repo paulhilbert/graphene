@@ -1,6 +1,13 @@
 #ifndef ORBITCAMERACONTROL_H_
 #define ORBITCAMERACONTROL_H_
 
+/**
+ *  @internal @file OrbitCameraControl.h
+ *
+ *  @brief Implementation of orbit-style camera control mode.
+ *
+ */
+
 #include <include/common.h>
 
 #include "CameraControl.h"
