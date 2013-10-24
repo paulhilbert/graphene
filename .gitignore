@@ -26,3 +26,6 @@ obj/
 Probes*
 graphene
 graphene.conf
+
+# doc
+doc/
