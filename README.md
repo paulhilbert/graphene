@@ -14,7 +14,7 @@ First of all: The primary target audience for graphene is us (i.e. the developer
 
 - you work under Linux systems (actually we compiled and successfully ran it under Windows, but be aware that we do not test compilation under Windows as regularly as under Linux and don't expect it to be easy (see Windows section below for some hints and rants). Our opinion regarding Windows and especially Visual Studio is nothing we are able to talk about politely - therefore don't expect much of us regarding that area).
 
-- you don't expect to hack graphene yourself and expect instabilities and compatibility breaking commits. Graphene is not intended for the masses and probably never will be - we modify/extend/destroy it almost every day which obviously doesn't always have benefits.
+- you don't hesitate to hack graphene yourself and expect instabilities and compatibility breaking commits. Graphene is not intended for the masses and probably never will be - we modify/extend/destroy it almost every day which obviously doesn't always have benefits.
 
 - you love (and we don't mean tolerate, or know, or have heard of, but *love*) the functional programming aspects of C++ and especially C++11/C++14. Graphene is intended to be used with lambda expressions a lot (and it heavily relies on automatic type derivation, initializer lists and variadic templates). A typical line looks like
 
