@@ -47,7 +47,6 @@ class Qt5Backend : public QObject, public Backend {
 		std::vector<std::string> getActiveVisualizerNames();
 
 		void setRenderCallback(std::function<void ()> func);
-		void setExitCallback(std::function<void ()> func);
 
 	protected:
 		bool initSingleVisualizer();

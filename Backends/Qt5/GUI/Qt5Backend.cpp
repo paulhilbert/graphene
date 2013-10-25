@@ -139,10 +139,6 @@ void Qt5Backend::setRenderCallback(std::function<void ()> func) {
 	m_glWidget->setRenderCallback(func);
 }
 
-void Qt5Backend::setExitCallback(std::function<void ()> func) {
-	m_onExit = func;
-}
-
 bool Qt5Backend::initSingleVisualizer() {
 	return onAddVis();
 }

@@ -2,7 +2,7 @@
 #define EVENTSVISUALIZERHANDLE_H_
 
 /**
- *  @file Handle.h
+ *  @file FW/Events/Handle.h
  *
  *  Specifies access class to event management system.
  *
