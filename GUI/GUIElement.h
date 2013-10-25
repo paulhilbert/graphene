@@ -25,10 +25,17 @@ class GUIElement {
 		typedef std::weak_ptr<GUIElement> WPtr;
 
 	public:
-		/** Constructor */
+		/** 
+		 *  @internal GUIElement()
+		 *
+		 *  @brief Constructor
+		 */
 		GUIElement();
 
-		/** Destructor */
+		/** 
+		 *  @internal ~GUIElement()
+		 *
+		 *  @brief Destructor */
 		virtual ~GUIElement();
 
 		/** Show (hidden) element */

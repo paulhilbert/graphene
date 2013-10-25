@@ -1,6 +1,12 @@
 #ifndef PROPERTYCONTAINER_H_
 #define PROPERTYCONTAINER_H_
 
+/**
+ *  @file Container.h
+ *
+ *  Defines base container property type.
+ */
+
 #include <include/common.h>
 
 #include "Base.h"
@@ -24,23 +30,89 @@ class String;
 class ToggleButton;
 class Tree;
 
+/**
+ *  Property type that provides a base for container properties. 
+ *
+ *  This class provides the basic means to manage subproperties.
+ *
+ *  It should not be instantiated on its own.
+ */
 class Container : public Base {
 	public:
+		/** Shared pointer to this class */
 		typedef std::shared_ptr<Container> Ptr;
+
+		/** Weak pointer to this class */
 		typedef std::weak_ptr<Container> WPtr;
 
 	public:
+		/**
+		 *  @internal Container()
+		 *
+		 *  @brief Constructor
+		 */
 		Container();
+
+		/**
+		 *  @internal ~Container()
+		 *
+		 *  @brief Destructor
+		 */
 		virtual ~Container();
 
+		/**
+		 *  Adds new subproperty with given parameters to this container.
+		 *
+		 *  This method is used to add properties to any container.
+		 *  For example
+		 *
+		 *      auto boolProp = container.add<Bool>("Example Bool Property", "boolProp");
+		 *
+		 *  adds a new boolean property to the container with given label and id and
+		 *  stores it in a variable.
+		 *
+		 *  @tparam PropertyType Type of property (i.e. the property types in GUI/Property/)
+		 *  @param label Label to use for the property.
+		 *  @param id Unique identifier of this property. Use this if you want to access this property from a different function later without storing the returned pointer in a member variable.
+		 *  @return Shared pointer to the new property created.
+		 */
 		template <class PropertyType>
 		typename PropertyType::Ptr add(std::string label, std::string id = "");
 
+		/**
+		 *  Adds a separator property to this container.
+		 *
+		 *  @param id Unique identifier of this property. Use this if you want to access this property from a different function later without storing the returned pointer in a member variable.
+		 */
 		std::shared_ptr<Separator> addSeparator(std::string id = "");
 
+		/**
+		 *  Returns subproperty with given path.
+		 *
+		 *  Consider following code:
+		 *
+		 *      auto container = gui()->properties()->add<Group>("Group label", "group")
+		 *      auto subcontainer = container->add<Group>("Subgroup label", "subgroup")
+		 *      auto boolProp = subcontainer->add<Bool>("Bool label", "boolProp");
+		 *
+		 *  Using this function to get the boolean property would then look like:
+		 *
+		 *      auto boolProp = gui()->properties()->get<Bool>({"group", "subgroup", "boolProp"});
+		 *
+		 *  So the path consists of those identifiers you supplied to the relevant add(label, id) calls.
+		 *
+		 *  @tparam PropertyType Type of property to return.
+		 *  @param path Vector of strings representing the identifier path to the property.
+		 *  @return Shared pointer to the property defined by path.
+		 */
 		template <class PropertyType>
 		typename PropertyType::Ptr get(const std::vector<std::string>& path);
 
+		/**
+		 *  Overwritten implementation of Base::isContainer().
+		 *
+		 *  @return Equals true.
+		 */
 		bool isContainer() const;
 
 	protected:

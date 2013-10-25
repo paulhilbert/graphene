@@ -214,7 +214,7 @@ class Backend {
 		std::map<std::string, FW::Factory::WPtr>       m_factories;
 		std::function<void (std::string,std::string)>  m_onAddVis;
 		std::function<void (std::string)>              m_onDelVis;
-		std::function<void (std::string)>              m_onExit;
+		std::function<void ()>                         m_onExit;
 		std::function<void (std::string)>              m_onSetCamControl;
 		std::function<void (bool)>                     m_onSetOrtho;
 

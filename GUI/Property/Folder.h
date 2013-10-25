@@ -1,6 +1,12 @@
 #ifndef PROPERTYFOLDER_H_
 #define PROPERTYFOLDER_H_
 
+/**
+ *  @file Folder.h
+ *
+ *  Defines folder choice property type.
+ */
+
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
 
@@ -12,14 +18,37 @@ namespace fs = boost::filesystem;
 namespace GUI {
 namespace Property {
 
+/**
+ *  Property type that provides means to choose a filesystem folder.
+ *
+ *  Backends usually implement this as a button triggering a folder choice dialog.
+ */
 class Folder : public Base, public Notify<void (fs::path)>, public Value<fs::path>, public Labeled {
 	public:
+		/** Shared pointer to this class */
 		typedef std::shared_ptr<Folder> Ptr;
+
+		/** Weak pointer to this class */
 		typedef std::weak_ptr<Folder>   WPtr;
+
+		/** Specific callback type for this property */
 		using Notify<void (fs::path)>::Callback;
 
 	public:
+		/**
+		 *  @internal Folder(std::string label)
+		 *
+		 *  @brief Constructor
+		 *
+		 *  @param label Label for this property.
+		 */
 		Folder(std::string label);
+
+		/**
+		 *  @internal ~Folder()
+		 *
+		 *  @brief Destructor
+		 */
 		virtual ~Folder();
 };
 
