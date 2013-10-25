@@ -1,4 +1,19 @@
 import os
+
+def CleanFlagIsSet() :
+	import SCons.Script.Main
+	return SCons.Script.Main.GetOption('clean')
+
+def LaunchedFromTopDir() :
+	return DefaultEnvironment().GetLaunchDir() == Dir('#')
+
+def CleanAction(name,action) :
+	if CleanFlagIsSet() :
+		if len(COMMAND_LINE_TARGETS) == 0 or name in COMMAND_LINE_TARGETS or LaunchedFromTopDir() and '.' in COMMAND_LINE_TARGETS :
+			Execute(action)
+
+
+
 env = Environment(ENV = {'PATH' : os.environ['PATH'],
                          'TERM' : os.environ['TERM'],
                          'HOME' : os.environ['HOME']})
@@ -19,3 +34,11 @@ env.Library("graphene", obj+lib)
 env['LIBS'] += ['graphene']
 env['LIBPATH'] = ['.']
 env.Program("graphene", ["graphene.cpp"])
+
+# documentation
+if 'doc' in COMMAND_LINE_TARGETS:
+	Execute('rm -rf doc');
+	env.Command ('doc/external', '', 'doxygen DoxExternal')
+	env.Command ('doc/internal', '', 'doxygen DoxInternal')
+
+CleanAction('doc', Action(['rm -rf doc']))

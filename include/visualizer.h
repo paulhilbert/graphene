@@ -1,6 +1,12 @@
 #ifndef INC_VISUALIZER_H_
 #define INC_VISUALIZER_H_
 
+/**
+ *  @file visualizer.h
+ *
+ *  This file includes all files used by visualizers.
+ */
+
 #include <GUI/Property/Bool.h>
 #include <GUI/Property/Button.h>
 #include <GUI/Property/Choice.h>
