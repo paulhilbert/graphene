@@ -1,16 +1,46 @@
 #ifndef PROPERTYLABELED_H_
 #define PROPERTYLABELED_H_
 
+/**
+ *  @file Labeled.h
+ *
+ *  Defines base type for labeled properties.
+ */
+
 #include <include/common.h>
 
 namespace GUI {
 namespace Property {
 
+/**
+ *  Property base type that defines labeled properties.
+ *
+ *  Properties inherited from this class (which are almost all types)
+ *  store a string the GUI backend uses to label the corresponding widgets.
+ */
 class Labeled {
 	public:
+		/**
+		 *  @internal Labeled(std::string label)
+		 *
+		 *  @brief Constructor
+		 *
+		 *  @param label Label for this property.
+		 */
 		Labeled(std::string label);
+
+		/**
+		 *  @internal ~Labeled()
+		 *
+		 *  @brief Destructor
+		 */
 		virtual ~Labeled();
 
+		/**
+		 *  Sets label string.
+		 *
+		 *  @param label Label for this property.
+		 */
 		virtual void setLabel(std::string label) = 0;
 
 	protected:

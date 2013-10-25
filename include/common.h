@@ -1,6 +1,12 @@
 #ifndef INC_COMMON_H_
 #define INC_COMMON_H_
 
+/**
+ *  @file common.h
+ *
+ *  This file includes files commonly included by most of the files in graphene.
+ */
+
 // stl
 #include <string>
 #include <iostream>

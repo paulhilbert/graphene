@@ -19,6 +19,9 @@
 *.exp
 obj/
 
+# doc
+doc/
+
 # misc
 *.dblite
 *.swp

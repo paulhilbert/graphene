@@ -16,6 +16,10 @@ void Backend::setDelVisCallback(const std::function<void (std::string)>& onDelVi
 	m_onDelVis = onDelVis;
 }
 
+void Backend::setExitCallback(std::function<void ()> func) {
+	m_onExit = func;
+}
+
 void Backend::setCamControlCallback(std::function<void (std::string)> onSetCamControl) {
 	m_onSetCamControl = std::move(onSetCamControl);
 }

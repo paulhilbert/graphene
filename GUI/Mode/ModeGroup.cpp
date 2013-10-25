@@ -34,7 +34,7 @@ void Group::setCallback(Callback onChange) {
 	m_onChange = std::move(onChange);
 }
 
-Option::Ptr Group::mode(std::string id) {
+Option::Ptr Group::option(std::string id) {
 	auto findIt = m_modes.find(id);
 	if (findIt == m_modes.end()) {
 		m_log->error("Option does not exist");

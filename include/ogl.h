@@ -1,6 +1,12 @@
 #ifndef INC_OGL_H_
 #define INC_OGL_H_
 
+/**
+ *  @file ogl.h
+ *
+ *  This file includes files commonly included by files using OpenGL commands.
+ */
+
 #ifndef GL_GLEXT_PROTOTYPES
 #define GL_GLEXT_PROTOTYPES
 #endif

@@ -6,11 +6,11 @@ inline Handle::~Handle() {
 }
 
 template <class Sig>
-inline void Handle::connect(EventType type, std::function<Sig> receiver) {
+inline void Handle::connect(std::string type, std::function<Sig> receiver) {
 	m_eventHandler->registerReceiver<Sig>(type, m_id, receiver);
 }
 
-inline void Handle::disconnect(EventType type) {
+inline void Handle::disconnect(std::string type) {
 	if (type == "__all__") m_eventHandler->unregisterReceiver(m_id);
 	else m_eventHandler->unregisterReceiver(type, m_id);
 }
