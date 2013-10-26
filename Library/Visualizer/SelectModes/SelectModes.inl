@@ -1,3 +1,10 @@
+/* This program is free software. It comes without any warranty, to
+ * the extent permitted by applicable law. You can redistribute it
+ * and/or modify it under the terms of the Do What The Fuck You Want
+ * To Public License, Version 2, as published by Sam Hocevar. See
+ * the COPYING file for more details */
+
+
 template <class Entities, class Entity>
 inline SelectModes<Entities, Entity>::SelectModes(std::string id, Methods exclude) : Visualizer(id), m_exclude(exclude), m_activeMethod(METHOD_NONE) {
 }
