@@ -25,8 +25,8 @@ using boost::regex_match;
 #include <FW/FWGraphene.h>
 using FW::Graphene;
 
-#include <FW/Events/EventHandler.h>
-#include <GUI/Backend.h>
+#include <FW/Events/EventsEventHandler.h>
+#include <GUI/GUIBackend.h>
 
 GUI::Backend::Ptr getBackend(std::string path);
 

@@ -18,7 +18,7 @@
 #include <include/common.h>
 #include <boost/extension/extension.hpp>
 
-#include "Visualizer.h"
+#include "FWVisualizer.h"
 
 #include <GUI/GUIFactoryHandle.h>
 

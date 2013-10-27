@@ -14,7 +14,7 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QLineEdit>
-#include <GUI/Property/Folder.h>
+#include <GUI/Property/PropFolder.h>
 
 namespace GUI {
 namespace Property {

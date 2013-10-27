@@ -7,7 +7,7 @@
 
 #include "Qt5Settings.h"
 
-#include <GUI/Property/Bool.h>
+#include <GUI/Property/PropBool.h>
 using GUI::Property::Bool;
 
 namespace GUI {

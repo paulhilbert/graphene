@@ -19,7 +19,7 @@
 #include <QtWidgets/QTabWidget>
 #include "Qt5GLWidget.h"
 
-#include <GUI/Backend.h>
+#include <GUI/GUIBackend.h>
 
 #include "Qt5Settings.h"
 #include "Qt5AddVisDialog.h"

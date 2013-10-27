@@ -16,7 +16,7 @@
  */
 
 #include <include/common.h>
-#include "EventHandler.h"
+#include "EventsEventHandler.h"
 
 
 namespace FW {
@@ -120,7 +120,7 @@ class Handle {
 		EventHandler::Ptr m_eventHandler;
 };
 
-#include "Handle.inl"
+#include "EventsHandle.inl"
 
 } // Events
 } // FW

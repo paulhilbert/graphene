@@ -15,13 +15,13 @@
 #include <mutex>
 #include <chrono>
 
-#include <FW/View/Camera.h>
-#include <FW/View/OrbitCameraControl.h>
-#include <FW/View/FlyCameraControl.h>
-#include <FW/View/Transforms.h>
+#include <FW/View/ViewCamera.h>
+#include <FW/View/ViewOrbitCameraControl.h>
+#include <FW/View/ViewFlyCameraControl.h>
+#include <FW/View/ViewTransforms.h>
 using namespace FW::View;
 
-#include <FW/Visualizer.h>
+#include <FW/FWVisualizer.h>
 
 
 #ifdef OPENGL_EFFECTS

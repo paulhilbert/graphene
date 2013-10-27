@@ -13,7 +13,7 @@
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QRadioButton>
-#include <GUI/Property/Choice.h>
+#include <GUI/Property/PropChoice.h>
 
 namespace GUI {
 namespace Property {

@@ -14,21 +14,21 @@
  *  This file includes all files used by visualizers.
  */
 
-#include <GUI/Property/Bool.h>
-#include <GUI/Property/Button.h>
-#include <GUI/Property/Choice.h>
-#include <GUI/Property/Color.h>
-#include <GUI/Property/File.h>
-#include <GUI/Property/Files.h>
-#include <GUI/Property/Folder.h>
+#include <GUI/Property/PropBool.h>
+#include <GUI/Property/PropButton.h>
+#include <GUI/Property/PropChoice.h>
+#include <GUI/Property/PropColor.h>
+#include <GUI/Property/PropFile.h>
+#include <GUI/Property/PropFiles.h>
+#include <GUI/Property/PropFolder.h>
 #include <GUI/Property/PropGroup.h>
-#include <GUI/Property/Number.h>
-#include <GUI/Property/Range.h>
-#include <GUI/Property/Section.h>
-#include <GUI/Property/String.h>
-#include <GUI/Property/Separator.h>
-#include <GUI/Property/ToggleButton.h>
-#include <GUI/Property/Tree.h>
+#include <GUI/Property/PropNumber.h>
+#include <GUI/Property/PropRange.h>
+#include <GUI/Property/PropSection.h>
+#include <GUI/Property/PropString.h>
+#include <GUI/Property/PropSeparator.h>
+#include <GUI/Property/PropToggleButton.h>
+#include <GUI/Property/PropTree.h>
 using namespace GUI::Property;
 
 #endif /* INC_VISUALIZER_H_ */

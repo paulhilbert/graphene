@@ -9,7 +9,7 @@
 #define QT5SEPARATOR_H_
 
 #include <QtWidgets/QFrame>
-#include <GUI/Property/Separator.h>
+#include <GUI/Property/PropSeparator.h>
 
 namespace GUI {
 namespace Property {

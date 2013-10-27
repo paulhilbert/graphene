@@ -7,7 +7,7 @@
 
 #include "Qt5GLWidget.h"
 
-#include <FW/Events/Keys.h>
+#include <FW/Events/EventsKeys.h>
 
 namespace GUI {
 

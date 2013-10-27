@@ -18,10 +18,10 @@
 #include <include/common.h>
 #include <include/ogl.h>
 
-#include <FW/Events/EventHandler.h>
-#include <FW/Factory.h>
+#include <FW/Events/EventsEventHandler.h>
+#include <FW/FWFactory.h>
 
-#include <GUI/Backend.h>
+#include <GUI/GUIBackend.h>
 #include <GUI/GUIFactoryHandle.h>
 
 namespace FW {

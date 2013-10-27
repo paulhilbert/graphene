@@ -14,7 +14,7 @@
 #include <QtWidgets/QGridLayout>
 
 #include <include/visualizer.h>
-#include <GUI/Property/Container.h>
+#include <GUI/Property/PropContainer.h>
 
 namespace GUI {
 namespace Property {

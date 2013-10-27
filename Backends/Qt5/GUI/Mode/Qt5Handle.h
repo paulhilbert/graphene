@@ -8,7 +8,7 @@
 #ifndef QT5HANDLE_H_
 #define QT5HANDLE_H_
 
-#include <GUI/Mode/Handle.h>
+#include <GUI/Mode/ModeHandle.h>
 #include <QtWidgets/QToolBar>
 
 namespace GUI {

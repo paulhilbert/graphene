@@ -11,7 +11,7 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
-#include <GUI/Property/String.h>
+#include <GUI/Property/PropString.h>
 
 namespace GUI {
 namespace Property {

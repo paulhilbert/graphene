@@ -12,7 +12,7 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QTreeWidget>
-#include <GUI/Property/Tree.h>
+#include <GUI/Property/PropTree.h>
 
 namespace GUI {
 namespace Property {

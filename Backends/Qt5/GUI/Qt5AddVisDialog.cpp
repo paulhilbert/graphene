@@ -11,7 +11,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QListWidgetItem>
-#include <GUI/Property/String.h>
+#include <GUI/Property/PropString.h>
 using GUI::Property::String;
 
 namespace GUI {

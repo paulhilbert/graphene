@@ -9,7 +9,7 @@
 #define QT5BUTTON_H_
 
 #include <QtWidgets/QPushButton>
-#include <GUI/Property/Button.h>
+#include <GUI/Property/PropButton.h>
 
 namespace GUI {
 namespace Property {

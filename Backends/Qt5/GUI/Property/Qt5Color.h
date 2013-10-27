@@ -12,7 +12,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
-#include <GUI/Property/Color.h>
+#include <GUI/Property/PropColor.h>
 
 namespace GUI {
 namespace Property {

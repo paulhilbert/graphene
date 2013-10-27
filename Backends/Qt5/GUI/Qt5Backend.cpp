@@ -7,8 +7,8 @@
 
 #include "Qt5Backend.h"
 
-#include <GUI/Property/Button.h>
-#include <GUI/Property/Color.h>
+#include <GUI/Property/PropButton.h>
+#include <GUI/Property/PropColor.h>
 #include <GUI/Property/PropGroup.h>
 using namespace GUI::Property;
 

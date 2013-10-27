@@ -17,10 +17,10 @@
 
 #include <include/common.h>
 
-#include <FW/Events/EventHandler.h>
-#include <FW/View/CameraControl.h>
+#include <FW/Events/EventsEventHandler.h>
+#include <FW/View/ViewCameraControl.h>
 #include <Geometry/Ray.h>
-#include "Transforms.h"
+#include "ViewTransforms.h"
 
 namespace FW {
 namespace View {

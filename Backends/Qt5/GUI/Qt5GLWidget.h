@@ -13,9 +13,9 @@
 #include <QtOpenGL/QGLWidget>
 #include <QtGui/QMouseEvent>
 
-#include <FW/Events/EventHandler.h>
+#include <FW/Events/EventsEventHandler.h>
 using FW::Events::EventHandler;
-#include <GUI/Property/Color.h>
+#include <GUI/Property/PropColor.h>
 using GUI::Property::Color;
 
 

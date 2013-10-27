@@ -5,45 +5,45 @@
  * the COPYING file for more details */
 
 
-#ifndef FLYCAMERACONTROL_H_
-#define FLYCAMERACONTROL_H_
+#ifndef ORBITCAMERACONTROL_H_
+#define ORBITCAMERACONTROL_H_
 
 /**
- *  @internal @file FlyCameraControl.h
+ *  @internal @file OrbitCameraControl.h
  *
- *  @brief Implementation of fly-style camera control mode.
+ *  @brief Implementation of orbit-style camera control mode.
  *
  */
 
 #include <include/common.h>
 
-#include "CameraControl.h"
+#include "ViewCameraControl.h"
 
 namespace FW {
 namespace View {
 
 /**
- *  @internal FlyCameraControl
+ *  @internal OrbitCameraControl
  *
- *  @brief Camera fly control class.
+ *  @brief Camera orbit control class.
  *
- *  Classes derived from CameraControl in order to implement fly camera control mode.
+ *  Classes derived from CameraControl in order to implement orbit camera control mode.
  */
-class FlyCameraControl : public CameraControl {
+class OrbitCameraControl : public CameraControl {
 	public:
-		typedef std::shared_ptr<FlyCameraControl>  Ptr;
-		typedef std::weak_ptr<FlyCameraControl>    WPtr;
+		typedef std::shared_ptr<OrbitCameraControl>  Ptr;
+		typedef std::weak_ptr<OrbitCameraControl>    WPtr;
 
 	public:
 		/**
 		 *  Constructor.
 		 */
-		FlyCameraControl();
+		OrbitCameraControl();
 
 		/**
 		 *  Destructor.
 		 */
-		virtual ~FlyCameraControl();
+		virtual ~OrbitCameraControl();
 
 		/**
 		 *  Returns the camera position.
@@ -72,10 +72,10 @@ class FlyCameraControl : public CameraControl {
 		void  update(int dX, int dY, int mod);
 
 		/**
-		 *  Align this control with another fly control.
-		 *  @param other Pointer to FlyCameraControl.
+		 *  Align this control with another orbit control.
+		 *  @param other Pointer to OrbitCameraControl.
 		 */
-		void  moveTo(std::shared_ptr<FlyCameraControl> other);
+		void  moveTo(std::shared_ptr<OrbitCameraControl> other);
 
 		/**
 		 *  Align this control with another camera control.
@@ -84,21 +84,21 @@ class FlyCameraControl : public CameraControl {
 		void  moveTo(std::shared_ptr<CameraControl> other);
 
 	protected:
-		void pan(float dX, float dY);
+		void pan(float dX, float dY, bool stayInPlane = false);
 		void zoom(float delta);
-		void pitch(float delta);
-		void yaw(float delta);
+		void rotP(float delta);
+		void rotT(float delta);
 		void determineMatrix();
 
 		// state variables
-		Vector3f  m_position;
-		float     m_pitch;
-		float     m_yaw;
-		float     m_focalLength;
+		float            m_theta;
+		float            m_phi;
+		float            m_radius;
+		Eigen::Vector3f  m_center;
 };
 
 
 } // View
 } // FW
 
-#endif /* FLYCAMERACONTROL_H_ */
+#endif /* ORBITCAMERACONTROL_H_ */

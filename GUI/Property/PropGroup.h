@@ -14,8 +14,8 @@
  *  Defines property group type.
  */
 
-#include "Container.h"
-#include "Labeled.h"
+#include "PropContainer.h"
+#include "PropLabeled.h"
 
 namespace GUI {
 namespace Property {

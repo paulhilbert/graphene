@@ -16,7 +16,7 @@
 
 #include <include/common.h>
 
-#include "Property/Container.h"
+#include "Property/PropContainer.h"
 
 namespace GUI {
 

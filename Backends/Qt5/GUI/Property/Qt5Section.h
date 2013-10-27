@@ -8,7 +8,7 @@
 #ifndef QT5SECTION_H_
 #define QT5SECTION_H_
 
-#include <GUI/Property/Section.h>
+#include <GUI/Property/PropSection.h>
 #include "Qt5Container.h"
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QWidget>

@@ -10,7 +10,7 @@
 
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QCheckBox>
-#include <GUI/Property/Bool.h>
+#include <GUI/Property/PropBool.h>
 
 namespace GUI {
 namespace Property {

@@ -8,7 +8,7 @@
 #ifndef QT5STATUS_H_
 #define QT5STATUS_H_
 
-#include <GUI/Status.h>
+#include <GUI/GUIStatus.h>
 #include <QtWidgets/QMainWindow>
 
 namespace GUI {

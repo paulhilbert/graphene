@@ -17,10 +17,10 @@
 #include <include/common.h>
 #include <include/visualizer.h>
 
-#include <GUI/Property/Container.h>
-#include <GUI/Mode/Handle.h>
+#include <GUI/Property/PropContainer.h>
+#include <GUI/Mode/ModeHandle.h>
 #include "GUILog.h"
-#include "Status.h"
+#include "GUIStatus.h"
 
 namespace GUI {
 

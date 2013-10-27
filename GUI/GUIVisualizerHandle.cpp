@@ -6,7 +6,7 @@
 
 
 #include "GUIVisualizerHandle.h"
-#include "Backend.h"
+#include "GUIBackend.h"
 
 namespace GUI {
 

@@ -11,7 +11,7 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QDoubleSpinBox>
-#include <GUI/Property/Number.h>
+#include <GUI/Property/PropNumber.h>
 
 namespace GUI {
 namespace Property {

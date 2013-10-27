@@ -12,7 +12,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QSlider>
-#include <GUI/Property/Range.h>
+#include <GUI/Property/PropRange.h>
 
 namespace GUI {
 namespace Property {

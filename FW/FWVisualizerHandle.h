@@ -17,10 +17,10 @@
 #include <include/common.h>
 
 #include <Geometry/Ray.h>
-#include <FW/View/Transforms.h>
-#include <FW/Events/Handle.h>
-#include <FW/Events/Modifier.h>
-#include <FW/Events/Keys.h>
+#include <FW/View/ViewTransforms.h>
+#include <FW/Events/EventsHandle.h>
+#include <FW/Events/EventsModifier.h>
+#include <FW/Events/EventsKeys.h>
 using FW::Events::Keys;
 
 namespace FW {

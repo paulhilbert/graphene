@@ -9,7 +9,7 @@
 #define QT5TOGGLEBUTTON_H_
 
 #include <QtWidgets/QPushButton>
-#include <GUI/Property/ToggleButton.h>
+#include <GUI/Property/PropToggleButton.h>
 
 namespace GUI {
 namespace Property {

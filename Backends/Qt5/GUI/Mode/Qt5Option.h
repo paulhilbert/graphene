@@ -8,7 +8,7 @@
 #ifndef QT5OPTION_H_
 #define QT5OPTION_H_
 
-#include <GUI/Mode/Option.h>
+#include <GUI/Mode/ModeOption.h>
 #include <QtWidgets/QToolButton>
 
 namespace GUI {
