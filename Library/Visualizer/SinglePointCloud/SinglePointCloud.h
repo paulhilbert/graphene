@@ -22,7 +22,7 @@ typedef Tools::CloudType Cloud;
 typedef Tools::Idx       Idx;
 typedef Tools::IdxSet    IdxSet;
 
-#include <FW/Visualizer.h>
+#include <FW/FWVisualizer.h>
 #include <Library/Rendered/Cloud.h>
 
 namespace FW {

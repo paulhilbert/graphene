@@ -10,7 +10,7 @@
 
 #include <Algorithm/Sets.h>
 
-#include <FW/Visualizer.h>
+#include <FW/FWVisualizer.h>
 #include <Library/Input/AreaSelect.h>
 #include <Library/Input/PaintSelect.h>
 

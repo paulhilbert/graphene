@@ -8,7 +8,7 @@
 #ifndef MULTIPOINTCLOUDVIS_H_
 #define MULTIPOINTCLOUDVIS_H_
 
-#include <FW/Visualizer.h>
+#include <FW/FWVisualizer.h>
 
 #include <Geometry/PCLTools.h>
 using Geometry::PCLTools;

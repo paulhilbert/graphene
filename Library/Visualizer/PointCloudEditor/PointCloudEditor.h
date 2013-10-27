@@ -8,7 +8,7 @@
 #ifndef POINTCLOUDEDITORVIS_H_
 #define POINTCLOUDEDITORVIS_H_
 
-#include <FW/Visualizer.h>
+#include <FW/FWVisualizer.h>
 #include <Library/Visualizer/SinglePointCloud/SinglePointCloud.h>
 #include <Library/Visualizer/SelectModes/SelectModes.h>
 

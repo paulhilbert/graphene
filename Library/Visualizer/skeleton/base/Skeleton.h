@@ -1,7 +1,7 @@
 #ifndef SKELETONVIS_H_
 #define SKELETONVIS_H_
 
-#include <FW/Visualizer.h>
+#include <FW/FWVisualizer.h>
 
 namespace FW {
 
