@@ -23,8 +23,7 @@
 #include "GUIFactoryHandle.h"
 #include <FW/FWFactory.h>
 #include "GUILog.h"
-
-#include <IO/AbstractProgressBarPool.h>
+#include "GUIProgressBarPool.h"
 
 namespace GUI {
 
@@ -112,7 +111,7 @@ class Backend {
 		 *
 		 *  @return Shared pointer to progress bar pool access handle.
 		 */
-		virtual IO::AbstractProgressBarPool::Ptr getProgressBarPool() = 0;
+		virtual ProgressBarPool::Ptr getProgressBarPool() = 0;
 
 		/**
 		 *  Pure virtual method returning access handle to main settings.

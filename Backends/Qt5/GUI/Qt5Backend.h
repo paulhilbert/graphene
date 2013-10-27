@@ -43,7 +43,7 @@ class Qt5Backend : public QObject, public Backend {
 
 		Log::Ptr getLog();
 		Status::Ptr getStatus();
-		IO::AbstractProgressBarPool::Ptr getProgressBarPool();
+		ProgressBarPool::Ptr getProgressBarPool();
 		Container::Ptr getMainSettings();
 
 		void setWindowTitle(std::string title);

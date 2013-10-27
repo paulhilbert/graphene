@@ -10,7 +10,7 @@
 namespace GUI {
 
 
-Qt5ProgressBarHandle::Qt5ProgressBarHandle(IO::AbstractProgressBarPool* pool, int idx, std::string label, int steps) : IO::AbstractProgressBar(label, steps), m_pool(pool), m_idx(idx) {
+Qt5ProgressBarHandle::Qt5ProgressBarHandle(ProgressBarPool* pool, int idx, std::string label, int steps) : ProgressBar(label, steps), m_pool(pool), m_idx(idx) {
 }
 
 Qt5ProgressBarHandle::~Qt5ProgressBarHandle() {

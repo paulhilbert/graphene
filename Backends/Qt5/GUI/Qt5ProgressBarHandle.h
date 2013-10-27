@@ -10,12 +10,12 @@
 
 #include <QtCore/QObject>
 
-#include <IO/AbstractProgressBar.h>
-#include <IO/AbstractProgressBarPool.h>
+#include <GUI/GUIProgressBar.h>
+#include <GUI/GUIProgressBarPool.h>
 
 namespace GUI {
 
-class Qt5ProgressBarHandle : public QObject, public IO::AbstractProgressBar {
+class Qt5ProgressBarHandle : public QObject, public ProgressBar {
 	Q_OBJECT
 
 	public:
@@ -23,7 +23,7 @@ class Qt5ProgressBarHandle : public QObject, public IO::AbstractProgressBar {
 		typedef std::weak_ptr<Qt5ProgressBarHandle> WPtr;
 
 	public:
-		Qt5ProgressBarHandle(IO::AbstractProgressBarPool* pool, int idx, std::string label, int steps = 1);
+		Qt5ProgressBarHandle(ProgressBarPool* pool, int idx, std::string label, int steps = 1);
 		virtual ~Qt5ProgressBarHandle();
 
 		void poll(float progress);
@@ -32,7 +32,7 @@ class Qt5ProgressBarHandle : public QObject, public IO::AbstractProgressBar {
 		void polled(float progress);
 
 	protected:
-		IO::AbstractProgressBarPool* m_pool;
+		ProgressBarPool* m_pool;
 		int m_idx;
 };
 

@@ -111,7 +111,7 @@ Status::Ptr Qt5Backend::getStatus() {
 	return Qt5Status::Ptr(new Qt5Status(m_wnd));
 }
 
-IO::AbstractProgressBarPool::Ptr Qt5Backend::getProgressBarPool() {
+ProgressBarPool::Ptr Qt5Backend::getProgressBarPool() {
 	return m_logDialog->progressBarPool();
 }
 

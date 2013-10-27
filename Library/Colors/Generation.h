@@ -3,11 +3,12 @@
 
 #include <vector>
 #include <algorithm>
-
-#include <Random/RNG.h>
-using namespace Random;
+#include <random>
+#include <chrono>
 
 #include "Conversion.h"
+#include <Library/Random/RNG.h>
+using Random::RNG;
 
 namespace Colors {
 
@@ -22,8 +23,7 @@ struct Generation {
 
 
 RGB Generation::randomHueRGB() {
-	RNG* rng = RNG::instance();
-	float hue = rng->uniformAB<float>(0.f, 2.f*M_PI);
+	float hue = RNG::uniformAB(0.f, static_cast<float>(2.f*M_PI));
 	return Conversion::hsv2rgb(HSV(hue, 1.f, 1.f));
 }
 

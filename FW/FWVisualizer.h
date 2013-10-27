@@ -22,7 +22,7 @@
 #include <FW/FWVisualizerHandle.h>
 #include <GUI/GUIVisualizerHandle.h>
 
-#include <IO/AbstractProgressBarPool.h>
+#include <GUI/GUIProgressBarPool.h>
 
 namespace FW {
 
@@ -43,8 +43,10 @@ class Visualizer {
 		typedef std::weak_ptr<Visualizer> WPtr;
 		/** defines a function to process in a separate thread */
 		typedef std::function<void (void)>    Job;
+		/** defines a progress bar callback function. Parameters are (int done, int todo). */
+		typedef std::function<void (int, int)> ProgressBar;
 		/** defines a function to process in a separate thread, provided a progress bar */
-		typedef std::function<void (IO::AbstractProgressBar::Ptr)>        JobWithBar;
+		typedef std::function<void (ProgressBar)>        JobWithBar;
 //		typedef std::function<void (IO::AbstractProgressBarPool::Ptr)>    JobWithPool;
 		friend class Graphene;
 
@@ -151,18 +153,18 @@ class Visualizer {
 
 	protected:
 		void setHandles(FW::VisualizerHandle::Ptr fw, GUI::VisualizerHandle::Ptr gui);
-		void setProgressBarPool(IO::AbstractProgressBarPool::Ptr m_pool);
+		void setProgressBarPool(GUI::ProgressBarPool::Ptr m_pool);
 		void waitForTasks();
 
 	protected:
-		typedef std::pair<std::future<void>, Job> Task;
+		typedef std::tuple<std::future<void>, Job, GUI::ProgressBar::Ptr> Task;
 
 	protected:
 		std::string                       m_id;
 		FW::VisualizerHandle::Ptr         m_fw;
 		GUI::VisualizerHandle::Ptr        m_gui;
 		std::vector<Task>                 m_tasks;
-		IO::AbstractProgressBarPool::Ptr  m_pool;
+		GUI::ProgressBarPool::Ptr         m_pool;
 };
 
 

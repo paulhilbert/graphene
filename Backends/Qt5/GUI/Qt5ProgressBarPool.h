@@ -11,12 +11,12 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QVBoxLayout>
 
-#include <IO/AbstractProgressBarPool.h>
+#include <GUI/GUIProgressBarPool.h>
 #include "Qt5ProgressBar.h"
 
 namespace GUI {
 
-class Qt5ProgressBarPool : public QObject, public IO::AbstractProgressBarPool {
+class Qt5ProgressBarPool : public QObject, public ProgressBarPool {
 	Q_OBJECT
 
 	public:
@@ -33,7 +33,7 @@ class Qt5ProgressBarPool : public QObject, public IO::AbstractProgressBarPool {
 		QWidget*  widget();
 
 	protected:
-		IO::AbstractProgressBar::Ptr createProgressBar(std::string label, int steps);
+		ProgressBar::Ptr createProgressBar(std::string label, int steps);
 		void removeProgressBar(int index);
 
 	protected:

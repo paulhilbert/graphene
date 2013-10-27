@@ -11,7 +11,7 @@
 
 namespace GUI {
 
-Qt5ProgressBarPool::Qt5ProgressBarPool() : IO::AbstractProgressBarPool(), m_area(new QWidget()), m_box(new QVBoxLayout())  {
+Qt5ProgressBarPool::Qt5ProgressBarPool() : ProgressBarPool(), m_area(new QWidget()), m_box(new QVBoxLayout())  {
 	m_area->setLayout(m_box);
 }
 
@@ -30,13 +30,13 @@ QWidget* Qt5ProgressBarPool::widget() {
 	return m_area;
 }
 
-IO::AbstractProgressBar::Ptr Qt5ProgressBarPool::createProgressBar(std::string label, int steps) {
+ProgressBar::Ptr Qt5ProgressBarPool::createProgressBar(std::string label, int steps) {
 	Qt5ProgressBar::Ptr bar(new Qt5ProgressBar(label));
 	Qt5ProgressBarHandle::Ptr handle(new Qt5ProgressBarHandle(this, m_count, label, steps));
 	QObject::connect(handle.get(), SIGNAL(polled(float)), bar.get(), SLOT(poll(float)));
 	m_box->addWidget(bar->widget());
 	m_bars.push_back(bar);
-	return std::dynamic_pointer_cast<IO::AbstractProgressBar>(handle);
+	return std::dynamic_pointer_cast<ProgressBar>(handle);
 }
 
 void Qt5ProgressBarPool::removeProgressBar(int index) {

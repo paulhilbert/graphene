@@ -45,8 +45,8 @@ void Qt5LogDialog::clear() {
 	m_text->setHtml("");
 }
 
-IO::AbstractProgressBarPool::Ptr Qt5LogDialog::progressBarPool() {
-	return std::dynamic_pointer_cast<IO::AbstractProgressBarPool>(m_barPool);
+ProgressBarPool::Ptr Qt5LogDialog::progressBarPool() {
+	return std::dynamic_pointer_cast<ProgressBarPool>(m_barPool);
 }
 
 QString Qt5LogDialog::format(const std::string& text) {

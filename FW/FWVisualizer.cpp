@@ -30,13 +30,13 @@ GUI::VisualizerHandle::Ptr Visualizer::gui() {
 }
 
 void Visualizer::execute(Job task, Job finally) {
-	m_tasks.push_back(std::make_pair(std::move(std::async(std::launch::async, task)), std::move(finally)));
+	m_tasks.push_back(std::make_tuple(std::move(std::async(std::launch::async, task)), std::move(finally), GUI::ProgressBar::Ptr()));
 }
 
 void Visualizer::execute(JobWithBar task, Job finally, std::string taskName, int steps) {
 	if (!m_pool) return;
 	auto bar = m_pool->create(taskName, steps);
-	m_tasks.push_back(std::make_pair(std::async(std::launch::async, task, bar), finally));
+	m_tasks.push_back(std::make_tuple(std::async(std::launch::async, task, [&] (int done, int todo) { bar->poll(done, todo); }), finally, bar));
 }
 
 std::vector<std::string> Visualizer::path(std::string&& s0) {
@@ -68,14 +68,14 @@ void Visualizer::setHandles(FW::VisualizerHandle::Ptr fw, GUI::VisualizerHandle:
 	m_gui = gui;
 }
 
-void Visualizer::setProgressBarPool(IO::AbstractProgressBarPool::Ptr pool) {
+void Visualizer::setProgressBarPool(GUI::ProgressBarPool::Ptr pool) {
 	m_pool = pool;
 }
 
 void Visualizer::waitForTasks() {
 	Algorithm::remove(m_tasks, [&] (const Task& task) {
-		if (task.first.wait_for(std::chrono::milliseconds(1)) != std::future_status::ready) return false;
-		if (task.second) task.second();
+		if (std::get<0>(task).wait_for(std::chrono::milliseconds(1)) != std::future_status::ready) return false;
+		if (std::get<1>(task)) std::get<1>(task)();
 		return true;
 	});
 }

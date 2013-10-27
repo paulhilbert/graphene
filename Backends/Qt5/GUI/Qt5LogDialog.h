@@ -37,7 +37,7 @@ class Qt5LogDialog : public QDockWidget {
 		void logVerbose(std::string text);
 		void clear();
 
-		IO::AbstractProgressBarPool::Ptr progressBarPool();
+		ProgressBarPool::Ptr progressBarPool();
 
 	protected:
 		QString format(const std::string& text);
