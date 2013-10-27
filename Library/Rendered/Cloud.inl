@@ -18,6 +18,7 @@ inline void CloudRenderKernel::initShader() {
 }
 
 inline void CloudRenderKernel::renderElements(int pointCount) {
+	glEnable(GL_DEPTH_TEST);
 	glPointSize(static_cast<GLfloat>(m_pointSize));
 	glDrawArrays(GL_POINTS, 0, pointCount);
 	glPointSize(1);

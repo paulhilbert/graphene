@@ -126,11 +126,38 @@ struct Transforms {
 		*/
 		const Matrix3f&  normal() const { return m_normal; }
 
+		/**
+		 * Access near plane distance.
+		 * @return Near plane distance.
+		 */
+		float& near() { return m_near; }
+
+		/**
+		 * Access near plane distance.
+		 * @return Near plane distance.
+		 */
+		const float& near() const { return m_near; }
+
+		/**
+		 * Access far plane distance.
+		 * @return Far plane distance.
+		 */
+		float& far() { return m_far; }
+
+		/**
+		 * Access far plane distance.
+		 * @return Far plane distance.
+		 */
+		const float& far() const { return m_far; }
+
+
 	protected:
-		Vector4i  m_viewport;
-		Matrix4f  m_modelview;
-		Matrix4f  m_projection;
-		Matrix3f  m_normal;
+		Eigen::Vector4i  m_viewport;
+		Eigen::Matrix4f  m_modelview;
+		Eigen::Matrix4f  m_projection;
+		Eigen::Matrix3f  m_normal;
+		float            m_near;
+		float            m_far;
 };
 
 } // View

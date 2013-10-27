@@ -116,7 +116,7 @@ class Camera {
 		void updatePickRay(int x, int y);
 
 	protected:
-		Matrix4f getProjectionMatrix(int w, int h);
+		Matrix4f getProjectionMatrix(int w, int h, float near, float far);
 		void registerEvents();
 
 	protected:

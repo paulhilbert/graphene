@@ -85,15 +85,19 @@ void Camera::updatePickRay(int x, int y) {
 }
 
 void Camera::updateTransforms() {
+	float near = 0.1f;
+	float far = 400.f;
 	auto trans = m_transforms.lock();
 	trans->modelview() = m_control->getViewTransformation();
-	trans->projection() = getProjectionMatrix(trans->viewport()[2], trans->viewport()[3]);
+	trans->projection() = getProjectionMatrix(trans->viewport()[2], trans->viewport()[3], near, far);
 	trans->normal() = trans->modelview().block<3,3>(0,0).inverse().transpose();
+	trans->near() = near;
+	trans->far() = far;
 }
 
-Eigen::Matrix4f Camera::getProjectionMatrix(int w, int h) {
+Eigen::Matrix4f Camera::getProjectionMatrix(int w, int h, float near, float far) {
 	float aspect = (float)(w > h ? w : h) / (w > h ? h : w);
-	Eigen::Matrix4f pr = Eigen::perspective(40.f, aspect, 0.1f, 500.f);
+	Eigen::Matrix4f pr = Eigen::perspective(40.f, aspect, near, far);
 	if (m_ortho) {
 		auto trans = m_transforms.lock();
 		Eigen::Vector4f lookAt;
@@ -122,6 +126,7 @@ void Camera::registerEvents() {
 		std::function<void (int,int,int,int)>(
 			[&](int dx, int dy, int x, int y) {
 				int m = 0;
+				if (m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) return;
 				if (m_eventHandler->modifier()->ctrl() )  { m |= MODIF_CTRL; dx *= 3; dy *= 3; }
 				if (m_eventHandler->modifier()->alt()  )  { m |= MODIF_ALT; }
 				if (m_eventHandler->modifier()->shift())  { m |= MODIF_SHIFT;	}
