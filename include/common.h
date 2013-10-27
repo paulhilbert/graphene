@@ -58,9 +58,9 @@ using Eigen::Matrix4i;
 using Eigen::Affine3f;
 using Eigen::Quaternionf;
 
-// commons
-#include <Algorithm/Sets.h>
-#include <Algorithm/Strings.h>
+// library
+#include <Library/Algorithm/Sets.h>
+#include <Library/Algorithm/Strings.h>
 #include <Library/Colors/Types.h>
 #include <Library/Colors/Colors.h>
 using namespace Colors;

@@ -21,7 +21,7 @@
 
 #include <include/common.h>
 
-#include <Generic/Command.h>
+#include <Library/Generic/Command.h>
 using Generic::Command;
 using Generic::BaseCommand;
 

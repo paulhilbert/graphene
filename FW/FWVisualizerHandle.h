@@ -16,7 +16,7 @@
 
 #include <include/common.h>
 
-#include <Geometry/Ray.h>
+#include <Library/Geometry/Ray.h>
 #include <FW/View/ViewTransforms.h>
 #include <FW/Events/EventsHandle.h>
 #include <FW/Events/EventsModifier.h>

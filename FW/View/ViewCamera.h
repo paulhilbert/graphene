@@ -19,7 +19,7 @@
 
 #include <FW/Events/EventsEventHandler.h>
 #include <FW/View/ViewCameraControl.h>
-#include <Geometry/Ray.h>
+#include <Library/Geometry/Ray.h>
 #include "ViewTransforms.h"
 
 namespace FW {
