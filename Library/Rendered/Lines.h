@@ -36,7 +36,7 @@ class Lines : public Field {
 		typedef Field Base;
 
 	public:
-		Lines(Annotation::Color baseColor, int lineWidth = 1);
+		Lines(RGBA baseColor, int lineWidth = 1);
 		virtual ~Lines();
 };
 

@@ -15,7 +15,8 @@ using std::map;
 
 #include <Eigen/Dense>
 
-#include <Vis/Color.h>
+#include <Library/Colors/Types.h>
+using Colors::RGBA;
 
 #include "../Shader/ShaderProgram.h"
 using Shader::ShaderProgram;

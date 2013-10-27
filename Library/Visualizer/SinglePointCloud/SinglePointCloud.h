@@ -11,8 +11,8 @@
 
 #include <pcl/keypoints/uniform_sampling.h>
 
-#include <Vis/Colors.h>
-using namespace Vis::Colors;
+#include <Color/Colors.h>
+using namespace Color::Colors;
 
 #include <Geometry/PCLTools.h>
 using Geometry::PCLTools;

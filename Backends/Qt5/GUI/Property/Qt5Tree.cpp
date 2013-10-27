@@ -73,7 +73,7 @@ void Qt5Tree::itemChanged(QTreeWidgetItem* item, int) {
 }
 
 void Qt5Tree::add(const std::vector<std::string>& path, bool checked) {
-	asserts(path.size(), "Empty path given");
+	if (!path.size()) throw std::runtime_error("Empty path given");
 	QTreeWidgetItem* newItem = new QTreeWidgetItem(QStringList(QString::fromStdString(path.back())));
 	newItem->setCheckState(0, checked ? Qt::Checked : Qt::Unchecked);
 	if (path.size() == 1) {
@@ -111,7 +111,7 @@ QTreeWidgetItem* Qt5Tree::getItem(const std::vector<std::string>& path, QTreeWid
 			}
 		}
 	}
-	asserts(first, "Incorrect path for Tree property");
+	if (!first) throw std::runtime_error("Incorrect path for Tree property");
 	if (path.size() == 1) return first;
 	std::vector<std::string>::const_iterator snd = path.begin();
 	std::advance(snd, 1);

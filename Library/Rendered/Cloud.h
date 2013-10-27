@@ -35,7 +35,7 @@ class Cloud : public Field {
 		typedef Field Base;
 
 	public:
-		Cloud(Annotation::Color baseColor, int pointSize = 2);
+		Cloud(RGBA baseColor, int pointSize = 2);
 		virtual ~Cloud();
 
 		template <class InputIterator>

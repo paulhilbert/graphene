@@ -12,9 +12,9 @@
 #include <Library/Visualizer/SinglePointCloud/SinglePointCloud.h>
 #include <Library/Visualizer/SelectModes/SelectModes.h>
 
-#include <Vis/Colors.h>
-using namespace Vis::Colors;
-using Vis::RGBA;
+#include <Color/Colors.h>
+using namespace Color::Colors;
+using Color::RGBA;
 
 namespace FW {
 

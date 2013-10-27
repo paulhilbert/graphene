@@ -8,17 +8,12 @@
 #ifndef AREASELECT_H_
 #define AREASELECT_H_
 
-#include <memory>
-
-#include <Eigen/Dense>
-#include <Eigen/Geometry>
-#include <Eigen/OpenGL>
-
-#include <Vis/Color.h>
-using Vis::RGBA;
+#include <include/common.h>
 
 #include <Library/Buffer/Geometry.h>
 #include <Library/Shader/ShaderProgram.h>
+#include <Library/Color/Types.h>
+using Color::RGBA;
 
 #include "SelectionMethod.h"
 

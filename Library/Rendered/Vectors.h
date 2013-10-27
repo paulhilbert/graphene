@@ -35,7 +35,7 @@ class Vectors : public Field {
 		typedef Field Base;
 
 	public:
-		Vectors(Annotation::Color baseColor, int lineWidth = 1);
+		Vectors(RGBA baseColor, int lineWidth = 1);
 		virtual ~Vectors();
 
 		template <class InputIterator>

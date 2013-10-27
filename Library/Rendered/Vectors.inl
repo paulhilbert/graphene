@@ -25,7 +25,7 @@ inline void VectorRenderKernel::renderElements(int pointCount) {
 
 /// RENDEREDVECTORS ///
 
-inline Vectors::Vectors(Annotation::Color baseColor, int lineWidth) : Base(baseColor, RenderKernel::Ptr(new VectorRenderKernel(lineWidth))) {
+inline Vectors::Vectors(RGBA baseColor, int lineWidth) : Base(baseColor, RenderKernel::Ptr(new VectorRenderKernel(lineWidth))) {
 }
 
 inline Vectors::~Vectors() {

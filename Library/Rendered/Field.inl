@@ -47,13 +47,13 @@ inline void Annotation::remove() {
 }
 
 
-inline void Annotation::colorize(Color color) {
+inline void Annotation::colorize(RGBA color) {
 	Colors colors(m_indices.size(), color);
 	colorize(colors);
 }
 
 inline void Annotation::colorize(const Colors& colors) {
-	asserts(m_indices.size() == colors.size(), "Invalid color array size");
+	if (m_indices.size() != colors.size()) throw std::runtime_error("Invalid color array size");
 	Colors& oldColors = m_field->getColors();
 	for (unsigned int i = 0; i < m_indices.size(); ++i) {
 		oldColors[m_indices[i]] = colors[i];
@@ -68,7 +68,7 @@ inline void Annotation::colorize(const CAssign& colorMap) {
 }
 
 inline void Annotation::colorize(const Scalars& scalars, const CMap&  colorMap) {
-	asserts(scalars.size() == m_indices.size(), "Invalid scalar array size");
+	if (scalars.size() != m_indices.size()) throw std::runtime_error("Invalid scalar array size");
 	auto& colors = m_field->getColors();
 	for (unsigned int i = 0; i < m_indices.size(); ++i) colors[m_indices[i]] = colorMap(scalars[i]);
 	m_field->upload();
@@ -85,7 +85,7 @@ inline void Annotation::colorize(const ScalarField& field, const CMap&  colorMap
 
 /// RENDEREDFIELD ///
 
-inline Field::Field(Annotation::Color baseColor, RenderKernel::Ptr kernel) : m_color(baseColor), m_visible(true), m_kernel(kernel) {
+inline Field::Field(RGBA baseColor, RenderKernel::Ptr kernel) : m_color(baseColor), m_visible(true), m_kernel(kernel) {
 	m_kernel->init();
 }
 
@@ -138,12 +138,12 @@ inline void Field::render(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f
 }
 
 inline Annotation::Ptr Field::operator[](std::string name) {
-	asserts(m_annotations.find(name) != m_annotations.end(), "Annotation with that name does not exist.");
+	if (m_annotations.find(name) == m_annotations.end()) throw std::runtime_error("Annotation with that name does not exist.");
 	return m_annotations[name];
 }
 
 inline Annotation::Ptr Field::annotate(const std::vector<int>& indices, std::string name, bool checkIntersections) {
-	asserts(m_annotations.find(name) == m_annotations.end(), "Annotation with that name already exists.");
+	if (m_annotations.find(name) != m_annotations.end()) throw std::runtime_error("Annotation with that name already exists.");
 	std::vector<int> cleanedIndices;
 	if (indices.size()) cleanedIndices = indices;
 	else {
@@ -178,7 +178,7 @@ inline bool Field::hasAnnotation(std::string name) const {
 
 inline void Field::removeAnnotation(std::string name) {
 	auto foundIt = m_annotations.find(name);
-	asserts(foundIt != m_annotations.end(), "Annotation does not exist.");
+	if (foundIt == m_annotations.end()) throw std::runtime_error("Annotation does not exist.");
 	foundIt->second->colorize(m_color);
 	m_annotations.erase(foundIt);
 }

@@ -27,6 +27,7 @@
 #include <map>
 #include <chrono>
 #include <cstring>
+#include <stdexcept>
 
 // boost
 #include <boost/lexical_cast.hpp>
@@ -39,7 +40,7 @@ using boost::none;
 // eigen
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
-#include <Eigen/OpenGL>
+#include <Library/Eigen/OpenGL.h>
 using Eigen::Matrix;
 using Eigen::Dynamic;
 using Eigen::Vector2f;
@@ -58,12 +59,11 @@ using Eigen::Affine3f;
 using Eigen::Quaternionf;
 
 // commons
-#include <Testing/asserts.h>
 #include <Algorithm/Sets.h>
 #include <Algorithm/Strings.h>
-#include <Vis/Colors.h>
-using namespace Vis::Colors;
-using Vis::RGBA;
+#include <Library/Colors/Types.h>
+#include <Library/Colors/Colors.h>
+using namespace Colors;
 
 // constants
 

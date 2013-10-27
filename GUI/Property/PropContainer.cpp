@@ -131,7 +131,7 @@ typename PropertyType::Ptr Container::get(const std::vector<std::string>& path) 
 	}
 
 	auto findIt = m_idMap.find(path[0]);
-	asserts(findIt != m_idMap.end(), "Child does not exist");
+	if (findIt == m_idMap.end()) throw std::runtime_error("Child does not exist");
 	auto child = m_children[findIt->second];
 	if (path.size() == 1) {
 		return std::dynamic_pointer_cast<PropertyType>(child);
@@ -139,7 +139,7 @@ typename PropertyType::Ptr Container::get(const std::vector<std::string>& path) 
 
 	auto snd = path.begin(); ++snd;
 	std::vector<std::string> rest(snd, path.end());
-	asserts(child->isContainer(), "Invalid path");
+	if (!child->isContainer()) throw std::runtime_error("Invalid path");
 	return std::dynamic_pointer_cast<Container>(child)->get<PropertyType>(rest);
 }
 
@@ -148,7 +148,7 @@ bool Container::isContainer() const {
 }
 
 void Container::add(Base::Ptr child, std::string id) {
-	asserts(m_idMap.find(id) == m_idMap.end(), "Child already exists");
+	if (m_idMap.find(id) != m_idMap.end()) throw std::runtime_error("Child already exists");
 	if (id != "") m_idMap[id] = static_cast<int>(m_children.size());
 	m_children.push_back(child);
 }

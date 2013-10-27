@@ -20,12 +20,12 @@ std::string Visualizer::id() const {
 }
 
 FW::VisualizerHandle::Ptr Visualizer::fw() {
-	asserts(m_fw, "Framework handle not yet available. Do not use Visualizer fw() and gui() methods in Visualizer constructor.");
+	if (!m_fw) throw std::runtime_error("Framework handle not yet available. Do not use Visualizer fw() and gui() methods in Visualizer constructor.");
 	return m_fw;
 }
 
 GUI::VisualizerHandle::Ptr Visualizer::gui() {
-	asserts(m_gui, "Framework handle not yet available. Do not use Visualizer fw() and gui() methods in Visualizer constructor.");
+	if (!m_gui) throw std::runtime_error("Framework handle not yet available. Do not use Visualizer fw() and gui() methods in Visualizer constructor.");
 	return m_gui;
 }
 

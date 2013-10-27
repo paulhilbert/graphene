@@ -26,7 +26,7 @@ void Choice::add(std::string id, std::string label) {
 }
 
 void Choice::add(const Option& option) {
-	asserts(std::find(m_options.begin(), m_options.end(), option.id) == m_options.end(), "Trying to add choice property option with duplicate id.");
+	if (std::find(m_options.begin(), m_options.end(), option.id) != m_options.end()) throw std::runtime_error("Trying to add choice property option with duplicate id.");
 	m_options.push_back(option.id);
 	addOption(option.label);
 }
@@ -37,13 +37,13 @@ void Choice::add(std::vector<Option>& options) {
 
 std::string Choice::value() const {
 	unsigned int idx = getActiveOption();
-	asserts(idx < m_options.size(), "Choice property index out of bounds.");
+	if (idx >= m_options.size()) throw std::runtime_error("Choice property index out of bounds.");
 	return m_options[idx];
 }
 
 void Choice::setValue(std::string id) {
 	auto findIt = std::find(m_options.begin(), m_options.end(), id);
-	asserts(findIt != m_options.end(), "Trying to set choice property value/id that does not exist.");
+	if (findIt == m_options.end()) throw std::runtime_error("Trying to set choice property value/id that does not exist.");
 	setActiveOption(static_cast<unsigned int>(std::distance(m_options.begin(), findIt)));
 }
 

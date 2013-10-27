@@ -20,7 +20,7 @@ void Factory::setGUIHandle(GUI::FactoryHandle::Ptr handle) {
 }
 
 GUI::FactoryHandle::Ptr Factory::gui() {
-	asserts(m_gui, "Trying to get invalid gui handle. Do not use the Factory::gui() function inside the factory constructor.");
+	if (!m_gui) throw std::runtime_error("Trying to get invalid gui handle. Do not use the Factory::gui() function inside the factory constructor.");
 	return m_gui;
 }
 

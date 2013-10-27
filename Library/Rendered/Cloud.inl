@@ -26,7 +26,7 @@ inline void CloudRenderKernel::renderElements(int pointCount) {
 
 /// RENDEREDCLOUD ///
 
-inline Cloud::Cloud(Annotation::Color baseColor, int pointSize) : Base(baseColor, RenderKernel::Ptr(new CloudRenderKernel(pointSize))) {
+inline Cloud::Cloud(RGBA baseColor, int pointSize) : Base(baseColor, RenderKernel::Ptr(new CloudRenderKernel(pointSize))) {
 }
 
 inline Cloud::~Cloud() {

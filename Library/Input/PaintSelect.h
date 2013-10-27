@@ -8,14 +8,10 @@
 #ifndef PAINTSELECT_H_
 #define PAINTSELECT_H_
 
-#include <memory>
+#include <include/common.h>
 
-#include <Eigen/Dense>
-#include <Eigen/Geometry>
-#include <Eigen/OpenGL>
-
-#include <Vis/Color.h>
-using Vis::RGBA;
+#include <Color/Types.h>
+using Color::RGBA;
 
 #include <Library/Buffer/Geometry.h>
 #include <Library/Shader/ShaderProgram.h>

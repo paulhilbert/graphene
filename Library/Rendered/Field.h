@@ -8,18 +8,10 @@
 #ifndef RENDEREDFIELD_H_
 #define RENDEREDFIELD_H_
 
-#include <iostream>
-#include <vector>
-#include <map>
-#include <memory>
-#include <functional>
-#include <numeric>
+#include <include/common.h>
 
-#include <Eigen/Dense>
-#include <Testing/asserts.h>
-#include <Algorithm/Sets.h>
-
-#include <Vis/ColorMap.h>
+#include <Library/Colors/Map.h>
+using Colors::RGBA;
 
 #include "../Buffer/Geometry.h"
 #include "../Shader/ShaderProgram.h"
@@ -53,10 +45,9 @@ class Annotation {
 	public:
 		typedef std::shared_ptr<Annotation> Ptr;
 		typedef std::weak_ptr<Annotation>   WPtr;
-		typedef Vis::RGBA Color;
-		typedef std::vector<Color> Colors;
-		typedef std::function<Color (float)> CMap;
-		typedef std::function<Color (int)> CAssign;
+		typedef std::vector<RGBA> Colors;
+		typedef std::function<RGBA (float)> CMap;
+		typedef std::function<RGBA (int)> CAssign;
 		typedef std::vector<float> Scalars;
 		typedef std::function<float (int)> ScalarField;
 
@@ -69,7 +60,7 @@ class Annotation {
 
 		void remove();
 
-		void colorize(Color color);
+		void colorize(RGBA color);
 		void colorize(const Colors& colors);
 		void colorize(const CAssign& colorMap);
 		void colorize(const Scalars& scalars, const CMap&  colorMap);
@@ -92,7 +83,7 @@ class Field {
 		typedef std::shared_ptr<Buffer::Geometry> GeometryPtr;
 
 	public:
-		Field(Annotation::Color baseColor, RenderKernel::Ptr kernel);
+		Field(RGBA baseColor, RenderKernel::Ptr kernel);
 		virtual ~Field();
 
 		void setVisible(bool visible);
@@ -116,7 +107,7 @@ class Field {
 		void upload();
 
 	protected:
-		Annotation::Color   m_color;
+		RGBA                m_color;
 		bool                m_visible;
 		Annotations         m_annotations;
 		GeometryPtr         m_geometry;

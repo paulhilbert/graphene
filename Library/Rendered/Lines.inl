@@ -25,7 +25,7 @@ inline void LineRenderKernel::renderElements(int pointCount) {
 
 /// RENDEREDLINES ///
 
-inline Lines::Lines(Annotation::Color baseColor, int lineWidth) : Base(baseColor, RenderKernel::Ptr(new LineRenderKernel(lineWidth))) {
+inline Lines::Lines(RGBA baseColor, int lineWidth) : Base(baseColor, RenderKernel::Ptr(new LineRenderKernel(lineWidth))) {
 }
 
 inline Lines::~Lines() {

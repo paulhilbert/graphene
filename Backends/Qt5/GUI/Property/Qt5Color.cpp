@@ -9,7 +9,7 @@
 
 #include <QtGui/QColor>
 #include <QtWidgets/QColorDialog>
-#include <Vis/ColorConversion.h>
+#include <Library/Colors/Conversion.h>
 
 namespace GUI {
 namespace Property {
@@ -73,7 +73,7 @@ QWidget* Qt5Color::widget() {
 void Qt5Color::setButtonColor() {
 	QColor color = QColor::fromRgbF(m_color[0], m_color[1], m_color[2], m_color[3]);
 	// compute text color
-	auto hsva = Vis::ColorConversion::rgba2hsva(m_color);
+	auto hsva = Colors::Conversion::rgba2hsva(m_color);
 	QString textColor = (hsva[2] > 0.5f) ? "#000000" : "#ffffff";
 	m_button->setStyleSheet("QPushButton:flat { color: "+textColor+"; background-color:"+color.name()+"; border: 1px solid black; margin: 0px 0px 0px 2px}");
 }
