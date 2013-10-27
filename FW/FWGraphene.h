@@ -44,8 +44,9 @@ class Graphene {
 		 *  @param backend Shared pointer to backend main class.
 		 *  @param eventHandler Shared pointer to main event management class.
 		 *  @param singleMode Start in single visualizer mode.
+		 *  @param noEffects If true, disables render effects.
 		 */
-		Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode);
+		Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects);
 
 		/**
 		 *  Destructor.

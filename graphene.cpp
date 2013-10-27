@@ -38,6 +38,7 @@ int main( int argc, char *argv[] ) {
 	std::string  title;
 	int          fps;
 	int          wndWidth, wndHeight;
+	bool         noEffects;
 	bool         verbose;
 	bool         singleMode;
 
@@ -52,6 +53,7 @@ int main( int argc, char *argv[] ) {
 		("width",   po::value<int>(&wndWidth)  ->default_value(1024), "Path to backend library")
 		("height",  po::value<int>(&wndHeight) ->default_value(576), "Path to backend library")
 		("fps",     po::value<int>(&fps) ->default_value(60), "Frames Per Second")
+		("no-effects", "Use simple rendering techniques (e.g. no depth-of-field)")
 		("verbose", "Output additional debug messages")
 	;
 
@@ -78,6 +80,7 @@ int main( int argc, char *argv[] ) {
 		std::cout << desc << "\n";
 		return 1;
 	}
+	noEffects = vm.count("no-effects") > 0;
 	verbose = vm.count("verbose") > 0;
 	singleMode = single != "";
 
@@ -89,7 +92,7 @@ int main( int argc, char *argv[] ) {
 	backend->setWindowTitle(title);
 	backend->setWindowSize(wndWidth, wndHeight);
 
-	Graphene graphene(backend, eventHandler, singleMode);
+	Graphene graphene(backend, eventHandler, singleMode, noEffects);
 
 	if (singleMode) {
 		fs::path p(visPath);
