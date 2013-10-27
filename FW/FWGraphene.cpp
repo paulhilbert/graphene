@@ -60,7 +60,9 @@ struct Graphene::Impl {
 		void         removeVisualizer(std::string visName);
 
 		void         render();
+#ifdef OPENGL_EFFECTS
 		void         renderBlur(float ratio);
+#endif // OPENGL_EFFECTS
 
 #ifdef ENABLE_SCREENCAST
 		void startScreencast(fs::path outputFile);
@@ -401,6 +403,7 @@ void Graphene::Impl::render() {
 #endif // ENABLE_SCREENCAST
 }
 
+#ifdef OPENGL_EFFECTS
 void Graphene::Impl::renderBlur(float ratio) {
 	auto wndSize = m_transforms->viewport().tail(2);
 	auto main = m_backend->getMainSettings();
@@ -450,6 +453,7 @@ void Graphene::Impl::renderBlur(float ratio) {
 	glEnable(GL_DEPTH_TEST);
 
 }
+#endif // OPENGL_EFFECTS
 
 void Graphene::Impl::modifier(Keys::Modifier mod, bool down) {
 	switch (mod) {
