@@ -4,6 +4,7 @@
  * To Public License, Version 2, as published by Sam Hocevar. See
  * the COPYING file for more details */
 
+#include <include/config.h>
 
 #include "Qt5File.h"
 
@@ -20,7 +21,7 @@ Qt5File::Qt5File(std::string label) : File(label), m_outer(new QWidget()), m_inn
 	m_hBox->addWidget(m_lineEdit, 1);
 	m_hBox->addWidget(m_button, 0);
 	QObject::connect(m_button, SIGNAL(clicked()), this, SLOT(buttonClicked()));
-	m_button->setIcon(QIcon("Icons/fileopen.png"));
+	m_button->setIcon(QIcon(QString(ICON_PREFIX)+"fileopen.png"));
 	m_lineEdit->setMinimumSize(200, 20);
 }
 

@@ -1,3 +1,17 @@
+#ifndef CMAKE_CONFIG_H
+#define CMAKE_CONFIG_H
+
 #define VERSION_MAJOR @graphene_VERSION_MAJOR@
 #define VERSION_MINOR @graphene_VERSION_MINOR@
+#define PREFIX "@CMAKE_INSTALL_PREFIX@"
 #cmakedefine OPENGL_EFFECTS
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
+#define ICON_PREFIX "Icons/"
+#define GLSL_PREFIX "Library/GLSL/"
+#else
+#define ICON_PREFIX "@CMAKE_INSTALL_PREFIX@/share/icons/graphene/"
+#define GLSL_PREFIX "@CMAKE_INSTALL_PREFIX@/include/graphene/Library/GLSL/"
+#endif
+
+#endif // CMAKE_CONFIG_H

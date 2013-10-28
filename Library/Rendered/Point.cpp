@@ -4,6 +4,7 @@
  * To Public License, Version 2, as published by Sam Hocevar. See
  * the COPYING file for more details */
 
+#include <include/config.h>
 
 #include "Point.h"
 
@@ -16,7 +17,7 @@ Point::Point(const Eigen::Vector3f& position, const Eigen::Vector4f& color, int 
 	setPosition(position);
 	setLineWidth(lineWidth);
 
-	m_prog.addShaders("Library/GLSL/translatedPoints.vert", "Library/GLSL/constant.frag");
+	m_prog.addShaders(std::string(GLSL_PREFIX)+"translatedPoints.vert", std::string(GLSL_PREFIX)+"constant.frag");
 	m_prog.link();
 	setColor(color);
 

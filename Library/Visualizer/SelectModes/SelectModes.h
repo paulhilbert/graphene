@@ -8,6 +8,8 @@
 #ifndef SELECTMODESVIS_H_
 #define SELECTMODESVIS_H_
 
+#include <include/config.h>
+
 #include <Algorithm/Sets.h>
 
 #include <FW/FWVisualizer.h>

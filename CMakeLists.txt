@@ -56,8 +56,22 @@ if(Boost_FOUND AND OPENGL_FOUND AND GLEW_FOUND)
 	find_package(Qt5Widgets REQUIRED)
 
 	include_directories("${PROJECT_SOURCE_DIR}Backends/Qt5")
-	add_library(backendQt5 SHARED ${qt5})
-	target_link_libraries(backendQt5 Graphene)
-	qt5_use_modules(backendQt5 Widgets OpenGL)
+	add_library(GrapheneQt5 SHARED ${qt5})
+	target_link_libraries(GrapheneQt5 Graphene)
+	qt5_use_modules(GrapheneQt5 Widgets OpenGL)
 endif()
 
+# binary
+install (TARGETS graphene DESTINATION bin)
+install (TARGETS Graphene GrapheneQt5 DESTINATION lib)
+install (FILES "bin/createBase" "bin/createVisualizer" DESTINATION bin)
+
+# header
+install (DIRECTORY FW DESTINATION include/graphene FILES_MATCHING PATTERN "*.h" PATTERN "*.inl")
+install (DIRECTORY GUI DESTINATION include/graphene FILES_MATCHING PATTERN "*.h" PATTERN "*.inl")
+install (DIRECTORY include DESTINATION include/graphene FILES_MATCHING PATTERN "*.h" PATTERN "*.inl")
+install (DIRECTORY Library DESTINATION include/graphene FILES_MATCHING PATTERN "*.h" PATTERN "*.inl" PATTERN "*.frag" PATTERN "*.vert" PATTERN "*.geom")
+
+# icons
+file (GLOB icons RELATIVE "${PROJECT_SOURCE_DIR}" "Icons/*.png")
+install (FILES ${icons} DESTINATION share/icons/graphene)

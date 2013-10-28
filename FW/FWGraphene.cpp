@@ -4,6 +4,7 @@
  * To Public License, Version 2, as published by Sam Hocevar. See
  * the COPYING file for more details */
 
+#include <include/config.h>
 
 #include "FWGraphene.h"
 
@@ -234,9 +235,9 @@ void Graphene::Impl::initEffects() {
 	});
 
 	// shaders and geometries
-	m_gaussH.addShaders("Library/GLSL/effectsQuad.vert", "Library/GLSL/effectsGaussH.frag");
-	m_gaussV.addShaders("Library/GLSL/effectsQuad.vert", "Library/GLSL/effectsGaussV.frag");
-	m_compose.addShaders("Library/GLSL/effectsQuad.vert", "Library/GLSL/effectsCompose.frag");
+	m_gaussH.addShaders(std::string(GLSL_PREFIX)+"effectsQuad.vert", std::string(GLSL_PREFIX)+"effectsGaussH.frag");
+	m_gaussV.addShaders(std::string(GLSL_PREFIX)+"effectsQuad.vert", std::string(GLSL_PREFIX)+"effectsGaussV.frag");
+	m_compose.addShaders(std::string(GLSL_PREFIX)+"effectsQuad.vert", std::string(GLSL_PREFIX)+"effectsCompose.frag");
 	m_gaussH.link();
 	m_gaussV.link();
 	m_compose.link();

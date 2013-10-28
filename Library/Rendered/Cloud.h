@@ -8,6 +8,7 @@
 #ifndef RENDEREDCLOUD_H_
 #define RENDEREDCLOUD_H_
 
+#include <include/config.h>
 #include "Field.h"
 
 namespace Rendered {

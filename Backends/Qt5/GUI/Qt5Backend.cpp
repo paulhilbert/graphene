@@ -5,6 +5,8 @@
  * the COPYING file for more details */
 
 
+#include <include/config.h>
+
 #include "Qt5Backend.h"
 
 #include <GUI/Property/PropButton.h>
@@ -158,17 +160,17 @@ void Qt5Backend::addToolbar() {
 
 	// actions
 	if (!m_singleMode) {
-		auto* addVisAction = new QAction(QIcon("Icons/add.png"), "Add Visualizer", m_wnd);
+		auto* addVisAction = new QAction(QIcon(QString(ICON_PREFIX)+"add.png"), "Add Visualizer", m_wnd);
 		QObject::connect(addVisAction, SIGNAL(triggered()), this, SLOT(onAddVis()));
 		m_tbar->addAction(addVisAction);
 	}
-	auto* exitAction = new QAction(QIcon("Icons/exit.png"), "Exit", m_wnd);
+	auto* exitAction = new QAction(QIcon(QString(ICON_PREFIX)+"exit.png"), "Exit", m_wnd);
 	QObject::connect(exitAction, SIGNAL(triggered()), this, SLOT(onExit()));
 	m_tbar->addAction(exitAction);
 	m_tbar->addSeparator();
 
 	auto* showSettingsButton = new QToolButton(m_wnd);
-	showSettingsButton->setIcon(QIcon("Icons/settings.png"));
+	showSettingsButton->setIcon(QIcon(QString(ICON_PREFIX)+"settings.png"));
 	showSettingsButton->setText("Show Settings");
 	showSettingsButton->setCheckable(true);
 	showSettingsButton->setChecked(true);
@@ -177,21 +179,21 @@ void Qt5Backend::addToolbar() {
 	m_tbar->addWidget(showSettingsButton);
 
 	auto* showLogButton = new QToolButton(m_wnd);
-	showLogButton->setIcon(QIcon("Icons/log.png"));
+	showLogButton->setIcon(QIcon(QString(ICON_PREFIX)+"log.png"));
 	showLogButton->setText("Show Log");
 	showLogButton->setCheckable(true);
 	QObject::connect(showLogButton, SIGNAL(toggled(bool)), this, SLOT(onShowLog(bool)));
 	QObject::connect(m_logDialog, SIGNAL(visibilityChanged(bool)), showLogButton, SLOT(setChecked(bool)));
 	m_tbar->addWidget(showLogButton);
-	auto* clearLogAction = new QAction(QIcon("Icons/clearLog.png"), "Clear Log", m_wnd);
+	auto* clearLogAction = new QAction(QIcon(QString(ICON_PREFIX)+"clearLog.png"), "Clear Log", m_wnd);
 	QObject::connect(clearLogAction, SIGNAL(triggered()), this, SLOT(onClearLog()));
 	m_tbar->addAction(clearLogAction);
 
 #ifdef ENABLE_SCREENCAST
 	m_tbar->addSeparator();
 	m_recording = false;
-	m_startScreencastAction = new QAction(QIcon("Icons/record.png"), "Record Screencast", m_wnd);
-	m_stopScreencastAction = new QAction(QIcon("Icons/stop.png"), "Record Screencast", m_wnd);
+	m_startScreencastAction = new QAction(QIcon(QString(ICON_PREFIX)+"record.png"), "Record Screencast", m_wnd);
+	m_stopScreencastAction = new QAction(QIcon(QString(ICON_PREFIX)+"stop.png"), "Record Screencast", m_wnd);
 	m_stopScreencastAction->setEnabled(false);
 	QObject::connect(m_startScreencastAction, SIGNAL(triggered()), this, SLOT(onRecord()));
 	QObject::connect(m_stopScreencastAction, SIGNAL(triggered()), this, SLOT(onStop()));
@@ -239,7 +241,7 @@ void Qt5Backend::onShowSettings(bool checked) {
 void Qt5Backend::onRecord() {
 #ifdef ENABLE_SCREENCAST
 	if (m_recording) {
-		m_startScreencastAction->setIcon(QIcon("Icons/record.png"));
+		m_startScreencastAction->setIcon(QIcon(QString(ICON_PREFIX)+"record.png"));
 		if (m_onPauseScreencast) m_onPauseScreencast();
 	} else {
 		if (!m_stopScreencastAction->isEnabled()) {
@@ -252,7 +254,7 @@ void Qt5Backend::onRecord() {
 		} else {
 			if (m_onResumeScreencast) m_onResumeScreencast();
 		}
-		m_startScreencastAction->setIcon(QIcon("Icons/pause.png"));
+		m_startScreencastAction->setIcon(QIcon(QString(ICON_PREFIX)+"pause.png"));
 	}
 	m_recording = !m_recording;
 
@@ -276,7 +278,7 @@ void Qt5Backend::onRecord() {
 void Qt5Backend::onStop() {
 #ifdef ENABLE_SCREENCAST
 	m_recording = false;
-	m_startScreencastAction->setIcon(QIcon("Icons/record.png"));
+	m_startScreencastAction->setIcon(QIcon(QString(ICON_PREFIX)+"record.png"));
 	m_stopScreencastAction->setEnabled(false);
 	if (m_onStopScreencast) m_onStopScreencast();
 #endif // ENABLE_SCREENCAST

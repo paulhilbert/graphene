@@ -17,6 +17,7 @@
 
 #include <include/common.h>
 #include <include/ogl.h>
+#include <include/config.h>
 #include <future>
 
 #include <FW/FWVisualizerHandle.h>

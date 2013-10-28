@@ -5,6 +5,7 @@
  * the COPYING file for more details */
 
 
+#include <include/config.h>
 #include <include/common.h>
 #include <include/ogl.h>
 
@@ -29,6 +30,7 @@ using FW::Graphene;
 #include <GUI/GUIBackend.h>
 
 GUI::Backend::Ptr getBackend(std::string path);
+void substituteHome(std::string& path);
 
 int main( int argc, char *argv[] ) {
 	std::string  visPath;
@@ -45,9 +47,15 @@ int main( int argc, char *argv[] ) {
 	po::options_description desc("Graphene command line options");
 	desc.add_options()
 		("help,h",  "Help message")
+		("version,v",  "Print version")
 		("visPath", po::value<std::string>(&visPath) ->required(), "Path to visualizer shared libraries")
-		("visExt",  po::value<std::string>(&visExt)  ->required(), "File extension of visualizer shared libraries")
-		("backend", po::value<std::string>(&backendPath) ->required(), "Path to backend library")
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
+		("visExt",  po::value<std::string>(&visExt)  ->default_value(".dll"), "File extension of visualizer shared libraries")
+		("backend", po::value<std::string>(&backendPath) ->default_value("GrapheneQt5.dll"), "Path to backend library")
+#else
+		("visExt",  po::value<std::string>(&visExt)  ->default_value(".so"), "File extension of visualizer shared libraries")
+		("backend", po::value<std::string>(&backendPath) ->default_value(PREFIX"/lib/libGrapheneQt5.so"), "Path to backend library")
+#endif
 		("single",  po::value<std::string>(&single) ->default_value(""), "Use the given name as single mode visualizer")
 		("title",   po::value<std::string>(&title) ->default_value("graphene"), "Window title")
 		("width",   po::value<int>(&wndWidth)  ->default_value(1024), "Path to backend library")
@@ -62,12 +70,18 @@ int main( int argc, char *argv[] ) {
 	bool optionsException = false;
 	try {
 		po::store(po::parse_command_line(argc, argv, desc), vm);
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
 		fs::path cfgFile("graphene.conf");
+#else
+		fs::path cfgFile(std::string(getenv("HOME"))+"/.graphene.conf");
+#endif
 		std::ifstream in;
 		if (fs::exists(cfgFile)) {
 			in.open(cfgFile.string().c_str());
 			po::store(po::parse_config_file(in, desc), vm);
 			in.close();
+		} else {
+			std::cout << "config file does not exist" << "\n";
 		}
 		po::notify(vm);
 	} catch (std::exception& e) {
@@ -78,11 +92,19 @@ int main( int argc, char *argv[] ) {
 	}
 	if (optionsException || vm.count("help")) {
 		std::cout << desc << "\n";
-		return 1;
+		return optionsException ? 1 : 0;
+	}
+	if (vm.count("version")) {
+		std::cout << "graphene version: " << VERSION_MAJOR << "." << VERSION_MINOR << "\n";
+		return 0;
 	}
 	noEffects = vm.count("no-effects") > 0;
 	verbose = vm.count("verbose") > 0;
 	singleMode = single != "";
+
+	// sanitize paths
+	substituteHome(visPath);
+	substituteHome(backendPath);
 
 	FW::Events::EventHandler::Ptr eventHandler(new FW::Events::EventHandler());
 
@@ -162,4 +184,12 @@ GUI::Backend::Ptr getBackend(std::string path) {
 	}
 	GUI::Backend::Ptr backend(f());
 	return backend;
+}
+
+inline void substituteHome(std::string& path) {
+	regex pattern("~");
+	std::ostringstream t(std::ios::out | std::ios::binary);
+	std::ostream_iterator<char, char> oi(t);
+	boost::regex_replace(oi, path.begin(), path.end(),	pattern, std::string(getenv("HOME")));
+	path = t.str();
 }

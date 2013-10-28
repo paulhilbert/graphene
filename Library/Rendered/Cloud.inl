@@ -14,7 +14,9 @@ inline CloudRenderKernel::~CloudRenderKernel() {
 }
 
 inline void CloudRenderKernel::initShader() {
-	m_prog.addShaders("Library/GLSL/points.vert", "Library/GLSL/points.frag");
+	std::cout << std::string(GLSL_PREFIX)+"points.vert" << "\n";
+	std::cout << std::string(GLSL_PREFIX)+"points.frag" << "\n";
+	m_prog.addShaders(std::string(GLSL_PREFIX)+"points.vert", std::string(GLSL_PREFIX)+"points.frag");
 }
 
 inline void CloudRenderKernel::renderElements(int pointCount) {

@@ -8,6 +8,7 @@
 #ifndef RENDEREDLINES_H
 #define RENDEREDLINES_H
 
+#include <include/config.h>
 #include "Field.h"
 
 

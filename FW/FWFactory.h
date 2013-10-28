@@ -16,6 +16,7 @@
  */
 
 #include <include/common.h>
+#include <include/config.h>
 #include <boost/extension/extension.hpp>
 
 #include "FWVisualizer.h"

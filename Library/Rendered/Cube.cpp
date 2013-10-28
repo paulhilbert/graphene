@@ -4,6 +4,7 @@
  * To Public License, Version 2, as published by Sam Hocevar. See
  * the COPYING file for more details */
 
+#include <include/config.h>
 
 #include "Cube.h"
 
@@ -52,7 +53,7 @@ Cube::Cube(const Eigen::Affine3f& trafo, const Eigen::Vector4f& ambientColor, co
 	indices[12] = 0;
 	indices[13] = 1;
 
-	m_prog.addShaders("Library/GLSL/mesh.vert", "Library/GLSL/mesh.frag");
+	m_prog.addShaders(std::string(GLSL_PREFIX)+"mesh.vert", std::string(GLSL_PREFIX)+"mesh.frag");
 	m_prog.link();
 	m_prog.use();
 	m_prog.setUniformVec3("lightDir", Eigen::Vector3f(1.f, 0.5f, 2.f).normalized().data());

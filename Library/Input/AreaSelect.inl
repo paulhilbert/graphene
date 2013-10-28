@@ -12,7 +12,7 @@ inline AreaSelect::~AreaSelect() {
 }
 
 inline void AreaSelect::init() {
-	m_progArea.addShaders("Library/GLSL/points.vert", "Library/GLSL/points.frag");
+	m_progArea.addShaders(std::string(GLSL_PREFIX)+"points.vert", std::string(GLSL_PREFIX)+"points.frag");
 	m_progArea.link();
 	m_geomArea.init();
 	uploadColors();

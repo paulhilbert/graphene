@@ -8,6 +8,7 @@
 #ifndef RENDEREDVECTORS_H_
 #define RENDEREDVECTORS_H_
 
+#include <include/config.h>
 #include "Field.h"
 
 namespace Rendered {
