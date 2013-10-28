@@ -1,0 +1,3 @@
+#define VERSION_MAJOR @graphene_VERSION_MAJOR@
+#define VERSION_MINOR @graphene_VERSION_MINOR@
+#cmakedefine OPENGL_EFFECTS
