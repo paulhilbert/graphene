@@ -8,16 +8,13 @@
 #ifndef POINTCLOUDEDITORVIS_H_
 #define POINTCLOUDEDITORVIS_H_
 
+#include <include/common.h>
 #include <FW/FWVisualizer.h>
 #include <Library/Visualizer/SinglePointCloud/SinglePointCloud.h>
 #include <Library/Visualizer/SelectModes/SelectModes.h>
 
-#include <Color/Colors.h>
-using namespace Color::Colors;
-using Color::RGBA;
 
 namespace FW {
-
 
 class PointCloudEditor : public SinglePointCloud, public SelectModes<Cloud, Point> {
 	public:

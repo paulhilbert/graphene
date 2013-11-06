@@ -19,6 +19,11 @@ namespace Shader {
 
 class ShaderProgram {
 	public:
+		typedef std::shared_ptr<ShaderProgram>   Ptr;
+		typedef std::weak_ptr<ShaderProgram>   WPtr;
+		typedef std::shared_ptr<const ShaderProgram>   ConstPtr;
+		typedef std::weak_ptr<const ShaderProgram>   ConstWPtr;
+
 		typedef std::shared_ptr<VertexShader>    VShaderPtr;
 		typedef std::shared_ptr<FragmentShader>  FShaderPtr;
 		typedef std::shared_ptr<GeometryShader>  GShaderPtr;

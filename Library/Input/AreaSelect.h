@@ -12,8 +12,6 @@
 
 #include <Library/Buffer/Geometry.h>
 #include <Library/Shader/ShaderProgram.h>
-#include <Library/Color/Types.h>
-using Color::RGBA;
 
 #include "SelectionMethod.h"
 

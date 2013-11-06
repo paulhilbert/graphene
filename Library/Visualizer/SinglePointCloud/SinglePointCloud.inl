@@ -14,9 +14,8 @@ inline SinglePointCloud::~SinglePointCloud() {
 inline void SinglePointCloud::init() {
 	addProperties();
 	registerEvents();
-	m_rendered = Rendered::Cloud::Ptr(new Rendered::Cloud(Eigen::Vector4f(0.4f, 0.4f, 0.4f, 1.f), 4.f));
+	m_rendered = Rendered::Cloud::Ptr(new Rendered::Cloud(Eigen::Vector4f(0.4f, 0.4f, 0.4f, 1.f), 1.f));
 	addClouds(m_paths);
-	uploadCloud();
 }
 
 inline void SinglePointCloud::render() {
@@ -52,17 +51,16 @@ inline void SinglePointCloud::addClouds(const GUI::Property::Paths& paths) {
 			gui()->log()->error("File \""+p.string()+"\" does not exist. Skipping this file.");
 			continue;
 		}
-		if (p.extension() != ".pcd") {
-			gui()->log()->error("File \""+p.string()+"\" is not a .pcd file. Skipping this file.");
+		try {
+//			std::vector<Vector4f> colors;
+			Cloud::Ptr singleCloud = Tools::loadPointCloud(p);
+			gui()->log()->verbose("Loaded point cloud with "+lexical_cast<std::string>(singleCloud->size())+" points.");
+			m_cloud->insert(m_cloud->end(), singleCloud->begin(), singleCloud->end());
+//			if (colors.size()) m_colors.insert(m_colors.end(), colors.begin(), colors.end());
+		} catch (std::runtime_error& e) {
+			gui()->log()->error(e.what());
 			continue;
 		}
-		Cloud singleCloud;
-		if (pcl::io::loadPCDFile<Point>(p.string(), singleCloud) == -1) {
-			gui()->log()->error("Couldn't read file \""+p.string()+"\". Skipping this file.");
-			continue;
-		}
-		gui()->log()->verbose("Loaded point cloud with "+lexical_cast<std::string>(singleCloud.size())+" points.");
-		m_cloud->insert(m_cloud->end(), singleCloud.begin(), singleCloud.end());
 	}
 	uploadCloud();
 }
@@ -74,6 +72,7 @@ inline void SinglePointCloud::exportCloud(const fs::path& path) {
 
 inline void SinglePointCloud::uploadCloud() {
 	m_rendered->setFromPCLCloud(m_cloud->begin(), m_cloud->end());
+//	if (m_colors.size()) m_rendered->annotateAll()->colorize(m_colors);
 }
 
 inline void SinglePointCloud::resample() {

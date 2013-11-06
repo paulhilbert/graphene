@@ -11,8 +11,8 @@
 
 #include <pcl/keypoints/uniform_sampling.h>
 
-#include <Color/Colors.h>
-using namespace Color::Colors;
+#include <Library/Colors/Colors.h>
+using namespace Colors;
 
 #include <Geometry/PCLTools.h>
 using Geometry::PCLTools;
@@ -48,6 +48,7 @@ class SinglePointCloud : virtual public Visualizer {
 		GUI::Property::Paths     m_paths;
 		Cloud::Ptr               m_cloud;
 		Rendered::Cloud::Ptr     m_rendered;
+//		std::vector<RGBA>        m_colors;
 };
 
 #include "SinglePointCloud.inl"

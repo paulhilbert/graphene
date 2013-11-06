@@ -2,10 +2,9 @@
 
 in vec3 mvsNormal;
 in vec3 lightNormal;
+in vec4 fColor;
 out vec4 fragmentColor;
 
-uniform vec4 ambient;
-uniform vec4 diffuse;
 
 void main() {
 	vec3 normalized_normal = normalize(mvsNormal);
@@ -13,5 +12,7 @@ void main() {
 
 	float att = clamp(dot(mvsNormal, normalized_lightDir), 0.0, 1.0);
 
+	vec4 diffuse = fColor;
+	vec4 ambient = 0.2*fColor;
 	fragmentColor = ambient + diffuse * att;
 }

@@ -138,8 +138,8 @@ inline void SelectModes<Entities, Entity>::addModes() {
 	bool paint = !(m_exclude & METHOD_PAINT);
 
 	auto groupSel = gui()->modes()->addGroup("selection");
-	if (area)  groupSel->addOption("selArea", "Select Area", QString(ICON_PREFIX)+"area_select.png");
-	if (paint) groupSel->addOption("selPaint", "Select By Painting", QString(ICON_PREFIX)+"paint_select.png");
+	if (area)  groupSel->addOption("selArea", "Select Area", std::string(ICON_PREFIX)+"area_select.png");
+	if (paint) groupSel->addOption("selPaint", "Select By Painting", std::string(ICON_PREFIX)+"paint_select.png");
 	groupSel->setCallback([&] (std::string mode, bool active) {
 		if (active) {
 			if (mode == "selArea")  m_areaSelect->enable();

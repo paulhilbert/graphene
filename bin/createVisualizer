@@ -16,7 +16,7 @@ if [ $? != 0 ] ; then usage; fi
 eval set -- "$TEMP"
 
 
-SKEL="$GRAPHENE_ROOT/Library/Visualizer/skeleton/vis"
+SKEL="/usr/include/graphene/Library/Visualizer/skeleton/vis"
 LINK=""
 BASE=""
 INHERIT=""
