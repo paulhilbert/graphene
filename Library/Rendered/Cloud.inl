@@ -24,6 +24,10 @@ inline void CloudRenderKernel::renderElements(int pointCount) {
 	glPointSize(1);
 }
 
+inline void CloudRenderKernel::setThickness(int thickness) {
+	m_pointSize = thickness;
+}
+
 /// RENDEREDCLOUD ///
 
 inline Cloud::Cloud(RGBA baseColor, int pointSize) : Base(baseColor, RenderKernel::Ptr(new CloudRenderKernel(pointSize))) {

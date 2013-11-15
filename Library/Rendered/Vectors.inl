@@ -23,6 +23,10 @@ inline void VectorRenderKernel::renderElements(int pointCount) {
 	glLineWidth(1);
 }
 
+inline void VectorRenderKernel::setThickness(int thickness) {
+	m_lineWidth = thickness;
+}
+
 /// RENDEREDVECTORS ///
 
 inline Vectors::Vectors(RGBA baseColor, int lineWidth) : Base(baseColor, RenderKernel::Ptr(new VectorRenderKernel(lineWidth))) {

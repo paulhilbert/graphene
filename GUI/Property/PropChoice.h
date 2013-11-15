@@ -76,21 +76,21 @@ class Choice : public Base, public Notify<void (std::string)>, public Value<std:
 		 *  @param id Unique identifier of the new option.
 		 *  @param label GUI label to use for the new option.
 		 */
-		void add(std::string id, std::string label);
+		Choice& add(std::string id, std::string label);
 
 		/**
 		 *  Adds new option.
 		 *
 		 *  @param option Option object to add.
 		 */
-		void add(const Option& option);
+		Choice& add(const Option& option);
 
 		/**
 		 *  Adds multiple options.
 		 *
 		 *  @param options Vector of options to add.
 		 */
-		void add(std::vector<Option>& options);
+		Choice& add(std::vector<Option>& options);
 		
 		/**
 		 *  Returns identifier of currently active option.

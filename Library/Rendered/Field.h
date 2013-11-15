@@ -32,6 +32,8 @@ class RenderKernel {
 		virtual void initShader() = 0;
 		virtual void renderElements(int pointCount) = 0;
 
+		virtual void setThickness(int thickness) = 0;
+
 		ShaderProgram& program();
 		const ShaderProgram& program() const;
 
@@ -99,6 +101,8 @@ class Field {
 		bool hasAnnotation(std::string name) const;
 		void removeAnnotation(std::string name);
 		void clearAnnotations();
+
+		void setThickness(int thickness);
 
 	protected:
 		Annotation::Colors& getColors();

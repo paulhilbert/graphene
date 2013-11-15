@@ -27,10 +27,10 @@ class Qt5Number : public QObject, public Number {
 		Qt5Number(std::string label, QLabel* labelWidget);
 		virtual ~Qt5Number();
 
-		void setMin(double min);
-		void setMax(double max);
-		void setDigits(int digits);
-		void setStep(double step);
+		Number& setMin(double min);
+		Number& setMax(double max);
+		Number& setDigits(int digits);
+		Number& setStep(double step);
 
 		void show();
 		void hide();

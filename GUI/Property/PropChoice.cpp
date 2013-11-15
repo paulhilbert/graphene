@@ -18,21 +18,24 @@ Choice::Choice(std::string label) : Base(), Notify<void (std::string)>(), Value<
 Choice::~Choice() {
 }
 
-void Choice::add(std::string id, std::string label) {
+Choice& Choice::add(std::string id, std::string label) {
 	Option opt;
 	opt.id = id;
 	opt.label = label;
 	add(opt);
+	return *this;
 }
 
-void Choice::add(const Option& option) {
+Choice& Choice::add(const Option& option) {
 	if (std::find(m_options.begin(), m_options.end(), option.id) != m_options.end()) throw std::runtime_error("Trying to add choice property option with duplicate id.");
 	m_options.push_back(option.id);
 	addOption(option.label);
+	return *this;
 }
 
-void Choice::add(std::vector<Option>& options) {
+Choice& Choice::add(std::vector<Option>& options) {
 	for (const auto& option : options) add(option);
+	return *this;
 }
 
 std::string Choice::value() const {

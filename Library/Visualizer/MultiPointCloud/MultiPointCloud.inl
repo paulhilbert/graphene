@@ -46,6 +46,15 @@ inline void MultiPointCloud::addProperties() {
 	exportFile->setCallback([&] (const fs::path& path) { exportCloud(path); });
 	groupCloud->collapse();
 
+	auto groupRendering = gui()->properties()->add<Section>("Rendering", "groupRendering");
+	auto thickness = groupRendering->add<Range>("Element Thickness", "thickness");
+	thickness->setDigits(0);
+	thickness->setMin(1);
+	thickness->setMax(6);
+	thickness->setValue(1);
+	thickness->setCallback([&] (float value) { for (auto v : m_rf) v.second->setThickness(static_cast<int>(value)); });
+	groupRendering->collapse();
+
 	auto groupEdit = gui()->properties()->add<Section>("Edit Cloud", "groupEdit");
 	auto diamFactor = groupEdit->add<Number>("Diameter Factor", "diamFactor");
 	diamFactor->setMin(0.0001);
@@ -82,7 +91,7 @@ inline void MultiPointCloud::addClouds(const GUI::Property::Paths& paths) {
 }
 
 inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA color, const std::vector<Vector3f>& points, bool visible) {
-	RC::Ptr rc(new RC(color, 3.f));
+	RC::Ptr rc(new RC(color, 1));
 	rc->set(points);
 	rc->setVisible(visible);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
@@ -92,7 +101,7 @@ inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA col
 }
 
 inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA color, Cloud::Ptr cloud, bool visible) {
-	RC::Ptr rc(new RC(color, 3.f));
+	RC::Ptr rc(new RC(color, 1));
 	rc->setFromPCLCloud(cloud->begin(), cloud->end());
 	rc->setVisible(visible);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
@@ -119,6 +128,14 @@ inline Rendered::Lines::Ptr MultiPointCloud::addLines(std::string name, RGBA col
 	tree->add(name, {name}, visible);
 	m_rf[name] = std::dynamic_pointer_cast<RF>(rl);
 	return rl;
+}
+
+inline void MultiPointCloud::removeField(std::string name) {
+	auto findIt = m_rf.find(name);
+	if (findIt == m_rf.end()) return;
+	auto tree = gui()->properties()->get<Tree>(path("visibility"));
+	tree->remove(name);
+	m_rf.erase(findIt);
 }
 
 inline void MultiPointCloud::exportCloud(const fs::path& path) {

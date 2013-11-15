@@ -189,6 +189,10 @@ inline void Field::clearAnnotations() {
 	m_annotations.clear();
 }
 
+inline void Field::setThickness(int thickness) {
+	m_kernel->setThickness(thickness);
+}
+
 inline Annotation::Colors& Field::getColors() {
 	return m_colors;
 }

@@ -40,6 +40,18 @@ class Backend {
 		/** Weak pointer to this class */
 		typedef std::weak_ptr<Backend> WPtr;
 
+		struct WindowParams {
+			bool maximized;
+			int  logX;
+			int  logY;
+			int  logWidth;
+			int  logHeight;
+			int  propX;
+			int  propY;
+			int  propWidth;
+			int  propHeight;
+		};
+
 	public:
 		/**
 		 *  Constructor
@@ -60,7 +72,7 @@ class Backend {
 		 *  @param singleMode Start in single visualizer mode
 		 *  @param verbose Log verbose output
 		 */
-		virtual void init(int argc, char* argv[], FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool verbose) = 0;
+		virtual void init(int argc, char* argv[], FW::Events::EventHandler::Ptr eventHandler, const WindowParams& params, bool singleMode, bool verbose) = 0;
 
 		/**
 		 *  Pure virtual method starting main application thread.

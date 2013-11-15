@@ -35,7 +35,7 @@ class Qt5Backend : public QObject, public Backend {
 		Qt5Backend();
 		virtual ~Qt5Backend();
 
-		void init(int argc, char* argv[], FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool verbose);
+		void init(int argc, char* argv[], FW::Events::EventHandler::Ptr eventHandler, const WindowParams& params, bool singleMode, bool verbose);
 		int  run(int fps);
 
 		FactoryHandle::Ptr addFactory(std::string name);

@@ -44,6 +44,8 @@ int main( int argc, char *argv[] ) {
 	bool         verbose;
 	bool         singleMode;
 
+	GUI::Backend::WindowParams wndParams;
+
 	po::options_description desc("Graphene command line options");
 	desc.add_options()
 		("help,h",  "Help message")
@@ -56,12 +58,21 @@ int main( int argc, char *argv[] ) {
 		("visExt",  po::value<std::string>(&visExt)  ->default_value(".so"), "File extension of visualizer shared libraries")
 		("backend", po::value<std::string>(&backendPath) ->default_value(PREFIX"/lib/libGrapheneQt5.so"), "Path to backend library")
 #endif
-		("single",  po::value<std::string>(&single) ->default_value(""), "Use the given name as single mode visualizer")
-		("title",   po::value<std::string>(&title) ->default_value("graphene"), "Window title")
-		("width",   po::value<int>(&wndWidth)  ->default_value(1024), "Path to backend library")
-		("height",  po::value<int>(&wndHeight) ->default_value(576), "Path to backend library")
-		("fps",     po::value<int>(&fps) ->default_value(60), "Frames Per Second")
+		("single",     po::value<std::string>(&single) ->default_value(""), "Use the given name as single mode visualizer")
+		("title",      po::value<std::string>(&title) ->default_value("graphene"), "Window title")
+		("width",      po::value<int>(&wndWidth)  ->default_value(1024), "Path to backend library")
+		("height",     po::value<int>(&wndHeight) ->default_value(576), "Path to backend library")
+		("fps",        po::value<int>(&fps) ->default_value(60), "Frames Per Second")
+		("logX",       po::value<int>(&wndParams.logX)->default_value(-1), "Log window position x")
+		("logY",       po::value<int>(&wndParams.logY)->default_value(-1), "Log window position y")
+		("logWidth",   po::value<int>(&wndParams.logWidth)->default_value(-1), "Log window width")
+		("logHeight",  po::value<int>(&wndParams.logHeight)->default_value(-1), "Log window height")
+		("propX",      po::value<int>(&wndParams.propX)->default_value(-1), "Property window position x")
+		("propY",      po::value<int>(&wndParams.propY)->default_value(-1), "Property window position y")
+		("propWidth",  po::value<int>(&wndParams.propWidth)->default_value(-1), "Property window width")
+		("propHeight", po::value<int>(&wndParams.propHeight)->default_value(-1), "Property window height")
 		("no-effects", "Use simple rendering techniques (e.g. no depth-of-field)")
+		("maximized", "Show main window maximized")
 		("verbose", "Output additional debug messages")
 	;
 
@@ -98,6 +109,7 @@ int main( int argc, char *argv[] ) {
 		std::cout << "graphene version: " << VERSION_MAJOR << "." << VERSION_MINOR << "\n";
 		return 0;
 	}
+	wndParams.maximized = vm.count("maximized") > 0;
 	noEffects = vm.count("no-effects") > 0;
 	verbose = vm.count("verbose") > 0;
 	singleMode = single != "";
@@ -110,7 +122,7 @@ int main( int argc, char *argv[] ) {
 
 	GUI::Backend::Ptr backend = getBackend(backendPath);
 	if (!backend) return 1;
-	backend->init(argc, argv, eventHandler, singleMode, verbose);
+	backend->init(argc, argv, eventHandler, wndParams, singleMode, verbose);
 	backend->setWindowTitle(title);
 	backend->setWindowSize(wndWidth, wndHeight);
 

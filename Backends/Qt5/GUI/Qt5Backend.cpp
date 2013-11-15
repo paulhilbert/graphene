@@ -32,7 +32,7 @@ Qt5Backend::~Qt5Backend() {
 	delete m_app;
 }
 
-void Qt5Backend::init(int argc, char* argv[], FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool verbose) {
+void Qt5Backend::init(int argc, char* argv[], FW::Events::EventHandler::Ptr eventHandler, const WindowParams& params, bool singleMode, bool verbose) {
 	m_singleMode = singleMode;
 	m_app = new QApplication(argc, argv);
 	m_wnd = new QMainWindow();
@@ -63,6 +63,25 @@ void Qt5Backend::init(int argc, char* argv[], FW::Events::EventHandler::Ptr even
 	}
 	m_wnd->addDockWidget(Qt::RightDockWidgetArea, m_dock);
 
+	if (params.logX > 0 && params.logY > 0) {
+		m_logDialog->setFloating(true);
+		m_logDialog->move(params.logX, params.logY);
+		m_logDialog->show();
+	}
+	if (params.logWidth > 0 && params.logHeight > 0) {
+		if (!m_logDialog->isFloating()) m_logDialog->setFloating(true);
+		m_logDialog->resize(params.logWidth, params.logHeight);
+	}
+
+	if (params.propX > 0 && params.propY > 0) {
+		m_dock->setFloating(true);
+		m_dock->move(params.propX, params.propY);
+	}
+	if (params.propWidth > 0 && params.propHeight > 0) {
+		if (!m_dock->isFloating()) m_dock->setFloating(true);
+		m_dock->resize(params.propWidth, params.propHeight);
+	}
+
 	// setup add visualizer dialog
 	m_addVisDialog = new Qt5AddVisDialog("Add Visualizer", singleMode);
 
@@ -74,6 +93,7 @@ void Qt5Backend::init(int argc, char* argv[], FW::Events::EventHandler::Ptr even
 	m_glWidget = new Qt5GLWidget(eventHandler, 1);
 	m_wnd->setCentralWidget(m_glWidget);
 	QCoreApplication::instance()->installEventFilter(m_glWidget);
+	if (params.maximized) m_wnd->showMaximized();
 }
 
 int Qt5Backend::run(int fps) {

@@ -17,21 +17,25 @@ Qt5Number::Qt5Number(std::string label, QLabel* labelWidget) : Number(label), m_
 Qt5Number::~Qt5Number() {
 }
 
-void Qt5Number::setMin(double min) {
+Number& Qt5Number::setMin(double min) {
 	m_spinBox->setMinimum(min);
+	return *this;
 }
 
-void Qt5Number::setMax(double max) {
+Number& Qt5Number::setMax(double max) {
 	m_spinBox->setMaximum(max);
+	return *this;
 }
 
-void Qt5Number::setDigits(int digits) {
+Number& Qt5Number::setDigits(int digits) {
 	m_spinBox->setDecimals(digits);
 	setStep(std::pow(0.1, digits));
+	return *this;
 }
 
-void Qt5Number::setStep(double step) {
+Number& Qt5Number::setStep(double step) {
 	m_spinBox->setSingleStep(step);
+	return *this;
 }
 
 void Qt5Number::show() {

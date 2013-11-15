@@ -23,6 +23,10 @@ inline void LineRenderKernel::renderElements(int pointCount) {
 	glLineWidth(1);
 }
 
+inline void LineRenderKernel::setThickness(int thickness) {
+	m_lineWidth = thickness;
+}
+
 /// RENDEREDLINES ///
 
 inline Lines::Lines(RGBA baseColor, int lineWidth) : Base(baseColor, RenderKernel::Ptr(new LineRenderKernel(lineWidth))) {

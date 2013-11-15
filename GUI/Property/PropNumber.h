@@ -66,14 +66,14 @@ class Number : public Base, public Notify<void (double)>, public Value<double>, 
 		 *
 		 *  @param min Minimum value to set.
 		 */
-		virtual void setMin(double min) = 0;
+		virtual Number& setMin(double min) = 0;
 
 		/**
 		 *  Set maximum value choosable.
 		 *
 		 *  @param max Maximum value to set.
 		 */
-		virtual void setMax(double max) = 0;
+		virtual Number& setMax(double max) = 0;
 
 		/**
 		 *  Set number of digits after the period (and therefore precision).
@@ -82,7 +82,7 @@ class Number : public Base, public Notify<void (double)>, public Value<double>, 
 		 *
 		 *  @param digits Number of digits after the period.
 		 */
-		virtual void setDigits(int digits) = 0;
+		virtual Number& setDigits(int digits) = 0;
 
 		/**
 		 *  Sets increment steps.
@@ -93,7 +93,7 @@ class Number : public Base, public Notify<void (double)>, public Value<double>, 
 		 *
 		 *  @param step Increment/Decrement amount.
 		 */
-		virtual void setStep(double step) = 0;
+		virtual Number& setStep(double step) = 0;
 };
 
 } // Property
