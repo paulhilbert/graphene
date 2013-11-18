@@ -27,16 +27,20 @@ Qt5Range::~Qt5Range() {
 }
 
 void Qt5Range::setMin(double min) {
+	double curValue = value();
 	m_minimum = min;
-	if (value() < min) setValue(min);
+	if (m_maximum < min) m_maximum = min;
 	updateSlider();
+	if (curValue < min) setValue(min);
 	updateLabel(value());
 }
 
 void Qt5Range::setMax(double max) {
+	double curValue = value();
 	m_maximum = max;
-	if (value() > max) setValue(max);
+	if (m_minimum > max) m_minimum = max;
 	updateSlider();
+	if (curValue > max) setValue(max);
 	updateLabel(value());
 }
 
