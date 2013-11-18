@@ -21,14 +21,14 @@ Mesh<MeshType>::~Mesh() {
 template <class MeshType>
 void Mesh<MeshType>::render() {
 	m_geometry->bind();
-	glDrawElements(GL_TRIANGLES, m_smooth ? m_smoothVertices.size() : m_flatVertices.size(), GL_UNSIGNED_INT, nullptr);
+	glDrawElements(GL_TRIANGLES, 3*Traits::numFaces(*m_mesh), GL_UNSIGNED_INT, nullptr);
 	m_geometry->release();
 }
 
 template <class MeshType>
 void Mesh<MeshType>::setSmoothNormals(bool smoothNormals) {
 	if (smoothNormals == m_smooth) return;
-	if (m_allowSwitching) {
+	if (!m_allowSwitching) {
 		throw std::runtime_error("Rendered::Mesh : Switch normal smoothing disabled. Instantiate with AllowSwitching=true to enable.");
 	}
 	m_smooth = smoothNormals;
@@ -38,6 +38,7 @@ void Mesh<MeshType>::setSmoothNormals(bool smoothNormals) {
 template <class MeshType>
 void Mesh<MeshType>::init() {
 	auto faces = Traits::faces(*m_mesh);
+	
 	if (m_smooth || m_allowSwitching) { // init smooth vertices
 		auto points = Traits::vertices(*m_mesh);
 		m_smoothVertices.resize(points.size());
@@ -48,6 +49,7 @@ void Mesh<MeshType>::init() {
 			m_smoothVertices[i] = Traits::vertexPosition(*m_mesh, idx);
 			m_smoothNormals[i] = Traits::vertexNormal(*m_mesh, idx);
 			m_smoothColors[i] = Traits::vertexColor(*m_mesh, idx);
+			++i;
 		}
 		m_smoothIndices.resize(faces.size()*3);
 		i = 0;
@@ -57,18 +59,19 @@ void Mesh<MeshType>::init() {
 			}
 		}
 	}
-
+	
 	if (!m_smooth || m_allowSwitching) { // init flat vertices
 		m_flatVertices.resize(faces.size()*3);
 		m_flatNormals.resize(faces.size()*3);
 		m_flatColors.resize(faces.size()*3);
-		int i=0;
+		int i = 0;
 		for (const auto& face : faces) {
 			Vector3f normal = Traits::faceNormal(*m_mesh, face);
 			for (const auto& idx : Traits::faceVertices(*m_mesh, face)) {
 				m_flatVertices[i] = Traits::vertexPosition(*m_mesh, idx);
-				m_flatNormals[i++] = normal;
-				m_flatColors[i++] = Traits::vertexColor(*m_mesh, idx);
+				m_flatNormals[i] = normal;
+				m_flatColors[i] = Traits::vertexColor(*m_mesh, idx);
+				++i;
 			}
 		}
 		m_flatIndices.resize(faces.size()*3);

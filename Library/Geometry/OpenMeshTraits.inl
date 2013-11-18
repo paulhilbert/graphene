@@ -1,7 +1,33 @@
 template <>
 inline bool OpenMeshTraits<TriMesh>::loadFromFile(MeshType& mesh, const std::string& path) {
-	bool success = OpenMesh::IO::read_mesh(mesh, path);
-	if (success) mesh.triangulate();
+	// The options define which properties we would like to have loaded.
+	// After the read_mesh call, "opt" will contain the attributes which
+	// were actually present in the file.
+	OpenMesh::IO::Options opt;
+	opt += OpenMesh::IO::Options::FaceNormal;
+	opt += OpenMesh::IO::Options::VertexNormal;
+	opt += OpenMesh::IO::Options::VertexColor;
+	
+	bool success = OpenMesh::IO::read_mesh(mesh, path, opt);
+	
+	if (success) {
+		mesh.triangulate();
+		// If no face normals were loaded, estimate them.
+		if (!opt.face_has_normal()) {
+			mesh.update_face_normals();
+		}
+		// If no vertex normals were loaded, estimate them.
+		// Note that OpenMesh requires face normals to be available for this.
+		if (!opt.vertex_has_normal()) {
+			mesh.update_normals();
+		}
+		// If no vertex colors were loaded, set a default value for all vertices.
+		if (!opt.vertex_has_color()) {
+			for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) {
+				mesh.set_color(it.handle(), InternalOpenMeshTraits::Color(1,1,1,1));
+			}
+		}
+	}
 	return success;
 }
 
@@ -42,53 +68,53 @@ inline std::vector<typename OpenMeshTraits<OpenMeshType>::FaceId> OpenMeshTraits
 
 template <class OpenMeshType>
 inline typename OpenMeshTraits<OpenMeshType>::PositionType OpenMeshTraits<OpenMeshType>::vertexPosition(const MeshType& mesh, VertexId id) {
-	return Eigen::Vector3f(mesh.point(mesh.vertex_handle(id)).data());
+	return PositionType(mesh.point(mesh.vertex_handle(id)).data());
 }
 
 template <class OpenMeshType>
 inline typename OpenMeshTraits<OpenMeshType>::NormalType OpenMeshTraits<OpenMeshType>::vertexNormal(const MeshType& mesh, VertexId id) {
-	return Eigen::Vector3f(mesh.normal(mesh.vertex_handle(id)).data());
+	return NormalType(mesh.normal(mesh.vertex_handle(id)).data());
 }
 
 template <class OpenMeshType>
 inline typename OpenMeshTraits<OpenMeshType>::ColorType OpenMeshTraits<OpenMeshType>::vertexColor(const MeshType& mesh, VertexId id) {
-	return Eigen::Vector4f(mesh.color(mesh.vertex_handle(id)).data());
+	return ColorType(mesh.color(mesh.vertex_handle(id)).data());
 }
 
 template <class OpenMeshType>
 inline typename OpenMeshTraits<OpenMeshType>::NormalType OpenMeshTraits<OpenMeshType>::faceNormal(const MeshType& mesh, FaceId id) {
-	return Eigen::Vector3f(mesh.normal(mesh.face_handle(id)).data());
+	return NormalType(mesh.normal(mesh.face_handle(id)).data());
 }
 
 template <class OpenMeshType>
 inline std::vector<typename OpenMeshTraits<OpenMeshType>::PositionType> OpenMeshTraits<OpenMeshType>::vertexPositions(const MeshType& mesh) {
 	std::vector<PositionType> positions(mesh.n_vertices());
 	unsigned int i=0;
-	for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) positions[i++] = mesh.point(it.handle());
+	for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) positions[i++] = PositionType(mesh.point(it.handle()).data());
 	return positions;
 }
 
 template <class OpenMeshType>
 inline std::vector<typename OpenMeshTraits<OpenMeshType>::NormalType> OpenMeshTraits<OpenMeshType>::vertexNormals(const MeshType& mesh) {
-	std::vector<PositionType> normals(mesh.n_vertices());
+	std::vector<NormalType> normals(mesh.n_vertices());
 	unsigned int i=0;
-	for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) normals[i++] = mesh.normal(it.handle());
+	for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) normals[i++] = NormalType(mesh.normal(it.handle()).data());
 	return normals;
 }
 
 template <class OpenMeshType>
 inline std::vector<typename OpenMeshTraits<OpenMeshType>::ColorType> OpenMeshTraits<OpenMeshType>::vertexColors(const MeshType& mesh) {
-	std::vector<PositionType> colors(mesh.n_vertices());
+	std::vector<ColorType> colors(mesh.n_vertices());
 	unsigned int i=0;
-	for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) colors[i++] = mesh.color(it.handle());
+	for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) colors[i++] = ColorType(mesh.color(it.handle()).data());
 	return colors;
 }
 
 template <class OpenMeshType>
 inline std::vector<typename OpenMeshTraits<OpenMeshType>::NormalType> OpenMeshTraits<OpenMeshType>::faceNormals(const MeshType& mesh) {
-	std::vector<PositionType> normals(mesh.n_faces());
+	std::vector<NormalType> normals(mesh.n_faces());
 	unsigned int i=0;
-	for (auto it = mesh.faces_begin(); it != mesh.faces_end(); ++it) normals[i++] = mesh.normal(it.handle());
+	for (auto it = mesh.faces_begin(); it != mesh.faces_end(); ++it) normals[i++] = NormalType(mesh.normal(it.handle()).data());
 	return normals;
 }
 

@@ -8,6 +8,8 @@ uniform mat4 mvM;
 uniform mat4 prM;
 uniform mat3 nmM;
 uniform vec3 lightDir;
+uniform vec3 clipNormal;
+uniform float clipDistance;
 
 out vec3 mvsNormal;
 out vec3 lightNormal;
@@ -19,4 +21,5 @@ void main() {
 	mvsNormal    = nmM * normal;
 	lightNormal  = nmM * lightDir;
 	fColor       = color;
+	gl_ClipDistance[0] = -dot(position.xyz, clipNormal) + clipDistance;
 }

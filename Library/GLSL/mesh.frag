@@ -10,7 +10,7 @@ void main() {
 	vec3 normalized_normal = normalize(mvsNormal);
 	vec3 normalized_lightDir = normalize(lightNormal);
 
-	float att = clamp(dot(mvsNormal, normalized_lightDir), 0.0, 1.0);
+	float att = clamp(dot(normalized_normal, normalized_lightDir), 0.0, 1.0);
 
 	vec4 diffuse = fColor;
 	vec4 ambient = 0.2*fColor;
