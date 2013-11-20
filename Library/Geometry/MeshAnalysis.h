@@ -25,10 +25,10 @@ namespace Geometry {
 template <class MeshTraits>
 class MeshAnalysis {
 	public:
-		typedef typename MeshTraits::MeshType    Mesh;
-		typedef typename MeshTraits::ScalarType  Scalar;
-		typedef typename MeshTraits::PointType   Point;
-		typedef typename MeshTraits::FaceId      FId;
+		typedef typename MeshTraits::MeshType      Mesh;
+		typedef typename MeshTraits::ScalarType    Scalar;
+		typedef typename MeshTraits::PositionType  Point;
+		typedef typename MeshTraits::FaceId        FId;
 
 		typedef std::set<FId>                    FIdSet;
 		typedef FIdSet                           CC;

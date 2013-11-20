@@ -68,7 +68,7 @@ inline void MeshAnalysis<MeshTraits>::sampleOnSurface(const Mesh& mesh, unsigned
 	// sample
 	cloud->resize(numSamples);
 	auto rng01 = RNG::uniform01Gen<Scalar>();
-	auto faceIds = MeshTraits::faceIdSet(mesh);
+	auto faceIds = MeshTraits::faces(mesh);
 	unsigned int done = 0;
 	for (auto& p : *cloud) {
 		// get random triangle using face areas as probability distribution
@@ -87,7 +87,9 @@ inline void MeshAnalysis<MeshTraits>::sampleOnSurface(const Mesh& mesh, unsigned
 
 template <class MeshTraits>
 typename MeshAnalysis<MeshTraits>::Scalar MeshAnalysis<MeshTraits>::faceArea(const Mesh& mesh, FId face) {
-	std::vector<Point> vertices = MeshTraits::facePoints(mesh, face);
+	auto vertexIds = MeshTraits::faceVertices(mesh, face);
+	std::vector<Point> vertices(vertexIds.size());
+	std::transform(vertexIds.begin(), vertexIds.end(), vertices.begin(), [&] (int idx) { return MeshTraits::vertexPosition(mesh, idx); });
 	return Scalar(0.5) * MeshTraits::norm(MeshTraits::crossP(vertices[1] - vertices[0], vertices[2] - vertices[0]));
 }
 
@@ -120,13 +122,15 @@ typename MeshAnalysis<MeshTraits>::Point MeshAnalysis<MeshTraits>::randomPointIn
 	Scalar s = sqrt(rng());
 	Scalar t = rng();
 	Scalar st = s*t;
-	std::vector<Point> vertices = MeshTraits::facePoints(mesh, face);
+	auto vertexIds = MeshTraits::faceVertices(mesh, face);
+	std::vector<Point> vertices(vertexIds.size());
+	std::transform(vertexIds.begin(), vertexIds.end(), vertices.begin(), [&] (int idx) { return MeshTraits::vertexPosition(mesh, idx); });
 	return (Scalar(1) - s) * vertices[0] + (s - st) * vertices[1] + st * vertices[2];
 }
 
 template <class MeshTraits>
 std::vector<typename MeshAnalysis<MeshTraits>::Scalar> MeshAnalysis<MeshTraits>::faceAreas(const Mesh& mesh) {
-	FIdSet faceIds = MeshTraits::faceIdSet(mesh);
+	auto faceIds = MeshTraits::faces(mesh);
 	std::vector<Scalar> areas(faceIds.size());
 	std::transform(faceIds.begin(), faceIds.end(), areas.begin(), [&] (FId id) { return MeshAnalysis<MeshTraits>::faceArea(mesh, id); });
 	return areas;
