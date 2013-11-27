@@ -30,7 +30,7 @@ namespace FW {
 
 class SinglePointCloud : virtual public Visualizer {
 	public:
-		SinglePointCloud(std::string id, const GUI::Property::Paths& paths);
+		SinglePointCloud(std::string id, const GUI::Property::Paths& paths, std::string upAxis, float scale, bool recenter);
 		virtual ~SinglePointCloud();
 
 		void init();
@@ -49,6 +49,9 @@ class SinglePointCloud : virtual public Visualizer {
 		Cloud::Ptr               m_cloud;
 		Rendered::Cloud::Ptr     m_rendered;
 //		std::vector<RGBA>        m_colors;
+		std::string              m_upAxis;
+		float                    m_scale;
+		bool                     m_recenter;
 };
 
 #include "SinglePointCloud.inl"

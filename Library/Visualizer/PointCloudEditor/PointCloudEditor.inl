@@ -5,7 +5,7 @@
  * the COPYING file for more details */
 
 
-inline PointCloudEditor::PointCloudEditor(std::string id, const Paths& paths) : Visualizer(id), SinglePointCloud(id, paths), SelectModes<Cloud,Point>(id) {
+inline PointCloudEditor::PointCloudEditor(std::string id, const Paths& paths, std::string upAxis, float scale, bool recenter) : Visualizer(id), SinglePointCloud(id, paths, upAxis, scale, recenter), SelectModes<Cloud,Point>(id) {
 }
 
 inline PointCloudEditor::~PointCloudEditor() {

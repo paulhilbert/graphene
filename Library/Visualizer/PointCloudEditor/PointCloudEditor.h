@@ -23,7 +23,7 @@ class PointCloudEditor : public SinglePointCloud, public SelectModes<Cloud, Poin
 		typedef GUI::Property::Paths      Paths;
 
 	public:
-		PointCloudEditor(std::string id, const Paths& paths);
+		PointCloudEditor(std::string id, const Paths& paths, std::string upAxis, float scale, bool recenter);
 		virtual ~PointCloudEditor();
 
 		void init();

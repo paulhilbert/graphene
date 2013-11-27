@@ -5,7 +5,7 @@
  * the COPYING file for more details */
 
 
-inline SinglePointCloud::SinglePointCloud(std::string id, const GUI::Property::Paths& paths) : Visualizer(id), m_paths(paths), m_cloud(new Cloud()) {
+inline SinglePointCloud::SinglePointCloud(std::string id, const GUI::Property::Paths& paths, std::string upAxis, float scale, bool recenter) : Visualizer(id), m_paths(paths), m_cloud(new Cloud()), m_upAxis(upAxis), m_scale(scale), m_recenter(recenter) {
 }
 
 inline SinglePointCloud::~SinglePointCloud() {
@@ -62,6 +62,7 @@ inline void SinglePointCloud::addClouds(const GUI::Property::Paths& paths) {
 			continue;
 		}
 	}
+	Tools::adjust(m_cloud, m_upAxis, m_scale, m_recenter);
 	uploadCloud();
 }
 

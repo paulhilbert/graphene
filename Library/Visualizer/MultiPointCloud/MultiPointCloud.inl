@@ -74,17 +74,9 @@ inline void MultiPointCloud::addClouds(const GUI::Property::Paths& paths) {
 			gui()->log()->error("File \""+p.string()+"\" does not exist. Skipping this file.");
 			continue;
 		}
-		if (p.extension() != ".pcd") {
-			gui()->log()->error("File \""+p.string()+"\" is not a .pcd file. Skipping this file.");
-			continue;
-		}
-		Cloud singleCloud;
-		if (pcl::io::loadPCDFile<Point>(p.string(), singleCloud) == -1) {
-			gui()->log()->error("Couldn't read file \""+p.string()+"\". Skipping this file.");
-			continue;
-		}
-		gui()->log()->verbose("Loaded point cloud with "+lexical_cast<std::string>(singleCloud.size())+" points.");
-		m_cloud->insert(m_cloud->end(), singleCloud.begin(), singleCloud.end());
+		Cloud::Ptr singleCloud = Tools::loadPointCloud(p);
+		gui()->log()->verbose("Loaded point cloud with "+lexical_cast<std::string>(singleCloud->size())+" points.");
+		m_cloud->insert(m_cloud->end(), singleCloud->begin(), singleCloud->end());
 	}
 	addCloud("Main Cloud", rgbaGrey(), m_cloud);
 	addNormals("Main Cloud Normals", rgbaWhite(), m_cloud, false);
