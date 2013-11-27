@@ -150,6 +150,18 @@ struct Transforms {
 		 */
 		const float& far() const { return m_far; }
 
+		/**
+		 * Get camera position.
+		 * @return Camera position as 3D-vector.
+		 */
+		Vector3f& cameraPosition() { return m_cameraPosition; }
+
+		/**
+		 * Get camera position.
+		 * @return Camera position as 3D-vector.
+		 */
+		const Vector3f& cameraPosition() const { return m_cameraPosition; }
+
 
 	protected:
 		Eigen::Vector4i  m_viewport;
@@ -158,6 +170,7 @@ struct Transforms {
 		Eigen::Matrix3f  m_normal;
 		float            m_near;
 		float            m_far;
+		Eigen::Vector3f  m_cameraPosition;
 };
 
 } // View

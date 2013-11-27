@@ -31,6 +31,7 @@ class PointCloudEditor : public SinglePointCloud, public SelectModes<Cloud, Poin
 		void addProperties();
 		void registerEvents();
 
+		void computeNormals();
 		void crop();
 		void erase();
 

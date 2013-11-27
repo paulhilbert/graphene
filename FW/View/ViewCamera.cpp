@@ -93,6 +93,7 @@ void Camera::updateTransforms() {
 	trans->normal() = trans->modelview().block<3,3>(0,0).inverse().transpose();
 	trans->near() = near;
 	trans->far() = far;
+	trans->cameraPosition() = m_control->getPosition();
 }
 
 Eigen::Matrix4f Camera::getProjectionMatrix(int w, int h, float near, float far) {

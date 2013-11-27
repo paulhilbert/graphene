@@ -24,6 +24,14 @@ inline void PointCloudEditor::render() {
 }
 
 inline void PointCloudEditor::addProperties() {
+	auto groupNormals = gui()->properties()->add<Section>("Normals", "groupNormals");
+	groupNormals->collapse();
+	groupNormals->add<Choice>("Method", "method")->add("knn", "kNN").add("radius", "Radius");
+	groupNormals->add<Number>("Radius", "radius")->setDigits(3).setMin(0.001).setMax(30.0).setValue(0.05);
+	groupNormals->add<Number>("k", "k")->setDigits(0).setMin(1).setMax(50).setValue(12);
+	groupNormals->add<Bool>("Use Camera as Origin", "cam")->setValue(true);
+	groupNormals->add<Button>("Compute Normals", "compute")->setCallback([&] () { computeNormals(); });
+	
 	auto groupEditSel = gui()->properties()->add<Group>("Edit Selection", "groupEditSel");
 	auto crop = groupEditSel->add<Button>("Crop Selection", "crop");
 	crop->setCallback(std::bind(&PointCloudEditor::crop, this));
@@ -68,6 +76,29 @@ inline void PointCloudEditor::updateSelectionRender(const IdxSet& selection) {
 		gui()->properties()->get<Button>({"groupEditSel", "crop"})->disable();
 		gui()->properties()->get<Button>({"groupEditSel", "erase"})->disable();
 	}
+}
+
+inline void PointCloudEditor::computeNormals() {
+	bool knn = gui()->properties()->get<Choice>({"groupNormals", "method"})->value() == "knn";
+	bool cam = gui()->properties()->get<Bool>({"groupNormals", "cam"})->value();
+
+	pcl::NormalEstimation<Point, Point> ne;
+	if (knn) {
+		ne.setKSearch(gui()->properties()->get<Number>({"groupNormals", "k"})->value());
+	} else {
+		ne.setRadiusSearch(gui()->properties()->get<Number>({"groupNormals", "radius"})->value());
+	}
+	Eigen::Vector3f viewPos = cam ? fw()->transforms()->cameraPosition() : m_cloud->sensor_origin_.head(3);
+	ne.setViewPoint(0.f, 0.f, 0.f);
+	for (auto& p : *m_cloud) {
+		p.getVector3fMap() -= viewPos;
+	}
+	ne.setInputCloud(m_cloud);
+	ne.compute(*m_cloud);
+	for (auto& p : *m_cloud) {
+		p.getVector3fMap() += viewPos;
+	}
+	gui()->log()->info("Computed normals.");
 }
 
 inline void PointCloudEditor::crop() {
