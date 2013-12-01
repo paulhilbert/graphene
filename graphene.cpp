@@ -36,6 +36,7 @@ int main( int argc, char *argv[] ) {
 	std::string  visPath;
 	std::string  visExt;
 	std::string  backendPath;
+	std::string  hdrPath;
 	std::string  single;
 	std::string  title;
 	int          fps;
@@ -58,6 +59,7 @@ int main( int argc, char *argv[] ) {
 		("visExt",  po::value<std::string>(&visExt)  ->default_value(".so"), "File extension of visualizer shared libraries")
 		("backend", po::value<std::string>(&backendPath) ->default_value(PREFIX"/lib/libGrapheneQt5.so"), "Path to backend library")
 #endif
+		("hdrPath",    po::value<std::string>(&hdrPath)->default_value(""), "Path to HDR environment maps")
 		("single",     po::value<std::string>(&single) ->default_value(""), "Use the given name as single mode visualizer")
 		("title",      po::value<std::string>(&title) ->default_value("graphene"), "Window title")
 		("width",      po::value<int>(&wndWidth)  ->default_value(1024), "Path to backend library")
@@ -126,7 +128,7 @@ int main( int argc, char *argv[] ) {
 	backend->setWindowTitle(title);
 	backend->setWindowSize(wndWidth, wndHeight);
 
-	Graphene graphene(backend, eventHandler, singleMode, noEffects);
+	Graphene graphene(backend, eventHandler, singleMode, noEffects, hdrPath);
 
 	if (singleMode) {
 		fs::path p(visPath);

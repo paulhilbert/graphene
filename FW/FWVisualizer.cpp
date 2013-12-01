@@ -29,6 +29,10 @@ GUI::VisualizerHandle::Ptr Visualizer::gui() {
 	return m_gui;
 }
 
+bool Visualizer::isHDR() const {
+	return false;
+}
+
 void Visualizer::execute(Job task, Job finally) {
 	m_tasks.push_back(std::make_tuple(std::move(std::async(std::launch::async, task)), std::move(finally), GUI::ProgressBar::Ptr()));
 }

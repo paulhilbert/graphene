@@ -71,6 +71,7 @@ class Geometry {
 		void setIndices  (const std::vector<GLuint>& indices);
 
 		void addVertices (const std::vector<Eigen::Vector3f>& vertices);
+		void addNormals  (const std::vector<Eigen::Vector3f>& normals);
 		void addColors   (const std::vector<Eigen::Vector4f>& colors);
 
 		void upload(std::set<Buffers> dynamicAccess = std::set<Buffers>());

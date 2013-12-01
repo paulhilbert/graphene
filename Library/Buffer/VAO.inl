@@ -4,6 +4,17 @@
  * To Public License, Version 2, as published by Sam Hocevar. See
  * the COPYING file for more details */
 
+inline VAO::VAO() : m_id(0) {
+}
+
+inline VAO::~VAO() {
+	if (m_id) glDeleteVertexArrays(1, &m_id);
+	m_id = 0;
+}
+
+inline void VAO::init() {
+	glGenVertexArrays(1, &m_id);
+}
 
 inline void VAO::bind() const {
 	glBindVertexArray(m_id);

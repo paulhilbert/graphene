@@ -1,42 +1,54 @@
-#ifndef CLASS_HDR_FILE
-#define CLASS_HDR_FILE
+#ifndef _HDRFILE_H_
+#define _HDRFILE_H_
 
 #include <stdexcept>
 #include <string>
+#include <cstdio>
+
+#include "HdrFile.h"
+extern "C" {
+#include "rgbe/rgbe.h"
+}
 
 namespace Buffer {
 
 class HdrFile {
-	private:
-		int _width;
-		int _height;
-		float *_image;
-
-		void LoadRgbe(const std::string& filename);
-		void LoadExr(const std::string& filename);
 	public:
-		/// Default Constructor
-		HdrFile() : _width(0), _height(0), _image(NULL) { };
-		/// Constructor from file
-		HdrFile(const std::string& filename) : _width(0), _height(0), _image(NULL) { Load(filename); };
-		/// Destructor
-		~HdrFile() { Free(); };
-		/// Load a file in the buffer
-		void Load(const std::string& filename);
-		/// Save the buffer to a Radiance file
-		void SaveRgbe(const std::string& filename);
-		/// Save the buffer to a OpenEXR file
-		void SaveExr(const std::string& filename);
-		/// Release the buffer
-		void Free();
-		/// Width getter
-		int Width() { return _width; };
-		/// Height getter
-		int Height() { return _height; };
-		/// Image data getter
-		float *Image() { return _image; };
+		typedef std::shared_ptr<HdrFile>        Ptr;
+		typedef std::weak_ptr<HdrFile>          WPtr;
+		typedef std::shared_ptr<const HdrFile>  ConstPtr;
+		typedef std::weak_ptr<const HdrFile>    ConstWPtr;
+
+	public:
+		HdrFile();
+		HdrFile(const std::string& filename);
+		~HdrFile();
+
+		void load(const std::string& filename);
+		//void saveRgbe(const std::string& filename);
+		//void saveExr(const std::string& filename);
+
+		void free();
+
+		int width() const;
+		int height() const;
+
+		float* data();
+		const float* data() const;
+
+	protected:
+		void loadRgbe(const std::string& filename);
+		//void loadExr(const std::string& filename);
+
+	protected:
+		int    m_width;
+		int    m_height;
+		float* m_data;
+
 };
+
+#include "HdrFile.inl"
 
 } // Buffer
 
-#endif
+#endif // _HDRFILE_H_

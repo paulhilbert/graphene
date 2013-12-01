@@ -13,8 +13,6 @@ include_directories("${PROJECT_SOURCE_DIR}")
 include_directories("${PROJECT_BINARY_DIR}")
 include_directories("/usr/include/eigen3")
 
-option (OPENGL_EFFECTS "Enables advanced rendering techniques like depth-of-field" ON)
-
 if(CMAKE_COMPILER_IS_GNUCXX)
 	add_definitions(-fPIC)
 endif()
@@ -39,7 +37,7 @@ find_package(GLEW)
 
 
 file (GLOB_RECURSE obj RELATIVE "${PROJECT_SOURCE_DIR}" "FW/*.cpp" "GUI/*.cpp")
-file (GLOB_RECURSE lib RELATIVE "${PROJECT_SOURCE_DIR}" "Library/Buffer/*.cpp" "Library/Rendered/*.cpp" "Library/Shader/*.cpp")
+file (GLOB_RECURSE lib RELATIVE "${PROJECT_SOURCE_DIR}" "Library/Rendered/*.cpp" "Library/Shader/*.cpp")
 file (GLOB_RECURSE qt5 RELATIVE "${PROJECT_SOURCE_DIR}" "Backends/Qt5/*.cpp")
 if(Boost_FOUND AND OPENGL_FOUND AND GLEW_FOUND)
 	include_directories(${Boost_INCLUDE_DIRS})

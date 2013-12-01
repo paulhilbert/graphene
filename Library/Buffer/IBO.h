@@ -22,6 +22,7 @@ class IBO : public DataBuffer<GLuint> {
 		void release();
 };
 
+#include "IBO.inl"
 
 } // Buffer
 

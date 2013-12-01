@@ -25,12 +25,11 @@ using namespace FW::View;
 #include <FW/FWVisualizer.h>
 
 
-#ifdef OPENGL_EFFECTS
 #include <Library/Buffer/Texture.h>
+#include <Library/Buffer/HdrFile.h>
 #include <Library/Buffer/FBO.h>
 #include <Library/Shader/ShaderProgram.h>
 #include <Library/Buffer/Geometry.h>
-#endif // OPENGL_EFFECTS
 
 namespace FW {
 
@@ -46,16 +45,18 @@ struct ScreencastInfo {
 };
 #endif // ENABLE_SCREENCAST
 
+struct EnvMap {
+	Buffer::HdrFile diffuse;
+	Buffer::HdrFile specular;
+};
 
 struct Graphene::Impl {
-		Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects);
+		Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects, std::string hdrPath);
 		virtual ~Impl();
 
 		void initTransforms();
-#ifdef OPENGL_EFFECTS
 		void initEffects();
 		void updateEffects(int width, int height);
-#endif // OPENGL_EFFECTS
 
 		int run(int fps);
 		void exit();
@@ -68,9 +69,8 @@ struct Graphene::Impl {
 		void         removeVisualizer(std::string visName);
 
 		void         render();
-#ifdef OPENGL_EFFECTS
+		void         renderTonemap();
 		void         renderBlur(float ratio);
-#endif // OPENGL_EFFECTS
 
 #ifdef ENABLE_SCREENCAST
 		void startScreencast(fs::path outputFile);
@@ -86,12 +86,15 @@ struct Graphene::Impl {
 		void setCameraControl(std::string control);
 		void setOrtho(bool ortho);
 
+		void loadHDRMaps(std::string hdrPath);
+
 
 		GUI::Backend::Ptr                         m_backend;
 		FW::Events::EventHandler::Ptr             m_eventHandler;
 
 		bool                                      m_singleMode;
 		bool                                      m_noEffects;
+		bool                                      m_hdr;
 
 		std::map<std::string, Factory::Ptr>       m_factories;
 		std::map<std::string, Visualizer::Ptr>    m_visualizer;
@@ -106,21 +109,25 @@ struct Graphene::Impl {
 		std::chrono::system_clock::duration       m_duration;
 		GUI::Status::Ptr                          m_status;
 #endif // ENABLE_SCREENCAST
-#ifdef OPENGL_EFFECTS
+
+		std::vector<Buffer::FBO>                  m_fbos;
 		Shader::ShaderProgram                     m_gaussH;
 		Shader::ShaderProgram                     m_gaussV;
 		Shader::ShaderProgram                     m_compose;
-		std::vector<Buffer::FBO>                  m_fbos;
+		Shader::ShaderProgram                     m_tonemap;
 		Buffer::Geometry                          m_geomQuad;
-#endif // OPENGL_EFFECTS
+
+		std::map<std::string, EnvMap>             m_envMaps;
+		std::map<std::string, EnvTex>             m_envTextures;
+		std::string                               m_crtMap;
 };
 
 
 /// GRAPHENE ///
 
 
-Graphene::Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects) {
-	m_impl = std::shared_ptr<Impl>(new Impl(backend, eventHandler, singleMode, noEffects));
+Graphene::Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects, std::string hdrPath) {
+	m_impl = std::shared_ptr<Impl>(new Impl(backend, eventHandler, singleMode, noEffects, hdrPath));
 }
 
 Graphene::~Graphene() {
@@ -142,7 +149,7 @@ Factory::Ptr Graphene::getFactory(std::string name) {
 /// GRAPHENE IMPL ///
 
 
-Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects) : m_backend(backend), m_eventHandler(eventHandler), m_singleMode(singleMode), m_noEffects(noEffects) {
+Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects, std::string hdrPath) : m_backend(backend), m_eventHandler(eventHandler), m_singleMode(singleMode), m_noEffects(noEffects), m_hdr(false) {
 	backend->setRenderCallback(std::bind(&Graphene::Impl::render, this));
 	backend->setExitCallback(std::bind(&Graphene::Impl::exit, this));
 	backend->setAddVisCallback(std::bind(&Graphene::Impl::addVisualizer, this, std::placeholders::_1, std::placeholders::_2));
@@ -158,6 +165,8 @@ Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr ev
 	m_scInfo.paused = false;
 	m_scInfo.thread = std::shared_ptr<std::thread>();
 #endif // ENABLE_SCREENCAST
+
+	if (hdrPath != "") loadHDRMaps(hdrPath);
 	initTransforms();
 }
 
@@ -193,9 +202,24 @@ void Graphene::Impl::initTransforms() {
 		groupNav->collapse();
 		groupRender->collapse();
 	}
+
+	auto groupHDR = main->add<Section>("HDR Rendering", "groupHDR");
+	auto exposure = groupHDR->add<Range>("Exposure", "exposure");
+	exposure->setDigits(2);
+	exposure->setMin(0.0);
+	exposure->setMax(2.0);
+	exposure->setValue(0.6);
+	exposure->disable();
+	if (m_envMaps.size()) {
+		auto choiceHDR = groupHDR->add<Choice>("Environment Map", "envMap");
+		for (const auto& m : m_envMaps) {
+			choiceHDR->add(m.first, m.first);
+		}
+		m_crtMap = choiceHDR->value();
+		choiceHDR->setCallback([&] (const std::string& m) { m_crtMap = m; });
+	}
 }
 
-#ifdef OPENGL_EFFECTS
 void Graphene::Impl::initEffects() {
 	// properties
 	auto main = m_backend->getMainSettings();
@@ -238,13 +262,17 @@ void Graphene::Impl::initEffects() {
 	m_gaussH.addShaders(std::string(GLSL_PREFIX)+"effectsQuad.vert", std::string(GLSL_PREFIX)+"effectsGaussH.frag");
 	m_gaussV.addShaders(std::string(GLSL_PREFIX)+"effectsQuad.vert", std::string(GLSL_PREFIX)+"effectsGaussV.frag");
 	m_compose.addShaders(std::string(GLSL_PREFIX)+"effectsQuad.vert", std::string(GLSL_PREFIX)+"effectsCompose.frag");
+	m_tonemap.addShaders(std::string(GLSL_PREFIX)+"effectsQuad.vert", std::string(GLSL_PREFIX)+"effectsTonemap.frag");
 	m_gaussH.link();
 	m_gaussV.link();
 	m_compose.link();
+	m_tonemap.link();
 	m_compose.use();
 	m_compose.setUniformVar1i("Tex0", 0);
 	m_compose.setUniformVar1i("Tex1", 1);
 	m_compose.setUniformVar1i("Tex2", 2);
+	m_tonemap.use();
+	m_tonemap.setUniformVar1i("Tex0", 0);
 	std::vector<Vector3f> quadVertices;
 	quadVertices.push_back(Vector3f(-1.f, -1.f, 0.f));
 	quadVertices.push_back(Vector3f( 1.f, -1.f, 0.f));
@@ -270,19 +298,19 @@ void Graphene::Impl::initEffects() {
 void Graphene::Impl::updateEffects(int width, int height) {
 	m_fbos.clear();
 	m_fbos.resize(3);
-	m_fbos[0].SetSize(width, height);
+	m_fbos[0].setSize(width, height);
 	//m_fbos[0].AttachRender(GL_DEPTH_COMPONENT24);
-	m_fbos[0].AttachTexture(GL_RGBA32F_ARB);
-	m_fbos[0].AttachTexture(GL_DEPTH_COMPONENT24);
+	m_fbos[0].attachTexture(GL_RGBA32F_ARB);
+	m_fbos[0].attachTexture(GL_DEPTH_COMPONENT24);
 	for (unsigned int i=1; i<3; ++i) {
-		m_fbos[i].SetSize(int(width/2), int(height/2));
-		m_fbos[i].AttachTexture(GL_RGBA32F_ARB, GL_LINEAR);
+		m_fbos[i].setSize(int(width/2), int(height/2));
+		m_fbos[i].attachTexture(GL_RGBA32F_ARB, GL_LINEAR);
 		// clamping to preserve post-pro from blur leaking
-		m_fbos[i].BindTex();
+		m_fbos[i].bindTex();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	}
-	Buffer::FBO::Unbind();
+	Buffer::FBO::unbind();
 	float weights[9] = {0.0677841f, 0.0954044f, 0.121786f, 0.140999f, 0.148054f, 0.140999f, 0.121786f, 0.0954044f, 0.0677841f};
 	float offsetsH[9], offsetsV[9];
 	for(int i=0; i<9; i++) {
@@ -296,7 +324,6 @@ void Graphene::Impl::updateEffects(int width, int height) {
 	m_gaussV.setUniformVar1f("weights", 9, weights);
 	m_gaussV.setUniformVar1f("offsets", 9, offsetsV);
 }
-#endif // OPENGL_EFFECTS
 
 int Graphene::Impl::run(int fps) {
 	m_fps = fps;
@@ -331,9 +358,7 @@ bool Graphene::Impl::hasFactory(std::string name) {
 }
 
 void Graphene::Impl::addVisualizer(std::string factoryName, std::string visName) {
-#ifdef OPENGL_EFFECTS
 	if (!m_noEffects && !m_fbos.size()) initEffects();
-#endif // OPENGL_EFFECTS
 	if (hasVisualizer(visName)) {
 		m_backend->getLog()->error("Visualizer already exists");
 		return;
@@ -345,14 +370,20 @@ void Graphene::Impl::addVisualizer(std::string factoryName, std::string visName)
 	auto vis = getFactory(factoryName)->addVisualizer();
 	if (!vis) return;
 	View::Transforms::WPtr transforms(m_transforms);
-	VisualizerHandle::Ptr fwHandle(new VisualizerHandle(visName, transforms, m_eventHandler, m_camera->getPickRay()));
+	VisualizerHandle::Ptr fwHandle(new VisualizerHandle(visName, transforms, m_eventHandler, m_camera->getPickRay(), &m_envTextures, m_envTextures.size() ? &m_crtMap : nullptr));
 	auto guiHandle = m_backend->addVisualizer(visName);
 	if (!guiHandle) return;
 	vis->setHandles(fwHandle, guiHandle);
 	vis->setProgressBarPool(m_backend->getProgressBarPool());
 	vis->init();
 	m_visualizer[visName] = vis;
-	return;
+	if (vis->isHDR()) {
+		if (!m_hdr) {
+			auto main = m_backend->getMainSettings();
+			main->get<Range>({"groupHDR", "exposure"})->enable();
+		}
+		m_hdr = true;
+	}
 }
 
 bool Graphene::Impl::hasVisualizer(std::string visName) {
@@ -365,18 +396,29 @@ void Graphene::Impl::removeVisualizer(std::string visName) {
 		return;
 	}
 	m_visualizer.erase(m_visualizer.find(visName));
+	if (!m_hdr) return;
+	m_hdr = false;
+	for (const auto& vis : m_visualizer) {
+		if (vis.second->isHDR()) {
+			m_hdr = true;
+			break;
+		}
+	}
+	if (!m_hdr) {
+		auto main = m_backend->getMainSettings();
+		main->get<Range>({"groupHDR", "exposure"})->disable();
+	}
 }
 
 void Graphene::Impl::render() {
-#ifdef OPENGL_EFFECTS
 	float blur = 0.f;
 	if (!m_noEffects && m_visualizer.size()) {
 		blur = m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "blur"})->value();
 	}
-	if (blur > 0.f) {
-		m_fbos[0].BindOutput();
+
+	if (m_hdr || blur > 0.f) {
+		m_fbos[0].bindOutput();
 	}
-#endif // OPENGL_EFFECTS
 
 	Eigen::Vector4f bg = m_backend->getBackgroundColor();
 	glClearColor(bg[0], bg[1], bg[2], bg[3]);
@@ -395,11 +437,13 @@ void Graphene::Impl::render() {
 		}
 	}
 
-#ifdef OPENGL_EFFECTS
+	if (m_hdr && blur == 0.f) {
+		renderTonemap();
+	}
+
 	if (blur > 0.f) {
 		renderBlur(blur);
 	}
-#endif // OPENGL_EFFECTS
 
 #ifdef ENABLE_SCREENCAST
 	if (m_scInfo.recording && !m_scInfo.paused) {
@@ -412,18 +456,39 @@ void Graphene::Impl::render() {
 #endif // ENABLE_SCREENCAST
 }
 
-#ifdef OPENGL_EFFECTS
+void Graphene::Impl::renderTonemap() {
+	auto wndSize = m_transforms->viewport().tail(2);
+	auto main = m_backend->getMainSettings();
+	float exposure = main->get<Range>({"groupHDR", "exposure"})->value();
+	glDisable(GL_DEPTH_TEST);
+
+	// compose
+	Buffer::FBO::unbind();
+	glActiveTexture(GL_TEXTURE0);
+	m_fbos[0].bindTex(0);
+	m_tonemap.use();
+	m_tonemap.setUniformVar1f("exposure", exposure);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glViewport(0, 0, wndSize[0], wndSize[1]);
+	m_geomQuad.bind();
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (char *)NULL);
+	m_geomQuad.release();
+
+	glEnable(GL_DEPTH_TEST);
+}
+
 void Graphene::Impl::renderBlur(float ratio) {
 	auto wndSize = m_transforms->viewport().tail(2);
 	auto main = m_backend->getMainSettings();
 	float focalPoint = main->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->value();
 	float focalArea  = main->get<Range>({"groupEffects", "groupFOD", "focalArea"})->value();
+	float exposure   = main->get<Range>({"groupHDR", "exposure"})->value();
 	int ortho = static_cast<int>(m_camera->getOrtho());
 	glDisable(GL_DEPTH_TEST);
 
 	// horizontal gauss
-	m_fbos[1].BindOutput();
-	m_fbos[0].BindTex();
+	m_fbos[1].bindOutput();
+	m_fbos[0].bindTex();
 	m_gaussH.use();
 	glClear(GL_COLOR_BUFFER_BIT);
 	glViewport(0,0, wndSize[0]/2, wndSize[1]/2); // downsampling
@@ -431,21 +496,21 @@ void Graphene::Impl::renderBlur(float ratio) {
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (char *)NULL);
 
 	// vertical gauss
-	m_fbos[2].BindOutput();
-	m_fbos[1].BindTex();
+	m_fbos[2].bindOutput();
+	m_fbos[1].bindTex();
 	m_gaussV.use();
 	glClear(GL_COLOR_BUFFER_BIT);
 	// geomQuad still bound here
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (char *)NULL);
 
 	// compose
-	Buffer::FBO::Unbind();
+	Buffer::FBO::unbind();
 	glActiveTexture(GL_TEXTURE0);
-	m_fbos[0].BindTex(0);
+	m_fbos[0].bindTex(0);
 	glActiveTexture(GL_TEXTURE1);
-	m_fbos[2].BindTex(0);
+	m_fbos[2].bindTex(0);
 	glActiveTexture(GL_TEXTURE2);
-	m_fbos[0].BindTex(1);
+	m_fbos[0].bindTex(1);
 	m_compose.use();
 	m_compose.setUniformVar1i("ortho", ortho);
 	m_compose.setUniformVar1f("ratio", ratio);
@@ -453,6 +518,8 @@ void Graphene::Impl::renderBlur(float ratio) {
 	m_compose.setUniformVar1f("focalArea", focalArea);
 	m_compose.setUniformVar1f("near", m_transforms->near());
 	m_compose.setUniformVar1f("far", m_transforms->far());
+	m_compose.setUniformVar1f("exposure", exposure);
+	m_compose.setUniformVar1i("tonemap", static_cast<int>(m_hdr));
 	glClear(GL_COLOR_BUFFER_BIT);
 	glViewport(0, 0, wndSize[0], wndSize[1]);
 	// geomQuad still bound here
@@ -462,7 +529,6 @@ void Graphene::Impl::renderBlur(float ratio) {
 	glEnable(GL_DEPTH_TEST);
 
 }
-#endif // OPENGL_EFFECTS
 
 void Graphene::Impl::modifier(Keys::Modifier mod, bool down) {
 	switch (mod) {
@@ -482,17 +548,45 @@ void Graphene::Impl::setOrtho(bool ortho) {
 	m_camera->setOrtho(ortho);
 }
 
-	/*
-void Graphene::Impl::updateState() {
-	// update viewport and matrices
-	int w,h;
-	std::tie(w,h) = m_backend->getViewportSize();
-	m_transforms->viewport   = glm::ivec4(0, 0, w, h);
-	m_transforms->modelview  = m_camera->getModelViewMatrix();
-	m_transforms->normal     = glm::inverseTranspose(glm::mat3(m_transforms.modelviewMat));
-	m_transforms->projection = glm::mat4(1.f);//TODO: fill
+void Graphene::Impl::loadHDRMaps(std::string hdrPath) {
+	fs::path path(hdrPath);
+	if (!fs::exists(path)) return;
+
+	std::vector<std::string> spec, diff;
+	fs::directory_iterator dirIt(path), endIt;
+	for (; dirIt != endIt; ++dirIt) {
+		fs::path p = dirIt->path();
+		if (fs::is_directory(p)) continue;
+		std::string filename = p.filename().string();
+
+		boost::smatch what;
+		boost::regex pattern("(\\w+)_specular.hdr");
+		if (boost::regex_match(filename, what, pattern)) {
+			spec.push_back(what[1]);
+			continue;
+		}
+		pattern = boost::regex("(\\w+)_diffuse.hdr");
+		if (boost::regex_match(filename, what, pattern)) {
+			diff.push_back(what[1]);
+		}
+	}
+	std::sort(spec.begin(), spec.end());
+	std::sort(diff.begin(), diff.end());
+	std::vector<std::string> maps = Algorithm::setUnion(spec, diff);
+
+	for (const auto& m : maps) {
+		fs::path pDiff = path / (m + "_diffuse.hdr");
+		fs::path pSpec = path / (m + "_specular.hdr");
+		EnvMap envMap;
+		envMap.diffuse.load(pDiff.string());
+		envMap.specular.load(pSpec.string());
+		EnvTex envTex;
+		envTex.diffuse  = Buffer::Texture::Ptr(new Buffer::Texture(GL_RGB16F_ARB, envMap.diffuse.width(), envMap.diffuse.height(), envMap.diffuse.data()));
+		envTex.specular = Buffer::Texture::Ptr(new Buffer::Texture(GL_RGB16F_ARB, envMap.specular.width(), envMap.specular.height(), envMap.specular.data()));
+		m_envMaps[m] = envMap;
+		m_envTextures[m] = envTex;
+	}
 }
-	*/
 
 #ifdef ENABLE_SCREENCAST
 void Graphene::Impl::startScreencast(fs::path outputFile) {

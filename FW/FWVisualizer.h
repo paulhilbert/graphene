@@ -98,6 +98,13 @@ class Visualizer {
 		virtual void render() = 0;
 
 		/**
+		 *  Virtual method checking whether this visualizer renders HDR.
+		 *
+		 *  @return True iff this visualizer renders HDR and therefore needs tonemapping
+		 */
+		virtual bool isHDR() const;
+
+		/**
 		 *  Execute given function in a separate thread.
 		 *
 		 *  @param task Callback function to execute independently.

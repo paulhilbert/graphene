@@ -19,31 +19,20 @@ class FBO {
 		typedef std::weak_ptr<FBO>   WPtr;
 
 	public:
-		/// Default Constructor
 		FBO();
-		/// Constructor used when size is known
 		FBO(int width, int height);
-		/// Destructor
 		~FBO();
-		/// Set FBO size when using default constructor
-		void SetSize(int width, int height) { m_width = width; m_height = height; };
-		/// Attach a render target to the FBO
-		void AttachRender(GLenum iformat);
-		/// Attach a texture to the FBO
-		void AttachTexture(GLenum iformat, GLint filter = GL_LINEAR);
-		/// Bind the FBO as input, for reading from
-		void BindInput();
-		/// Bind the FBO as output, for writing into
-		void BindOutput();
-		/// Bind the specified FBO texture to the context
-		void BindTex(int num = 0);
-		/// Blit from an FBO to another
-		void BlitTo(FBO *dest, GLbitfield mask, GLenum filter = GL_LINEAR);
-		/// Check OpenGL status of the FBO
-		void Check();
 
-		/// Disable rendering to FBO
-		static void Unbind();
+		void setSize(int width, int height);
+		void attachRender(GLenum iformat);
+		void attachTexture(GLenum iformat, GLint filter = GL_LINEAR);
+		void bindInput();
+		void bindOutput();
+		void bindTex(int num = 0);
+		void blitTo(FBO *dest, GLbitfield mask, GLenum filter = GL_LINEAR);
+		void check();
+
+		static void unbind();
 
 	protected:
 		int m_width;
@@ -57,6 +46,7 @@ class FBO {
 		int m_max_color_attachments;
 };
 
+#include "FBO.inl"
 
 } // Buffer
 

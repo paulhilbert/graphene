@@ -46,7 +46,7 @@ class Graphene {
 		 *  @param singleMode Start in single visualizer mode.
 		 *  @param noEffects If true, disables render effects.
 		 */
-		Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects);
+		Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects, std::string hdrPath);
 
 		/**
 		 *  Destructor.

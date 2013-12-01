@@ -17,6 +17,7 @@
 #include <include/common.h>
 
 #include <Library/Geometry/Ray.h>
+#include <Library/Buffer/Texture.h>
 #include <FW/View/ViewTransforms.h>
 #include <FW/Events/EventsHandle.h>
 #include <FW/Events/EventsModifier.h>
@@ -26,6 +27,12 @@ using FW::Events::Keys;
 namespace FW {
 
 class Graphene;
+
+struct EnvTex {
+	Buffer::Texture::Ptr diffuse;
+	Buffer::Texture::Ptr specular;
+};
+
 
 /**
  *  Access class to framework functionality provided to visualizers.
@@ -44,7 +51,7 @@ class VisualizerHandle {
 		friend class Graphene;
 
 	protected:
-		VisualizerHandle(std::string id, View::Transforms::WPtr transforms, Events::EventHandler::Ptr eventHandler, Geometry::Ray::Ptr pickRay);
+		VisualizerHandle(std::string id, View::Transforms::WPtr transforms, Events::EventHandler::Ptr eventHandler, Geometry::Ray::Ptr pickRay, std::map<std::string, EnvTex>* envMaps, std::string* crtMap);
 
 	public:
 		/**
@@ -76,14 +83,21 @@ class VisualizerHandle {
 		/**
 		 *  Returns access class to current pick ray.
 		 */
-		Geometry::Ray::Ptr     pickRay();
+		Geometry::Ray::Ptr pickRay();
+
+		/**
+		 *  Returns access handle to environment map textures.
+		 */
+		optional<EnvTex> environmentMaps();
 
 	protected:
-		std::string            m_id;
-		View::Transforms::WPtr m_transforms;
-		Events::Handle::Ptr    m_events;
-		Events::Modifier::Ptr  m_modifier;
-		Geometry::Ray::Ptr     m_pickRay;
+		std::string                     m_id;
+		View::Transforms::WPtr          m_transforms;
+		Events::Handle::Ptr             m_events;
+		Events::Modifier::Ptr           m_modifier;
+		Geometry::Ray::Ptr              m_pickRay;
+		std::map<std::string, EnvTex>*  m_envMaps;
+		std::string*                    m_crtMap;
 };
 
 } // FW
