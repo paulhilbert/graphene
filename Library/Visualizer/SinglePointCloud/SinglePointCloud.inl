@@ -19,7 +19,7 @@ inline void SinglePointCloud::init() {
 }
 
 inline void SinglePointCloud::render() {
-	m_rendered->render(fw()->transforms()->modelview(), fw()->transforms()->projection());
+	m_rendered->render(fw()->transforms()->modelview(), fw()->transforms()->projection(), fw()->transforms()->normal());
 }
 
 inline void SinglePointCloud::addProperties() {

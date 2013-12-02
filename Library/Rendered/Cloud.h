@@ -9,7 +9,7 @@
 #define RENDEREDCLOUD_H_
 
 #include <include/config.h>
-#include "Field.h"
+#include "NormalField.h"
 
 namespace Rendered {
 
@@ -31,11 +31,11 @@ class CloudRenderKernel : public RenderKernel {
 		int m_pointSize;
 };
 
-class Cloud : public Field {
+class Cloud : public NormalField {
 	public:
 		typedef std::shared_ptr<Cloud> Ptr;
 		typedef std::weak_ptr<Cloud>   WPtr;
-		typedef Field Base;
+		typedef NormalField Base;
 
 	public:
 		Cloud(RGBA baseColor, int pointSize = 2);

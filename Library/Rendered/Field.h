@@ -91,9 +91,9 @@ class Field {
 		void setVisible(bool visible);
 		bool getVisible() const;
 
-		void set(const std::vector<Eigen::Vector3f>& points);
+		virtual void set(const std::vector<Eigen::Vector3f>& points);
 
-		void render(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix);
+		virtual void render(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix, const Eigen::Matrix3f& nrmMatrix);
 
 		Annotation::Ptr operator[](std::string name);
 		Annotation::Ptr annotate(const std::vector<int>& indices, std::string name, bool checkIntersections = false);

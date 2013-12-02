@@ -22,11 +22,12 @@ inline void MultiPointCloud::render() {
 
 	auto mvMatrix = fw()->transforms()->modelview();
 	auto prMatrix = fw()->transforms()->projection();
-	m_rf["Main Cloud"]->render(mvMatrix, prMatrix);
-	m_rf["Main Cloud Normals"]->render(mvMatrix, prMatrix);
+	auto nmMatrix = fw()->transforms()->normal();
+	m_rf["Main Cloud"]->render(mvMatrix, prMatrix, nmMatrix);
+	m_rf["Main Cloud Normals"]->render(mvMatrix, prMatrix, nmMatrix);
 	for (const auto& cloud : m_rf) {
 		std::string name = cloud.first;
-		if (name != "Main Cloud" && name != "Main Cloud Normals") cloud.second->render(mvMatrix, prMatrix);
+		if (name != "Main Cloud" && name != "Main Cloud Normals") cloud.second->render(mvMatrix, prMatrix, nmMatrix);
 	}
 }
 
@@ -78,19 +79,19 @@ inline void MultiPointCloud::addClouds(const GUI::Property::Paths& paths) {
 		gui()->log()->verbose("Loaded point cloud with "+lexical_cast<std::string>(singleCloud->size())+" points.");
 		m_cloud->insert(m_cloud->end(), singleCloud->begin(), singleCloud->end());
 	}
-	addCloud("Main Cloud", rgbaGrey(), m_cloud);
+	addCloud("Main Cloud", rgbaWhite(), m_cloud);
 	addNormals("Main Cloud Normals", rgbaWhite(), m_cloud, false);
 }
 
-inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA color, const std::vector<Vector3f>& points, bool visible) {
-	RC::Ptr rc(new RC(color, 1));
-	rc->set(points);
-	rc->setVisible(visible);
-	auto tree = gui()->properties()->get<Tree>(path("visibility"));
-	tree->add(name, {name}, visible);
-	m_rf[name] = std::dynamic_pointer_cast<RF>(rc);
-	return rc;
-}
+//inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA color, const std::vector<Vector3f>& points, bool visible) {
+//	RC::Ptr rc(new RC(color, 1));
+//	rc->set(points);
+//	rc->setVisible(visible);
+//	auto tree = gui()->properties()->get<Tree>(path("visibility"));
+//	tree->add(name, {name}, visible);
+//	m_rf[name] = std::dynamic_pointer_cast<RF>(rc);
+//	return rc;
+//}
 
 inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA color, Cloud::Ptr cloud, bool visible) {
 	RC::Ptr rc(new RC(color, 1));

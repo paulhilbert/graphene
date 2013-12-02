@@ -115,7 +115,7 @@ inline void Field::set(const std::vector<Eigen::Vector3f>& points) {
 	m_geometry->bindColors(m_kernel->program(), "color");
 }
 
-inline void Field::render(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix) {
+inline void Field::render(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix, const Eigen::Matrix3f&) {
 	if (!m_visible || !m_geometry) return;
 	m_kernel->program().use();
 	m_kernel->program().setUniformMat4("mvM", mvMatrix.data());
