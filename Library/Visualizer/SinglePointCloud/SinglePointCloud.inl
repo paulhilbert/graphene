@@ -19,7 +19,9 @@ inline void SinglePointCloud::init() {
 }
 
 inline void SinglePointCloud::render() {
-	m_rendered->render(fw()->transforms()->modelview(), fw()->transforms()->projection(), fw()->transforms()->normal());
+	auto optTex = fw()->environmentMaps();
+	if (optTex) m_rendered->renderHDR(fw()->transforms()->modelview(), fw()->transforms()->projection(), fw()->transforms()->normal(), optTex.get(), 0.3f, fw()->transforms()->viewDirection());
+	else m_rendered->render(fw()->transforms()->modelview(), fw()->transforms()->projection(), fw()->transforms()->normal());
 }
 
 inline void SinglePointCloud::addProperties() {

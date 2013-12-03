@@ -24,6 +24,7 @@ class CloudRenderKernel : public RenderKernel {
 
 		void initShader() override;
 		void renderElements(int pointCount) override;
+		void renderElementsHDR(int pointCount) override;
 
 		void setThickness(int thickness);
 

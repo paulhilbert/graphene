@@ -15,6 +15,11 @@ inline CloudRenderKernel::~CloudRenderKernel() {
 
 inline void CloudRenderKernel::initShader() {
 	m_prog.addShaders(std::string(GLSL_PREFIX)+"simpleLighting.vert", std::string(GLSL_PREFIX)+"simpleLighting.frag");
+	m_progHDR.addShaders(std::string(GLSL_PREFIX)+"hdrLighting.vert", std::string(GLSL_PREFIX)+"hdrLighting.frag");
+	m_progHDR.link();
+	m_progHDR.use();
+	m_progHDR.setUniformVar1i("Tex0", 0);
+	m_progHDR.setUniformVar1i("Tex1", 1);
 }
 
 inline void CloudRenderKernel::renderElements(int pointCount) {
@@ -22,10 +27,19 @@ inline void CloudRenderKernel::renderElements(int pointCount) {
 	lightDir.normalize();
 	m_prog.setUniformVec3("lightDir", lightDir.data());
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_POINT_SMOOTH);
+//	glEnable(GL_POINT_SMOOTH);
 	glPointSize(static_cast<GLfloat>(m_pointSize));
 	glDrawArrays(GL_POINTS, 0, pointCount);
-	glDisable(GL_POINT_SMOOTH);
+//	glDisable(GL_POINT_SMOOTH);
+	glPointSize(1);
+}
+
+inline void CloudRenderKernel::renderElementsHDR(int pointCount) {
+	glEnable(GL_DEPTH_TEST);
+//	glEnable(GL_POINT_SMOOTH);
+	glPointSize(static_cast<GLfloat>(m_pointSize));
+	glDrawArrays(GL_POINTS, 0, pointCount);
+//	glDisable(GL_POINT_SMOOTH);
 	glPointSize(1);
 }
 

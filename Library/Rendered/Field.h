@@ -31,14 +31,18 @@ class RenderKernel {
 		void init();
 		virtual void initShader() = 0;
 		virtual void renderElements(int pointCount) = 0;
+		virtual void renderElementsHDR(int pointCount) {}
 
 		virtual void setThickness(int thickness) = 0;
 
 		ShaderProgram& program();
 		const ShaderProgram& program() const;
+		ShaderProgram& programHDR();
+		const ShaderProgram& programHDR() const;
 
 	protected:
 		ShaderProgram  m_prog;
+		ShaderProgram  m_progHDR;
 };
 
 class Field;
@@ -71,7 +75,7 @@ class Annotation {
 	protected:
 		std::vector<int> m_indices;
 		std::string      m_name;
-		Field*   m_field;
+		Field*           m_field;
 };
 
 
@@ -94,6 +98,7 @@ class Field {
 		virtual void set(const std::vector<Eigen::Vector3f>& points);
 
 		virtual void render(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix, const Eigen::Matrix3f& nrmMatrix);
+		virtual void renderHDR(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix, const Eigen::Matrix3f& nrmMatrix, FW::EnvTex envTex, float specularity, const Eigen::Vector3f& viewDir);
 
 		Annotation::Ptr operator[](std::string name);
 		Annotation::Ptr annotate(const std::vector<int>& indices, std::string name, bool checkIntersections = false);

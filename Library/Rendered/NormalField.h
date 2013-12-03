@@ -18,6 +18,7 @@ class NormalField : public Field {
 
 		void set(const std::vector<Eigen::Vector3f>& points, const std::vector<Eigen::Vector3f>& normals);
 		void render(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix, const Eigen::Matrix3f& nmMatrix);
+		void renderHDR(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix, const Eigen::Matrix3f& nmMatrix, FW::EnvTex envTex, float specularity, const Eigen::Vector3f& viewDir);
 
 	protected:
 		void set(const std::vector<Eigen::Vector3f>& points) {}
