@@ -17,7 +17,7 @@ class SingleMesh : virtual public Visualizer {
 		typedef Geometry::OpenMeshTraits<Mesh> Traits;
 
 	public:
-		SingleMesh(std::string id, fs::path meshFile);
+		SingleMesh(std::string id, fs::path meshFile, std::string upAxis, std::string frontAxis, float scale, bool recenter);
 		virtual ~SingleMesh();
 
 		void init();
@@ -28,6 +28,10 @@ class SingleMesh : virtual public Visualizer {
 
 	protected:
 		fs::path                  m_meshFile;
+		std::string               m_upAxis;
+		std::string               m_frontAxis;
+		float                     m_scale;
+		bool                      m_recenter;
 		std::shared_ptr<Mesh>     m_mesh;
 		Rendered::Mesh<Mesh>::Ptr m_rm;
 		ShaderProgram::Ptr        m_program;

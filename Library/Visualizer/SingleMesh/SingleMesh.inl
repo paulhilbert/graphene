@@ -1,4 +1,4 @@
-inline SingleMesh::SingleMesh(std::string id, fs::path meshFile) : Visualizer(id), m_meshFile(meshFile) {
+inline SingleMesh::SingleMesh(std::string id, fs::path meshFile, std::string upAxis, std::string frontAxis, float scale, bool recenter) : Visualizer(id), m_meshFile(meshFile), m_upAxis(upAxis), m_frontAxis(frontAxis), m_scale(scale), m_recenter(recenter) {
 }
 
 inline SingleMesh::~SingleMesh() {
@@ -13,6 +13,7 @@ inline void SingleMesh::init() {
 		gui()->log()->error("Could not open mesh file \""+m_meshFile.string()+"\"");
 	}
 	gui()->log()->info("Loaded mesh with "+lexical_cast<std::string>(Traits::numVertices(*m_mesh))+" vertices and "+lexical_cast<std::string>(Traits::numFaces(*m_mesh))+" faces.");
+	Traits::adjust(*m_mesh, m_upAxis, m_frontAxis, m_scale, m_recenter);
 
 	m_program = std::make_shared<ShaderProgram>();
 	m_program->addShaders(std::string(GLSL_PREFIX)+"mesh.vert", std::string(GLSL_PREFIX)+"mesh.frag");

@@ -1,11 +1,13 @@
 #ifndef OPENMESHTRAITS_H
 #define OPENMESHTRAITS_H
 
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include <functional>
 #include <memory>
 #include <Eigen/Dense>
+
 
 #include <OpenMesh/Core/IO/MeshIO.hh>
 #include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
@@ -32,6 +34,10 @@ struct OpenMeshTraits {
 	// mesh IO
 	static bool loadFromFile(MeshType& mesh, const std::string& path);
 	static bool saveToFile(const MeshType& mesh, const std::string& path);
+
+	static void adjust(MeshType& mesh, const Eigen::Matrix3f& transform, float scale = 1.f, bool recenter = false);
+	static void adjust(MeshType& mesh, const Eigen::Vector3f& up, const Eigen::Vector3f& front, float scale = 1.f, bool recenter = false);
+	static void adjust(MeshType& mesh, const std::string& up = "Z", const std::string& front = "Y", float scale = 1.f, bool recenter = false);
 
 	// mesh properties
 	static Size numVertices(const MeshType& mesh);
