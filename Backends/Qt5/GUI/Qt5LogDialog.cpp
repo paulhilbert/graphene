@@ -7,6 +7,7 @@
 
 #include "Qt5LogDialog.h"
 #include <iostream>
+//#include <qapplication.h>
 
 namespace GUI {
 
@@ -43,6 +44,7 @@ void Qt5LogDialog::logVerbose(std::string text) {
 
 void Qt5LogDialog::clear() {
 	m_text->setHtml("");
+//	qApp->processEvents();
 }
 
 ProgressBarPool::Ptr Qt5LogDialog::progressBarPool() {
@@ -59,6 +61,7 @@ QString Qt5LogDialog::formatPrefix(const std::string& text, const std::string& c
 
 void Qt5LogDialog::append(const QString& string) {
 	m_text->setHtml(m_text->toHtml() + "</ br>" + string);
+//	qApp->processEvents();
 }
 
 } // GUI

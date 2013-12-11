@@ -46,7 +46,6 @@ struct OpenMeshTraits {
 	// element access
 	static std::vector<VertexId> vertices(const MeshType& mesh);
 	static std::vector<FaceId> faces(const MeshType& mesh);
-	
 
 	// element properties
 	static PositionType vertexPosition(const MeshType& mesh, VertexId id);
@@ -68,6 +67,9 @@ struct OpenMeshTraits {
 	// operators
 	static ScalarType norm(const PositionType& p);
 	static PositionType crossP(const PositionType& p0, const PositionType& p1);
+
+	// transformation
+	static void transform(MeshType& mesh, const Eigen::Affine3f& transformation);
 };
 
 

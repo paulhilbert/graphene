@@ -29,6 +29,7 @@ inline void SingleMesh::init() {
 }
 
 inline void SingleMesh::render() {
+	if (!m_visible) return;
 	m_program->use();
 	
 	bool clipping = gui()->modes()->group("showGroup")->option("showClip")->active();
@@ -52,6 +53,9 @@ inline void SingleMesh::render() {
 }
 
 inline void SingleMesh::addProperties() {
+	auto visible = gui()->properties()->add<Bool>("Render Mesh", "visible");
+	visible->setValue(true);
+	visible->setCallback([&] (bool value) { m_visible = value; });
 }
 
 inline void SingleMesh::addModes() {

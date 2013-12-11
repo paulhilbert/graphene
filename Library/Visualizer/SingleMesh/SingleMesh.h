@@ -36,6 +36,8 @@ class SingleMesh : virtual public Visualizer {
 		Rendered::Mesh<Mesh>::Ptr m_rm;
 		ShaderProgram::Ptr        m_program;
 
+		bool                      m_visible = true;
+
 		float                     m_clippingHeight = 0.f;
 		float                     m_clipRangeMin;
 		float                     m_clipRangeMax;

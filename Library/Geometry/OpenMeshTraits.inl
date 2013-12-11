@@ -8,6 +8,8 @@ inline bool OpenMeshTraits<TriMesh>::loadFromFile(MeshType& mesh, const std::str
 	opt += OpenMesh::IO::Options::VertexNormal;
 	opt += OpenMesh::IO::Options::VertexColor;
 	
+	mesh.request_vertex_normals();
+	mesh.request_face_normals();
 	bool success = OpenMesh::IO::read_mesh(mesh, path, opt);
 	
 	if (success) {
@@ -33,7 +35,36 @@ inline bool OpenMeshTraits<TriMesh>::loadFromFile(MeshType& mesh, const std::str
 
 template <class OpenMeshType>
 inline bool OpenMeshTraits<OpenMeshType>::loadFromFile(MeshType& mesh, const std::string& path) {
-	return OpenMesh::IO::read_mesh(mesh, path);
+	// The options define which properties we would like to have loaded.
+	// After the read_mesh call, "opt" will contain the attributes which
+	// were actually present in the file.
+	OpenMesh::IO::Options opt;
+	opt += OpenMesh::IO::Options::FaceNormal;
+	opt += OpenMesh::IO::Options::VertexNormal;
+	opt += OpenMesh::IO::Options::VertexColor;
+	
+	mesh.request_vertex_normals();
+	mesh.request_face_normals();
+	bool success = OpenMesh::IO::read_mesh(mesh, path, opt);
+	
+	if (success) {
+		// If no face normals were loaded, estimate them.
+		if (!opt.face_has_normal()) {
+			mesh.update_face_normals();
+		}
+		// If no vertex normals were loaded, estimate them.
+		// Note that OpenMesh requires face normals to be available for this.
+		if (!opt.vertex_has_normal()) {
+			mesh.update_normals();
+		}
+		// If no vertex colors were loaded, set a default value for all vertices.
+		if (!opt.vertex_has_color()) {
+			for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) {
+				mesh.set_color(it.handle(), InternalOpenMeshTraits::Color(1,1,1,1));
+			}
+		}
+	}
+	return success;
 }
 
 template <class OpenMeshType>
@@ -72,15 +103,7 @@ inline void OpenMeshTraits<OpenMeshType>::adjust(MeshType& mesh, const Eigen::Ma
 		if (!recenter) finalTransform = Eigen::Translation<float,3>(center) * finalTransform;
 	}
 
-	if (!finalTransform.matrix().isIdentity()) {
-		for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) {
-			auto pos = PositionType(mesh.point(it.handle()).data());
-			pos = finalTransform*pos;
-			mesh.point(it.handle())[0] = pos[0];
-			mesh.point(it.handle())[1] = pos[1];
-			mesh.point(it.handle())[2] = pos[2];
-		}
-	}
+	OpenMeshTraits<OpenMeshType>::transform(mesh, finalTransform);
 }
 
 template <class OpenMeshType>
@@ -218,4 +241,23 @@ inline typename OpenMeshTraits<OpenMeshType>::ScalarType OpenMeshTraits<OpenMesh
 template <class OpenMeshType>
 inline typename OpenMeshTraits<OpenMeshType>::PositionType OpenMeshTraits<OpenMeshType>::crossP(const PositionType& p0, const PositionType& p1) {
 	return p0.cross(p1);
+}
+
+template <class OpenMeshType>
+inline void OpenMeshTraits<OpenMeshType>::transform(MeshType& mesh, const Eigen::Affine3f& transformation) {
+	typedef typename MeshType::Point OpenMeshPoint;
+	typedef typename MeshType::Normal OpenMeshNormal;
+
+	if (transformation.matrix().isIdentity()) return;
+
+	auto normalTransform = transformation.linear().inverse().transpose();
+	for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) {
+		auto pos = PositionType(mesh.point(it.handle()).data());
+		auto nrm = PositionType(mesh.normal(it.handle()).data());
+		pos = transformation*pos;
+		nrm = normalTransform*nrm;
+		nrm.normalize();
+		mesh.set_point (it.handle(), OpenMeshPoint(pos.data()));
+		mesh.set_normal(it.handle(), OpenMeshNormal(nrm.data()));
+	}
 }

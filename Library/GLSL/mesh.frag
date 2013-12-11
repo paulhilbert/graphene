@@ -12,7 +12,9 @@ void main() {
 
 	float att = clamp(dot(normalized_normal, normalized_lightDir), 0.0, 1.0);
 
+	float alpha = fColor.a;
 	vec4 diffuse = fColor;
 	vec4 ambient = 0.2*fColor;
 	fragmentColor = ambient + diffuse * att;
+	fragmentColor.a = alpha;
 }

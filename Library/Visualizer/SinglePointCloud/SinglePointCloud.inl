@@ -34,10 +34,10 @@ inline void SinglePointCloud::addProperties() {
 
 	auto groupEdit = gui()->properties()->add<Section>("Edit Cloud", "groupEdit");
 	auto diamFactor = groupEdit->add<Number>("Diameter Factor", "diamFactor");
-	diamFactor->setMin(0.0001);
+	diamFactor->setDigits(5);
+	diamFactor->setMin(0.00001);
 	diamFactor->setMax(1.0000);
-	diamFactor->setValue(0.0016);
-	diamFactor->setDigits(4);
+	diamFactor->setValue(0.0001);
 	groupEdit->add<Button>("Resample")->setCallback([&] () { resample(); });
 	groupEdit->collapse();
 }
@@ -54,7 +54,7 @@ inline void SinglePointCloud::addClouds(const GUI::Property::Paths& paths) {
 		try {
 //			std::vector<Vector4f> colors;
 			Cloud::Ptr singleCloud = Tools::loadPointCloud(p);
-			gui()->log()->verbose("Loaded point cloud with "+lexical_cast<std::string>(singleCloud->size())+" points.");
+			gui()->log()->info("Loaded point cloud with "+lexical_cast<std::string>(singleCloud->size())+" points.");
 			m_cloud->insert(m_cloud->end(), singleCloud->begin(), singleCloud->end());
 //			if (colors.size()) m_colors.insert(m_colors.end(), colors.begin(), colors.end());
 		} catch (std::runtime_error& e) {
@@ -84,9 +84,9 @@ inline void SinglePointCloud::resample() {
 	pcl::PointCloud<int> subsampled_indices;
 	us.compute(subsampled_indices);
 	std::sort(subsampled_indices.points.begin (), subsampled_indices.points.end ());
-	Cloud::Ptr result(new Cloud());
-	pcl::copyPointCloud(*m_cloud, subsampled_indices.points, *result);
-	m_cloud = result;
+	IdxSet subset(subsampled_indices.size());
+	std::transform(subsampled_indices.begin(), subsampled_indices.end(), subset.begin(), [&] (Idx idx) { return idx; });
+	Tools::crop(m_cloud, subset);
 	uploadCloud();
-	gui()->log()->verbose("Resampled with diameter "+lexical_cast<std::string>(diamFactor)+".");
+	gui()->log()->info("Resampled with diameter "+lexical_cast<std::string>(diamFactor)+".");
 }

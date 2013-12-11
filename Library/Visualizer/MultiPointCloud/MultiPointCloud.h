@@ -37,7 +37,7 @@ class MultiPointCloud : virtual public Visualizer {
 		friend class Computation;
 
 	public:
-		MultiPointCloud(std::string id, const GUI::Property::Paths& paths);
+		MultiPointCloud(std::string id, const GUI::Property::Paths& paths = GUI::Property::Paths());
 		virtual ~MultiPointCloud();
 
 		void init();

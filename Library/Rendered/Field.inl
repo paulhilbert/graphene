@@ -102,6 +102,9 @@ inline bool Field::getVisible() const {
 
 inline void Field::set(const std::vector<Eigen::Vector3f>& points) {
 	m_pointCount = static_cast<unsigned int>(points.size());
+	if (!m_pointCount) {
+		throw std::runtime_error("Trying to add empty field.");
+	}
 	m_colors = Annotation::Colors(m_pointCount, m_color);
 	m_geometry.reset();
 	m_geometry = std::shared_ptr<Buffer::Geometry>(new Buffer::Geometry());
