@@ -2,6 +2,7 @@
 #define ALGOSETS_H_
 
 #include <algorithm>
+#include <numeric>
 #include <functional>
 
 namespace Algorithm {

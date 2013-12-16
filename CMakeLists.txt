@@ -18,6 +18,9 @@ option (OPENGL_EFFECTS "Enables advanced rendering techniques like depth-of-fiel
 if(CMAKE_COMPILER_IS_GNUCXX)
 	add_definitions(-fPIC)
 endif()
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+	add_definitions(-fPIC)
+endif()
 
 # rgbe
 add_subdirectory("Library/Buffer/rgbe/")
@@ -25,6 +28,12 @@ add_subdirectory("Library/Buffer/rgbe/")
 # c++11
 if(CMAKE_COMPILER_IS_GNUCXX)
 	add_definitions(-std=c++11)
+endif()
+
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+	add_definitions(-std=c++11)
+	add_definitions(-stdlib=libc++)
+	add_definitions(-fPIC)
 endif()
 
 # boost
@@ -46,9 +55,17 @@ if(Boost_FOUND AND OPENGL_FOUND AND GLEW_FOUND)
 	include_directories(${OPENGL_INCLUDE_DIR})
 	include_directories(${GLEW_INCLUDE_DIRS})
 	add_library(Graphene SHARED ${obj} ${lib})
-	target_link_libraries(Graphene ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} "rgbe" "dl")
+	if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+		target_link_libraries(Graphene ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} "rgbe" "dl" "c++abi")
+	else()
+		target_link_libraries(Graphene ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} "rgbe" "dl")
+	endif()
 	add_executable(graphene "graphene.cpp")
-	target_link_libraries(graphene Graphene)
+	if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+		target_link_libraries(graphene Graphene "c++abi")
+	else()
+		target_link_libraries(graphene Graphene)
+	endif()
 
 	# qt backend
 	set(CMAKE_AUTOMOC ON)
