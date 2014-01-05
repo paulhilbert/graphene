@@ -34,7 +34,7 @@ class MultiPointCloud : virtual public Visualizer {
 		typedef Rendered::Vectors                RV;
 		typedef Rendered::Lines                  RL;
 		typedef std::map<std::string, RF::Ptr>   RFPtrs;
-		friend class Computation;
+		friend struct Computation;
 
 	public:
 		MultiPointCloud(std::string id, const GUI::Property::Paths& paths = GUI::Property::Paths());
@@ -54,7 +54,7 @@ class MultiPointCloud : virtual public Visualizer {
 		void    removeField(std::string name);
 		void    exportCloud(const fs::path& path);
 		void    resample();
-	
+
 	protected:
 		GUI::Property::Paths     m_paths;
 		Cloud::Ptr               m_cloud;
