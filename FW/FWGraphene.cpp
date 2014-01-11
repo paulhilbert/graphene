@@ -526,6 +526,13 @@ void Graphene::Impl::renderBlur(float ratio) {
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (char *)NULL);
 	m_geomQuad.release();
 
+	glActiveTexture(GL_TEXTURE0);
+	Buffer::Texture::unbind();
+	glActiveTexture(GL_TEXTURE1);
+	Buffer::Texture::unbind();
+	glActiveTexture(GL_TEXTURE2);
+	Buffer::Texture::unbind();
+
 	glEnable(GL_DEPTH_TEST);
 
 }

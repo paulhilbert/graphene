@@ -43,7 +43,7 @@ class SinglePointCloud : virtual public Visualizer {
 		void exportCloud(const fs::path& path);
 		void uploadCloud();
 		void resample();
-	
+
 	protected:
 		GUI::Property::Paths     m_paths;
 		Cloud::Ptr               m_cloud;

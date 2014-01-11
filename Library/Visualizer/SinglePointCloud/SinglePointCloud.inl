@@ -20,7 +20,7 @@ inline void SinglePointCloud::init() {
 
 inline void SinglePointCloud::render() {
 	auto optTex = fw()->environmentMaps();
-	if (optTex) m_rendered->renderHDR(fw()->transforms()->modelview(), fw()->transforms()->projection(), fw()->transforms()->normal(), optTex.get(), 0.3f, fw()->transforms()->viewDirection());
+	if (optTex) m_rendered->renderHDR(fw()->transforms()->modelview(), fw()->transforms()->projection(), fw()->transforms()->normal(), optTex.get(), 0.0f, fw()->transforms()->viewDirection());
 	else m_rendered->render(fw()->transforms()->modelview(), fw()->transforms()->projection(), fw()->transforms()->normal());
 }
 
@@ -33,6 +33,14 @@ inline void SinglePointCloud::addProperties() {
 	exportFile->setMode(File::SAVE);
 	exportFile->setCallback([&] (const fs::path& path) { exportCloud(path); });
 	groupCloud->collapse();
+
+	auto groupRendering = gui()->properties()->add<Section>("Rendering", "groupRendering");
+	auto pointSize = groupRendering->add<Range>("Point Size", "pointSize");
+	pointSize->setDigits(0);
+	pointSize->setMin(1);
+	pointSize->setMax(20);
+	pointSize->setValue(2);
+	pointSize->setCallback([&] (float value) { m_rendered->setThickness(static_cast<int>(value)); });
 
 	auto groupEdit = gui()->properties()->add<Section>("Edit Cloud", "groupEdit");
 	auto diamFactor = groupEdit->add<Number>("Diameter Factor", "diamFactor");
