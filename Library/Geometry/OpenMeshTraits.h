@@ -20,20 +20,25 @@ namespace Geometry {
 template <class OpenMeshType>
 struct OpenMeshTraits {
 	// types
-	typedef OpenMeshType    MeshType;
+	typedef OpenMeshType                  MeshType;
 
-	typedef float           ScalarType;
-	typedef Eigen::Vector3f PositionType;
-	typedef Eigen::Vector3f NormalType;
-	typedef Eigen::Vector4f ColorType;
+	typedef float                         ScalarType;
+	typedef Eigen::Vector3f               PositionType;
+	typedef Eigen::Vector3f               NormalType;
+	typedef Eigen::Vector4f               ColorType;
 
-	typedef int             VertexId;
-	typedef int             FaceId;
-	typedef int             Size;
+	typedef int                           VertexId;
+	typedef int                           FaceId;
+	typedef int                           Size;
+
+	typedef std::vector<Eigen::Vector3f>  Polygon;
+	typedef std::vector<Polygon>          Polygons;
 
 	// mesh IO
 	static bool loadFromFile(MeshType& mesh, const std::string& path);
 	static bool saveToFile(const MeshType& mesh, const std::string& path);
+
+	static void fromPolygons(MeshType& mesh, const Polygons& polygons, const Polygons& vertexNormals = Polygons(), bool triangulate = true);
 
 	static void adjust(MeshType& mesh, const Eigen::Matrix3f& transform, float scale = 1.f, bool recenter = false);
 	static void adjust(MeshType& mesh, const Eigen::Vector3f& up, const Eigen::Vector3f& front, float scale = 1.f, bool recenter = false);
@@ -74,7 +79,7 @@ struct OpenMeshTraits {
 
 
 struct InternalOpenMeshTraits : public OpenMesh::DefaultTraits {
-	typedef OpenMesh::Vec4f Color;
+	typedef OpenMesh::Vec4f  Color;
 
 	VertexAttributes( OpenMesh::Attributes::Normal | OpenMesh::Attributes::Color );
 	FaceAttributes( OpenMesh::Attributes::Normal );

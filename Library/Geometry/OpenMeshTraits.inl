@@ -73,6 +73,34 @@ inline bool OpenMeshTraits<OpenMeshType>::saveToFile(const MeshType& mesh, const
 }
 
 template <class OpenMeshType>
+void OpenMeshTraits<OpenMeshType>::fromPolygons(MeshType& mesh, const Polygons& polygons, const Polygons& vertexNormals, bool triangulate) {
+	if (!polys.size()) throw std::runtime_error("Empty polygon set given");
+	bool hasNormals = vertexNormals.size() == polys.size();
+	for (unsigned int p=0; p<polygons.size(); ++p) {
+		const Polygon& poly = polygons[p];
+		if (poly.size() < 3) continue;
+		bool polyHasNormals = hasNormals && vertexNormals[p].size() == poly.size();
+
+		std::vector<typename OpenMeshType::VertexHandle> faceVertices;
+		for (unsigned int v=0; v < poly.size(); ++v) {
+			typename OpenMeshType::Point p(poly[v][0], poly[v][1], poly[v][2]);
+			auto handle = mesh.add_vertex(p);
+			if (polyHasNormals) {
+				auto normal = vertexNormals[p][v].normalized();
+				mesh.set_normal(handle, typename OpenMeshType::Normal(normal[0], normal[1], normal[2]));
+			}
+			faceVertices.push_back(handle);
+		}
+		mesh.add_face(faceVertices);
+	}
+	mesh.update_normals();
+	if (triangulate) {
+		mesh.triangulate();
+		mesh.update_normals();
+	}
+}
+
+template <class OpenMeshType>
 inline void OpenMeshTraits<OpenMeshType>::adjust(MeshType& mesh, const Eigen::Matrix3f& transform, float scale, bool recenter) {
 	/*
 	if (!transform.isIdentity()) {
