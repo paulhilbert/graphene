@@ -94,6 +94,7 @@ void Camera::updateTransforms() {
 	trans->near() = near;
 	trans->far() = far;
 	trans->cameraPosition() = m_control->getPosition();
+	trans->lookAt() = m_control->getLookAt();
 }
 
 Eigen::Matrix4f Camera::getProjectionMatrix(int w, int h, float near, float far) {

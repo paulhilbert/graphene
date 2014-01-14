@@ -162,6 +162,24 @@ struct Transforms {
 		 */
 		const Vector3f& cameraPosition() const { return m_cameraPosition; }
 
+		/**
+		 * Get camera look-at.
+		 * @return Camera look-at as 3D-vector.
+		 */
+		Vector3f& lookAt() { return m_lookAt; }
+
+		/**
+		 * Get camera look-at.
+		 * @return Camera look-at as 3D-vector.
+		 */
+		const Vector3f& lookAt() const { return m_lookAt; }
+
+		/**
+		 * Get camera view direction.
+		 * @return Camera view direction as 3D-vector.
+		 */
+		Vector3f viewDirection() const { return (m_lookAt - m_cameraPosition).normalized(); }
+
 
 	protected:
 		Eigen::Vector4i  m_viewport;
@@ -171,6 +189,7 @@ struct Transforms {
 		float            m_near;
 		float            m_far;
 		Eigen::Vector3f  m_cameraPosition;
+		Eigen::Vector3f  m_lookAt;
 };
 
 } // View
