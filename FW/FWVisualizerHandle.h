@@ -51,7 +51,7 @@ class VisualizerHandle {
 		friend class Graphene;
 
 	protected:
-		VisualizerHandle(std::string id, View::Transforms::WPtr transforms, Events::EventHandler::Ptr eventHandler, Geometry::Ray::Ptr pickRay, std::map<std::string, EnvTex>* envMaps, std::string* crtMap);
+		VisualizerHandle(std::string id, View::Transforms::WPtr transforms, Events::EventHandler::Ptr eventHandler, Geometry::Ray::Ptr pickRay, std::map<std::string, EnvTex>* envMaps, std::string* crtMap, float* specularity);
 
 	public:
 		/**
@@ -61,21 +61,21 @@ class VisualizerHandle {
 
 		/**
 		 *  Returns access class to OpenGL transform parameters.
-		 *  
+		 *
 		 *  @see View::Transforms
 		 */
 		View::Transforms::Ptr  transforms();
 
 		/**
 		 *  Returns access class to event management system.
-		 *  
+		 *
 		 *  @see Events::Handle
 		 */
 		Events::Handle::Ptr    events();
 
 		/**
 		 *  Returns access class to keyboard modifier states.
-		 *  
+		 *
 		 *  @see Events::Modifier
 		 */
 		Events::Modifier::Ptr  modifier();
@@ -90,6 +90,11 @@ class VisualizerHandle {
 		 */
 		optional<EnvTex> environmentMaps();
 
+		/**
+		 *  Returns selected specularity for IBL
+		 */
+		float specularity() const;
+
 	protected:
 		std::string                     m_id;
 		View::Transforms::WPtr          m_transforms;
@@ -98,6 +103,7 @@ class VisualizerHandle {
 		Geometry::Ray::Ptr              m_pickRay;
 		std::map<std::string, EnvTex>*  m_envMaps;
 		std::string*                    m_crtMap;
+		float*                          m_specularity;
 };
 
 } // FW

@@ -23,11 +23,22 @@ inline void MultiPointCloud::render() {
 	auto mvMatrix = fw()->transforms()->modelview();
 	auto prMatrix = fw()->transforms()->projection();
 	auto nmMatrix = fw()->transforms()->normal();
-	m_rf["Main Cloud"]->render(mvMatrix, prMatrix, nmMatrix);
-	m_rf["Main Cloud Normals"]->render(mvMatrix, prMatrix, nmMatrix);
-	for (const auto& cloud : m_rf) {
-		std::string name = cloud.first;
-		if (name != "Main Cloud" && name != "Main Cloud Normals") cloud.second->render(mvMatrix, prMatrix, nmMatrix);
+
+	auto optTex = fw()->environmentMaps();
+	if (optTex) {
+		m_rf["Main Cloud"]->renderHDR(mvMatrix, prMatrix, nmMatrix, optTex.get(), fw()->specularity(), fw()->transforms()->viewDirection());
+		m_rf["Main Cloud Normals"]->render(mvMatrix, prMatrix, nmMatrix);
+		for (const auto& cloud : m_rf) {
+			std::string name = cloud.first;
+			if (name != "Main Cloud" && name != "Main Cloud Normals") cloud.second->render(mvMatrix, prMatrix, nmMatrix);
+		}
+	} else {
+		m_rf["Main Cloud"]->render(mvMatrix, prMatrix, nmMatrix);
+		m_rf["Main Cloud Normals"]->render(mvMatrix, prMatrix, nmMatrix);
+		for (const auto& cloud : m_rf) {
+			std::string name = cloud.first;
+			if (name != "Main Cloud" && name != "Main Cloud Normals") cloud.second->render(mvMatrix, prMatrix, nmMatrix);
+		}
 	}
 }
 
@@ -67,6 +78,10 @@ inline void MultiPointCloud::addProperties() {
 }
 
 inline void MultiPointCloud::registerEvents() {
+}
+
+inline bool MultiPointCloud::isHDR() const {
+	return true;
 }
 
 inline void MultiPointCloud::addClouds(const GUI::Property::Paths& paths) {

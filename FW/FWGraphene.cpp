@@ -120,6 +120,7 @@ struct Graphene::Impl {
 		std::map<std::string, EnvMap>             m_envMaps;
 		std::map<std::string, EnvTex>             m_envTextures;
 		std::string                               m_crtMap;
+		float                                     m_specularity;
 };
 
 
@@ -149,7 +150,7 @@ Factory::Ptr Graphene::getFactory(std::string name) {
 /// GRAPHENE IMPL ///
 
 
-Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects, std::string hdrPath) : m_backend(backend), m_eventHandler(eventHandler), m_singleMode(singleMode), m_noEffects(noEffects), m_hdr(false) {
+Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects, std::string hdrPath) : m_backend(backend), m_eventHandler(eventHandler), m_singleMode(singleMode), m_noEffects(noEffects), m_hdr(false), m_specularity(0.f) {
 	backend->setRenderCallback(std::bind(&Graphene::Impl::render, this));
 	backend->setExitCallback(std::bind(&Graphene::Impl::exit, this));
 	backend->setAddVisCallback(std::bind(&Graphene::Impl::addVisualizer, this, std::placeholders::_1, std::placeholders::_2));
@@ -210,6 +211,13 @@ void Graphene::Impl::initTransforms() {
 	exposure->setMax(2.0);
 	exposure->setValue(0.6);
 	exposure->disable();
+	auto specularity = groupHDR->add<Range>("Specularity", "specularity");
+	specularity->setDigits(2);
+	specularity->setMin(0.0);
+	specularity->setMax(1.0);
+	specularity->setValue(0.0);
+	specularity->disable();
+	specularity->setCallback([&] (float value) { m_specularity = value; });
 	if (m_envMaps.size()) {
 		auto choiceHDR = groupHDR->add<Choice>("Environment Map", "envMap");
 		for (const auto& m : m_envMaps) {
@@ -370,7 +378,7 @@ void Graphene::Impl::addVisualizer(std::string factoryName, std::string visName)
 	auto vis = getFactory(factoryName)->addVisualizer();
 	if (!vis) return;
 	View::Transforms::WPtr transforms(m_transforms);
-	VisualizerHandle::Ptr fwHandle(new VisualizerHandle(visName, transforms, m_eventHandler, m_camera->getPickRay(), &m_envTextures, m_envTextures.size() ? &m_crtMap : nullptr));
+	VisualizerHandle::Ptr fwHandle(new VisualizerHandle(visName, transforms, m_eventHandler, m_camera->getPickRay(), &m_envTextures, m_envTextures.size() ? &m_crtMap : nullptr, &m_specularity));
 	auto guiHandle = m_backend->addVisualizer(visName);
 	if (!guiHandle) return;
 	vis->setHandles(fwHandle, guiHandle);
@@ -381,6 +389,7 @@ void Graphene::Impl::addVisualizer(std::string factoryName, std::string visName)
 		if (!m_hdr) {
 			auto main = m_backend->getMainSettings();
 			main->get<Range>({"groupHDR", "exposure"})->enable();
+			main->get<Range>({"groupHDR", "specularity"})->enable();
 		}
 		m_hdr = true;
 	}
@@ -407,6 +416,7 @@ void Graphene::Impl::removeVisualizer(std::string visName) {
 	if (!m_hdr) {
 		auto main = m_backend->getMainSettings();
 		main->get<Range>({"groupHDR", "exposure"})->disable();
+		main->get<Range>({"groupHDR", "specularity"})->disable();
 	}
 }
 

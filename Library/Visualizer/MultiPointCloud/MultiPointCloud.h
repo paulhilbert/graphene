@@ -45,6 +45,8 @@ class MultiPointCloud : virtual public Visualizer {
 		void addProperties();
 		void registerEvents();
 
+		virtual bool isHDR() const;
+
 	protected:
 		void    addClouds(const GUI::Property::Paths& paths);
 //		RC::Ptr addCloud(std::string name, RGBA color, const std::vector<Vector3f>& points, bool visible = true);
@@ -54,7 +56,7 @@ class MultiPointCloud : virtual public Visualizer {
 		void    removeField(std::string name);
 		void    exportCloud(const fs::path& path);
 		void    resample();
-	
+
 	protected:
 		GUI::Property::Paths     m_paths;
 		Cloud::Ptr               m_cloud;
