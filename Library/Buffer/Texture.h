@@ -23,12 +23,17 @@ class Texture {
 		void bind();
 		static void unbind();
 
+		void bindToRenderbuffer(GLuint attachment);
+
+		GLuint id() const;
+
 	protected:
 		void load(GLenum iformat, int width, int height, GLfloat *pixels);
 		void load(GLenum iformat, int width, int height, GLubyte *pixels);
 
 	protected:
 		GLuint m_id;
+		bool   m_boundToRB;
 };
 
 #include "Texture.inl"

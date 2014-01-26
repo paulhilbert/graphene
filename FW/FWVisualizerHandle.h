@@ -51,7 +51,7 @@ class VisualizerHandle {
 		friend class Graphene;
 
 	protected:
-		VisualizerHandle(std::string id, View::Transforms::WPtr transforms, Events::EventHandler::Ptr eventHandler, Geometry::Ray::Ptr pickRay, std::map<std::string, EnvTex>* envMaps, std::string* crtMap, float* specularity);
+		VisualizerHandle(std::string id, View::Transforms::WPtr transforms, Events::EventHandler::Ptr eventHandler, Geometry::Ray::Ptr pickRay);
 
 	public:
 		/**
@@ -85,25 +85,12 @@ class VisualizerHandle {
 		 */
 		Geometry::Ray::Ptr pickRay();
 
-		/**
-		 *  Returns access handle to environment map textures.
-		 */
-		optional<EnvTex> environmentMaps();
-
-		/**
-		 *  Returns selected specularity for IBL
-		 */
-		float specularity() const;
-
 	protected:
 		std::string                     m_id;
 		View::Transforms::WPtr          m_transforms;
 		Events::Handle::Ptr             m_events;
 		Events::Modifier::Ptr           m_modifier;
 		Geometry::Ray::Ptr              m_pickRay;
-		std::map<std::string, EnvTex>*  m_envMaps;
-		std::string*                    m_crtMap;
-		float*                          m_specularity;
 };
 
 } // FW

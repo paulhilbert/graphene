@@ -103,6 +103,11 @@ void ShaderProgram::setUniformMat4(const GLchar* name, const float* values) {
 	glUniformMatrix4fv(location, 1, false, values);
 }
 
+void ShaderProgram::setTexture(const GLchar* name, int unit) {
+	//setUniformVar1i(name, (int)texture->id());
+	setUniformVar1i(name, unit);
+}
+
 bool ShaderProgram::isLinked() {
 	return static_cast<bool>(m_linkStatus != 0);
 }

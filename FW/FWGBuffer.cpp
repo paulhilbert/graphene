@@ -25,20 +25,20 @@ void GBuffer::init(int width, int height) {
 	glGenFramebuffers(1, &m_fbo);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
 
-	glGenTextures(NUM_TEX, m_tex);
-	glGenTextures(1, &m_depth);
+	m_position = Texture::Ptr(new Texture(GL_RGB32F, width, height, (GLfloat*)nullptr));
+	m_position->setFiltering(GL_NEAREST);
+	m_position->bindToRenderbuffer(GL_COLOR_ATTACHMENT0);
 
-	for (unsigned int i=0; i < NUM_TEX; ++i) {
-		glBindTexture(GL_TEXTURE_2D, m_tex[i]);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, m_tex[i], 0);
-	}
+	m_color = Texture::Ptr(new Texture(GL_RGBA32F, width, height, (GLfloat*)nullptr));
+	m_color->setFiltering(GL_NEAREST);
+	m_color->bindToRenderbuffer(GL_COLOR_ATTACHMENT1);
 
-	glBindTexture(GL_TEXTURE_2D, m_depth);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_depth, 0);
+	m_normal = Texture::Ptr(new Texture(GL_RGB32F, width, height, (GLfloat*)nullptr));
+	m_normal->setFiltering(GL_NEAREST);
+	m_normal->bindToRenderbuffer(GL_COLOR_ATTACHMENT2);
+
+	m_depth = Texture::Ptr(new Texture(GL_DEPTH_COMPONENT32F, width, height, (GLfloat*)nullptr));
+	m_depth->bindToRenderbuffer(GL_DEPTH_ATTACHMENT);
 
 	GLenum buffers[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
 	glDrawBuffers(3, buffers);
@@ -55,33 +55,56 @@ bool GBuffer::initialized() const {
 	return m_initialized;
 }
 
+GLuint GBuffer::framebuffer() {
+	return m_fbo;
+}
+
+Texture::Ptr GBuffer::position() {
+	return m_position;
+}
+
+Texture::Ptr GBuffer::color() {
+	return m_color;
+}
+
+Texture::Ptr GBuffer::normal() {
+	return m_normal;
+}
+
 void GBuffer::bindWrite() {
 	if (!m_initialized) throw std::runtime_error("Trying to bind uninitialized GBuffer");
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
 }
 
-void GBuffer::bindRead() {
+void GBuffer::bindRead(Texture::Ptr diffuse, Texture::Ptr specular) {
 	if (!m_initialized) throw std::runtime_error("Trying to bind uninitialized GBuffer");
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	for (unsigned int i = 0 ; i < NUM_TEX; i++) {
-		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, m_tex[i]);
-	}
+	glActiveTexture(GL_TEXTURE0);
+	m_position->bind();
+	glActiveTexture(GL_TEXTURE1);
+	m_color->bind();
+	glActiveTexture(GL_TEXTURE2);
+	m_normal->bind();
+	glActiveTexture(GL_TEXTURE3);
+	diffuse->bind();
+	glActiveTexture(GL_TEXTURE4);
+	specular->bind();
 }
 
 void GBuffer::release() {
 	if (!m_initialized) throw std::runtime_error("Trying to release uninitialized GBuffer");
 }
 
-void GBuffer::blitTo(TEX_TYPE tex, GLsizei x, GLsizei y, GLsizei w, GLsizei h) {
-	glReadBuffer(GL_COLOR_ATTACHMENT0 + tex);
+void GBuffer::blitTo(GLuint attachment, GLsizei x, GLsizei y, GLsizei w, GLsizei h) {
+	glReadBuffer(attachment);
 	glBlitFramebuffer(0, 0, m_width, m_height, x, y, w, h, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
 
 void GBuffer::clearBuffers() {
-	glDeleteRenderbuffers(1, &m_depth);
-	glDeleteRenderbuffers(NUM_TEX, m_tex);
-	glDeleteFramebuffers(1, &m_fbo);
+	m_position.reset();
+	m_color.reset();
+	m_normal.reset();
+	m_depth.reset();
 }
 
 } // FW

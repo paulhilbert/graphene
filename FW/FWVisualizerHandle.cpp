@@ -11,7 +11,7 @@
 
 namespace FW {
 
-VisualizerHandle::VisualizerHandle(std::string id, View::Transforms::WPtr transforms, Events::EventHandler::Ptr eventHandler, Geometry::Ray::Ptr pickRay, std::map<std::string, EnvTex>* envMaps, std::string* crtMap, float* specularity) : m_id(id), m_transforms(transforms), m_pickRay(pickRay), m_envMaps(envMaps), m_crtMap(crtMap), m_specularity(specularity) {
+VisualizerHandle::VisualizerHandle(std::string id, View::Transforms::WPtr transforms, Events::EventHandler::Ptr eventHandler, Geometry::Ray::Ptr pickRay) : m_id(id), m_transforms(transforms), m_pickRay(pickRay) {
 	m_events = Events::Handle::Ptr(new Events::Handle(id, eventHandler));
 	m_modifier = eventHandler->modifier();
 }
@@ -33,15 +33,6 @@ Events::Modifier::Ptr VisualizerHandle::modifier() {
 
 Geometry::Ray::Ptr VisualizerHandle::pickRay() {
 	return m_pickRay;
-}
-
-optional<EnvTex> VisualizerHandle::environmentMaps() {
-	if (!m_crtMap || !m_envMaps->size()) return none;
-	return (*m_envMaps)[*m_crtMap];
-}
-
-float VisualizerHandle::specularity() const {
-	return *m_specularity;
 }
 
 } // FW

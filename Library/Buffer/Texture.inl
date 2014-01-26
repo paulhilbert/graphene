@@ -2,7 +2,7 @@ inline Texture::Texture() : m_id(0) {
 	glGenTextures(1, &m_id);
 }
 
-inline Texture::Texture(GLenum iformat, int width, int height, GLfloat *pixels) : m_id(0) {
+inline Texture::Texture(GLenum iformat, int width, int height, GLfloat *pixels) : m_id(0), m_boundToRB(false) {
 	glGenTextures(1, &m_id);
 	bind();
 	load(iformat, width, height, pixels);
@@ -15,6 +15,7 @@ inline Texture::Texture(GLenum iformat, int width, int height, GLubyte *pixels) 
 }
 
 inline Texture::~Texture() {
+	if (m_boundToRB) glDeleteRenderbuffers(1, &m_id);
 	glDeleteTextures(1, &m_id);
 }
 
@@ -32,16 +33,25 @@ inline void Texture::unbind() {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+inline void Texture::bindToRenderbuffer(GLuint attachment) {
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, attachment, GL_TEXTURE_2D, m_id, 0);
+	m_boundToRB = true;
+}
+
+inline GLuint Texture::id() const {
+	return m_id;
+}
+
 inline void Texture::load(GLenum iformat, int width, int height, GLfloat *pixels) {
 	GLenum format;
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-	if (iformat == GL_RGB16F_ARB || iformat == GL_RGB32F_ARB) {
+	if (iformat == GL_RGB16F || iformat == GL_RGB32F) {
 		format = GL_RGB;
 	}
-	else if (iformat == GL_RGBA16F_ARB || iformat == GL_RGB32F_ARB) {
+	else if (iformat == GL_RGBA16F || iformat == GL_RGBA32F) {
 		format = GL_RGBA;
 	}
 	else if (iformat == GL_RGBA8 || iformat == GL_RGBA || iformat == 4) {
@@ -56,8 +66,8 @@ inline void Texture::load(GLenum iformat, int width, int height, GLfloat *pixels
 	else if (iformat == GL_LUMINANCE8 || iformat == GL_LUMINANCE || iformat == 1) {
 		format = GL_LUMINANCE;
 	}
-	else if (iformat == GL_DEPTH_COMPONENT || iformat == GL_DEPTH_COMPONENT16_ARB || 
-		iformat == GL_DEPTH_COMPONENT24_ARB || iformat == GL_DEPTH_COMPONENT32_ARB) {
+	else if (iformat == GL_DEPTH_COMPONENT || iformat == GL_DEPTH_COMPONENT16 || 
+		iformat == GL_DEPTH_COMPONENT24 || iformat == GL_DEPTH_COMPONENT32 || iformat == GL_DEPTH_COMPONENT32F) {
 		format = GL_DEPTH_COMPONENT;
 	}
 	else {

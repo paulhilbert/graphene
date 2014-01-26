@@ -3,6 +3,8 @@
 
 #include <memory>
 #include <include/ogl.h>
+#include <Library/Buffer/Texture.h>
+using Buffer::Texture;
 
 namespace FW {
 
@@ -13,13 +15,6 @@ class GBuffer {
 		typedef std::shared_ptr<const GBuffer>  ConstPtr;
 		typedef std::weak_ptr<const GBuffer>    ConstWPtr;
 
-		enum TEX_TYPE {
-			TEX_POSITION,
-			TEX_COLOR,
-			TEX_NORMAL,
-			NUM_TEX
-		};
-
 	public:
 		GBuffer();
 		GBuffer(int width, int height);
@@ -29,11 +24,16 @@ class GBuffer {
 
 		bool initialized() const;
 
+		GLuint       framebuffer();
+		Texture::Ptr position();
+		Texture::Ptr color();
+		Texture::Ptr normal();
+
 		void bindWrite();
-		void bindRead();
+		void bindRead(Texture::Ptr diffuse, Texture::Ptr specular);
 		void release();
 
-		void blitTo(TEX_TYPE tex, GLsizei x, GLsizei y, GLsizei w, GLsizei h);
+		void blitTo(GLuint attachment, GLsizei x, GLsizei y, GLsizei w, GLsizei h);
 
 	protected:
 		void clearBuffers();
@@ -44,8 +44,10 @@ class GBuffer {
 		bool  m_initialized;
 
 		GLuint  m_fbo;
-		GLuint  m_tex[NUM_TEX];
-		GLuint  m_depth;
+		Texture::Ptr m_position;
+		Texture::Ptr m_color;
+		Texture::Ptr m_normal;
+		Texture::Ptr m_depth;
 };
 
 

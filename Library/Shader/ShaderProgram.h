@@ -20,6 +20,8 @@ using boost::optional;
 using boost::none;
 
 #include "Shader.h"
+#include "../Buffer/Texture.h"
+using Buffer::Texture;
 
 namespace Shader {
 
@@ -55,7 +57,8 @@ class ShaderProgram {
 		void setUniformMat2(const GLchar* name, const float* values);
 		void setUniformMat3(const GLchar* name, const float* values);
 		void setUniformMat4(const GLchar* name, const float* values);
-		
+		void setTexture(const GLchar* name, int unit);
+
 		bool isLinked();
 
 	protected:

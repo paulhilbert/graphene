@@ -20,21 +20,21 @@ out vec4 fragColor;
 const float pi = 3.14159265358979;
 const float piInv = 0.318309886183791;
 
-const vec4 ambient = vec4(0.2, 0.2, 0.2, 1.0);
-
 vec2 dirToUV(in vec3 dir);
 vec4 toneMap(in vec4 col, in float exposure);
 
 void main(void) {
-	vec3 pos = texture2D(mapPos, tc);
-	vec3 col = texture2D(mapCol, tc);
-	vec3 nrm = texture2D(mapNrm, tc);
+	vec3 pos = texture2D(mapPos, tc).xyz;
+	vec4 diffCol = texture2D(mapCol, tc);
+	vec3 nrm = texture2D(mapNrm, tc).xyz;
 
 	vec3 refl = normalize(reflect(normalize(pos-camPos), nrm));
 	vec4 diff = texture2D(mapDiff, dirToUV(nrm));
+	vec4 ambient = 0.3 * diff;
 	vec4 spec = texture2D(mapSpec, dirToUV(refl));
 
-	fragmentColor.rgb = (ambient + diff) * (col.xyz, 1.f) + specularity * spec;
+	vec4 fragmentColor;
+	fragmentColor = (ambient + diff) * diffCol + specularity * spec;
 	fragmentColor.a = 1.f;
 
 	fragColor = toneMap(fragmentColor, exposure);
