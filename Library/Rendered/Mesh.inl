@@ -1,5 +1,5 @@
 template <class MeshType>
-Mesh<MeshType>::Mesh(MeshPtr mesh, Shader::ShaderProgram::Ptr program, bool smoothNormals, bool allowSwitching) : m_mesh(mesh), m_program(program), m_smooth(smoothNormals), m_allowSwitching(allowSwitching) {
+Mesh<MeshType>::Mesh(MeshPtr mesh, bool smoothNormals, bool allowSwitching) : m_mesh(mesh), m_smooth(smoothNormals), m_allowSwitching(allowSwitching) {
 	m_geometry = GeometryPtr(new Buffer::Geometry());
 	m_geometry->init();
 	init();
@@ -9,9 +9,6 @@ Mesh<MeshType>::Mesh(MeshPtr mesh, Shader::ShaderProgram::Ptr program, bool smoo
 	m_geometry->enableNormals();
 	m_geometry->enableColors();
 	m_geometry->enableIndices();
-	m_geometry->bindVertices(*m_program, "position");
-	m_geometry->bindNormals(*m_program, "normal");
-	m_geometry->bindColors(*m_program, "color");
 }
 
 template <class MeshType>
@@ -19,7 +16,10 @@ Mesh<MeshType>::~Mesh() {
 }
 
 template <class MeshType>
-void Mesh<MeshType>::render() {
+void Mesh<MeshType>::render(ShaderProgram& program) {
+	m_geometry->bindVertices(program, "position");
+	m_geometry->bindNormals(program, "normal");
+	m_geometry->bindColors(program, "color");
 	m_geometry->bind();
 	glDrawElements(GL_TRIANGLES, 3*Traits::numFaces(*m_mesh), GL_UNSIGNED_INT, nullptr);
 	m_geometry->release();
@@ -38,7 +38,7 @@ void Mesh<MeshType>::setSmoothNormals(bool smoothNormals) {
 template <class MeshType>
 void Mesh<MeshType>::init() {
 	auto faces = Traits::faces(*m_mesh);
-	
+
 	if (m_smooth || m_allowSwitching) { // init smooth vertices
 		auto points = Traits::vertices(*m_mesh);
 		m_smoothVertices.resize(points.size());
@@ -59,7 +59,7 @@ void Mesh<MeshType>::init() {
 			}
 		}
 	}
-	
+
 	if (!m_smooth || m_allowSwitching) { // init flat vertices
 		m_flatVertices.resize(faces.size()*3);
 		m_flatNormals.resize(faces.size()*3);

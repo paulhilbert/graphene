@@ -36,12 +36,10 @@ class Mesh {
 		 *  Constructor.
 		 *
 		 *  @param filePath Path to mesh file.
-		 *  @param program Shared pointer to shader program used by visualizer.
-		 *  Should define in vec3 position, in vec3 normal and in vec4 color
 		 *  @param smoothNormals Smoothly interpolate normals per fragment
 		 *  @param If true keeps both representations in order to allow switching later
 		 */
-		Mesh(MeshPtr mesh, ShaderProgram::Ptr program, bool smoothNormals, bool allowSwitching = true);
+		Mesh(MeshPtr mesh, bool smoothNormals, bool allowSwitching = true);
 
 		/** @internal ~Mesh()
 		 *
@@ -50,7 +48,7 @@ class Mesh {
 		virtual ~Mesh();
 
 		/** Renders mesh */
-		void render();
+		void render(ShaderProgram& program);
 
 		/**
 		 *  Changes normal interpolation mode.
@@ -74,7 +72,6 @@ class Mesh {
 
 	protected:
 		MeshPtr             m_mesh;
-		ShaderProgram::Ptr  m_program;
 		bool                m_smooth;
 		bool                m_allowSwitching;
 		GeometryPtr         m_geometry;

@@ -14,40 +14,13 @@ inline void SingleMesh::init() {
 	}
 	gui()->log()->info("Loaded mesh with "+lexical_cast<std::string>(Traits::numVertices(*m_mesh))+" vertices and "+lexical_cast<std::string>(Traits::numFaces(*m_mesh))+" faces.");
 
-	m_program = std::make_shared<ShaderProgram>();
-	m_program->addShaders(std::string(GLSL_PREFIX)+"mesh.vert", std::string(GLSL_PREFIX)+"mesh.frag");
-	m_program->link();
-	Eigen::Vector3f lightDir(1.f, 1.f, 1.f);
-	lightDir.normalize();
-	m_program->use();
-	m_program->setUniformVec3("lightDir", lightDir.data());
-
-	m_rm = std::make_shared<Rendered::Mesh<Mesh>>(m_mesh, m_program, false);
+	m_rm = std::make_shared<Rendered::Mesh<Mesh>>(m_mesh, false);
 
 	registerEvents();
 }
 
-inline void SingleMesh::render() {
-	m_program->use();
-	
-	bool clipping = gui()->modes()->group("showGroup")->option("showClip")->active();
-	if (clipping) {
-		Eigen::Vector3f clipNormal = Eigen::Vector3f(0, 0, 1);
-		m_program->setUniformVec3("clipNormal", clipNormal.data());
-		m_program->setUniformVar1f("clipDistance", m_clippingHeight);
-		glEnable(GL_CLIP_DISTANCE0);
-	}
-	glEnable(GL_DEPTH_TEST);
-	
-	m_program->setUniformMat4("mvM", fw()->transforms()->modelview().data());
-	m_program->setUniformMat4("prM", fw()->transforms()->projection().data());
-	m_program->setUniformMat3("nmM", fw()->transforms()->normal().data());
-	m_rm->render();
-	
-	glDisable(GL_DEPTH_TEST);
-	if (clipping) {
-		glDisable(GL_CLIP_DISTANCE0);
-	}
+inline void SingleMesh::render(ShaderProgram& program) {
+	m_rm->render(program);
 }
 
 inline void SingleMesh::addProperties() {

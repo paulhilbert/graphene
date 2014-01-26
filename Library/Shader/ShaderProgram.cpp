@@ -21,7 +21,7 @@ void ShaderProgram::addShaders(std::string vertexShader, std::string fragmentSha
 	if (geometryShader != "") addShader(GShaderPtr(GeometryShader::fromFile(geometryShader)));
 }
 
-void ShaderProgram::link() {
+void ShaderProgram::link(optional<std::map<int, std::string>> outputMap) {
 	// create program
 	m_ref = glCreateProgram();
 	// attach shaders
@@ -29,6 +29,11 @@ void ShaderProgram::link() {
 	glAttachShader(m_ref, m_fShader->getReference());
 	if (m_gShader) glAttachShader(m_ref, m_gShader->getReference());
 	// link
+	if (outputMap) {
+		for (const auto& p : outputMap.get()) {
+			glBindFragDataLocation(m_ref, p.first, p.second.c_str());
+		}
+	}
 	glLinkProgram(m_ref);
 	glGetProgramiv(m_ref, GL_LINK_STATUS, &m_linkStatus);
 	printProgramInfoLog();

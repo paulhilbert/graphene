@@ -22,6 +22,8 @@
 #include <FW/View/ViewTransforms.h>
 using namespace FW::View;
 
+#include "FWGBuffer.h"
+
 #include <FW/FWVisualizer.h>
 
 
@@ -69,8 +71,6 @@ struct Graphene::Impl {
 		void         removeVisualizer(std::string visName);
 
 		void         render();
-		void         renderTonemap();
-		void         renderBlur(float ratio);
 
 #ifdef ENABLE_SCREENCAST
 		void startScreencast(fs::path outputFile);
@@ -110,12 +110,8 @@ struct Graphene::Impl {
 		GUI::Status::Ptr                          m_status;
 #endif // ENABLE_SCREENCAST
 
-		std::vector<Buffer::FBO>                  m_fbos;
-		Shader::ShaderProgram                     m_gaussH;
-		Shader::ShaderProgram                     m_gaussV;
-		Shader::ShaderProgram                     m_compose;
-		Shader::ShaderProgram                     m_tonemap;
-		Buffer::Geometry                          m_geomQuad;
+		GBuffer                                   m_gbuffer;
+		Shader::ShaderProgram                     m_geomPass;
 
 		std::map<std::string, EnvMap>             m_envMaps;
 		std::map<std::string, EnvTex>             m_envTextures;
@@ -230,107 +226,69 @@ void Graphene::Impl::initTransforms() {
 
 void Graphene::Impl::initEffects() {
 	// properties
-	auto main = m_backend->getMainSettings();
-	auto group = main->add<Section>("Effects", "groupEffects");
-	auto fod = group->add<Group>("Field Of Depth", "groupFOD");
-	auto blur = fod->add<Range>("Blur Ratio", "blur");
-	blur->setDigits(2);
-	blur->setMin(0.f);
-	blur->setMax(1.f);
-	blur->setValue(0.f);
-	auto focalPoint = fod->add<Range>("Focal Point", "focalPoint");
-	focalPoint->setDigits(2);
-	focalPoint->setMin(0.f);
-	focalPoint->setMax(1.f);
-	focalPoint->setValue(0.0f);
-	auto focalArea = fod->add<Range>("Focal Area", "focalArea");
-	focalArea->setDigits(2);
-	focalArea->setMin(0.f);
-	focalArea->setMax(1.f);
-	focalArea->setValue(0.5f);
-	if (m_singleMode) group->collapse();
+	//auto main = m_backend->getMainSettings();
+	//auto group = main->add<Section>("Effects", "groupEffects");
+	//auto fod = group->add<Group>("Field Of Depth", "groupFOD");
+	//auto blur = fod->add<Range>("Blur Ratio", "blur");
+	//blur->setDigits(2);
+	//blur->setMin(0.f);
+	//blur->setMax(1.f);
+	//blur->setValue(0.f);
+	//auto focalPoint = fod->add<Range>("Focal Point", "focalPoint");
+	//focalPoint->setDigits(2);
+	//focalPoint->setMin(0.f);
+	//focalPoint->setMax(1.f);
+	//focalPoint->setValue(0.0f);
+	//auto focalArea = fod->add<Range>("Focal Area", "focalArea");
+	//focalArea->setDigits(2);
+	//focalArea->setMin(0.f);
+	//focalArea->setMax(1.f);
+	//focalArea->setValue(0.5f);
+	//if (m_singleMode) group->collapse();
 
-	// events
-	m_eventHandler->registerReceiver<void (int, int, int, int)>("LEFT_DRAG", "mainapp", [&] (int dx, int dy, int x, int y) {
-		if (! (m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) ) return;
-		float newVal = m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalArea"})->value() + (-0.01f * dy);
-		if (newVal > 1.f) newVal = 1.f;
-		if (newVal < 0.f) newVal = 0.f;
-		m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalArea"})->setValue(newVal);
-	});
-	m_eventHandler->registerReceiver<void (int, int, int, int)>("RIGHT_DRAG", "mainapp", [&] (int dx, int dy, int x, int y) {
-		if (! (m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) ) return;
-		float newVal = m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->value() + (-0.01f * dy);
-		if (newVal > 1.f) newVal = 1.f;
-		if (newVal < 0.f) newVal = 0.f;
-		m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->setValue(newVal);
-	});
+	//// events
+	//m_eventHandler->registerReceiver<void (int, int, int, int)>("LEFT_DRAG", "mainapp", [&] (int dx, int dy, int x, int y) {
+		//if (! (m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) ) return;
+		//float newVal = m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalArea"})->value() + (-0.01f * dy);
+		//if (newVal > 1.f) newVal = 1.f;
+		//if (newVal < 0.f) newVal = 0.f;
+		//m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalArea"})->setValue(newVal);
+	//});
+	//m_eventHandler->registerReceiver<void (int, int, int, int)>("RIGHT_DRAG", "mainapp", [&] (int dx, int dy, int x, int y) {
+		//if (! (m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) ) return;
+		//float newVal = m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->value() + (-0.01f * dy);
+		//if (newVal > 1.f) newVal = 1.f;
+		//if (newVal < 0.f) newVal = 0.f;
+		//m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->setValue(newVal);
+	//});
 
 	// shaders and geometries
-	m_gaussH.addShaders(std::string(GLSL_PREFIX)+"effectsQuad.vert", std::string(GLSL_PREFIX)+"effectsGaussH.frag");
-	m_gaussV.addShaders(std::string(GLSL_PREFIX)+"effectsQuad.vert", std::string(GLSL_PREFIX)+"effectsGaussV.frag");
-	m_compose.addShaders(std::string(GLSL_PREFIX)+"effectsQuad.vert", std::string(GLSL_PREFIX)+"effectsCompose.frag");
-	m_tonemap.addShaders(std::string(GLSL_PREFIX)+"effectsQuad.vert", std::string(GLSL_PREFIX)+"effectsTonemap.frag");
-	m_gaussH.link();
-	m_gaussV.link();
-	m_compose.link();
-	m_tonemap.link();
-	m_compose.use();
-	m_compose.setUniformVar1i("Tex0", 0);
-	m_compose.setUniformVar1i("Tex1", 1);
-	m_compose.setUniformVar1i("Tex2", 2);
-	m_tonemap.use();
-	m_tonemap.setUniformVar1i("Tex0", 0);
-	std::vector<Vector3f> quadVertices;
-	quadVertices.push_back(Vector3f(-1.f, -1.f, 0.f));
-	quadVertices.push_back(Vector3f( 1.f, -1.f, 0.f));
-	quadVertices.push_back(Vector3f( 1.f,  1.f, 0.f));
-	quadVertices.push_back(Vector3f(-1.f,  1.f, 0.f));
-	std::vector<GLuint> quadIndices(6);
-	quadIndices[0] = 0; quadIndices[1] = 1; quadIndices[2] = 2;
-	quadIndices[3] = 0; quadIndices[4] = 2; quadIndices[5] = 3;
-	m_geomQuad.init();
-	m_geomQuad.setVertices(quadVertices);
-	m_geomQuad.setIndices(quadIndices);
-	m_geomQuad.upload();
-	m_geomQuad.enableVertices();
-	m_geomQuad.enableIndices();
-	m_geomQuad.bindVertices(m_gaussH, "position");
-	m_geomQuad.bindVertices(m_gaussV, "position");
-	m_geomQuad.bindVertices(m_compose, "position");
+	m_geomPass.addShaders(std::string(GLSL_PREFIX)+"geomPass.vert", std::string(GLSL_PREFIX)+"geomPass.frag");
+	std::map<int,std::string> outputMap;
+	outputMap[0] = "outPos";
+	outputMap[1] = "outCol";
+	outputMap[2] = "outNrm";
+	m_geomPass.link(outputMap);
 	auto wndSize = m_transforms->viewport().tail(2);
 	updateEffects(wndSize[0], wndSize[1]);
 	m_eventHandler->registerReceiver<void (int width, int height)>("WINDOW_RESIZE", "mainapp", std::bind(&Graphene::Impl::updateEffects, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void Graphene::Impl::updateEffects(int width, int height) {
-	m_fbos.clear();
-	m_fbos.resize(3);
-	m_fbos[0].setSize(width, height);
-	//m_fbos[0].AttachRender(GL_DEPTH_COMPONENT24);
-	m_fbos[0].attachTexture(GL_RGBA32F_ARB);
-	m_fbos[0].attachTexture(GL_DEPTH_COMPONENT24);
-	for (unsigned int i=1; i<3; ++i) {
-		m_fbos[i].setSize(int(width/2), int(height/2));
-		m_fbos[i].attachTexture(GL_RGBA32F_ARB, GL_LINEAR);
-		// clamping to preserve post-pro from blur leaking
-		m_fbos[i].bindTex();
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	}
-	Buffer::FBO::unbind();
-	float weights[9] = {0.0677841f, 0.0954044f, 0.121786f, 0.140999f, 0.148054f, 0.140999f, 0.121786f, 0.0954044f, 0.0677841f};
-	float offsetsH[9], offsetsV[9];
-	for(int i=0; i<9; i++) {
-		offsetsH[i] = (i - 4.0f) / float(width/2.0f);
-		offsetsV[i] = (i - 4.0f) / float(height/2.0f);
-	}
-	m_gaussH.use();
-	m_gaussH.setUniformVar1f("weights", 9, weights);
-	m_gaussH.setUniformVar1f("offsets", 9, offsetsH);
-	m_gaussV.use();
-	m_gaussV.setUniformVar1f("weights", 9, weights);
-	m_gaussV.setUniformVar1f("offsets", 9, offsetsV);
+	m_gbuffer.init(width, height);
+
+	//float weights[9] = {0.0677841f, 0.0954044f, 0.121786f, 0.140999f, 0.148054f, 0.140999f, 0.121786f, 0.0954044f, 0.0677841f};
+	//float offsetsH[9], offsetsV[9];
+	//for(int i=0; i<9; i++) {
+		//offsetsH[i] = (i - 4.0f) / float(width/2.0f);
+		//offsetsV[i] = (i - 4.0f) / float(height/2.0f);
+	//}
+	//m_gaussH.use();
+	//m_gaussH.setUniformVar1f("weights", 9, weights);
+	//m_gaussH.setUniformVar1f("offsets", 9, offsetsH);
+	//m_gaussV.use();
+	//m_gaussV.setUniformVar1f("weights", 9, weights);
+	//m_gaussV.setUniformVar1f("offsets", 9, offsetsV);
 }
 
 int Graphene::Impl::run(int fps) {
@@ -366,7 +324,7 @@ bool Graphene::Impl::hasFactory(std::string name) {
 }
 
 void Graphene::Impl::addVisualizer(std::string factoryName, std::string visName) {
-	if (!m_noEffects && !m_fbos.size()) initEffects();
+	if (!m_noEffects && !m_gbuffer.initialized()) initEffects();
 	if (hasVisualizer(visName)) {
 		m_backend->getLog()->error("Visualizer already exists");
 		return;
@@ -421,39 +379,48 @@ void Graphene::Impl::removeVisualizer(std::string visName) {
 }
 
 void Graphene::Impl::render() {
-	float blur = 0.f;
-	if (!m_noEffects && m_visualizer.size()) {
-		blur = m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "blur"})->value();
-	}
-
-	if (m_hdr || blur > 0.f) {
-		m_fbos[0].bindOutput();
-	}
-
+	if (!m_gbuffer.initialized()) return;
 	Eigen::Vector4f bg = m_backend->getBackgroundColor();
+
+	m_gbuffer.bindWrite();
+	m_geomPass.use();
+	m_geomPass.setUniformMat4("mvM", m_transforms->modelview().data());
+	m_geomPass.setUniformMat4("prM", m_transforms->projection().data());
+
 	glClearColor(bg[0], bg[1], bg[2], bg[3]);
+	glDepthMask(GL_TRUE);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
 
 	if (m_singleMode) {
 		for (const auto& vis : m_visualizer) {
 			vis.second->waitForTasks();
-			vis.second->render();
+			vis.second->render(m_geomPass);
 		}
 	} else {
 		auto names = m_backend->getActiveVisualizerNames();
 		for (const auto& name : names) {
 			m_visualizer[name]->waitForTasks();
-			m_visualizer[name]->render();
+			m_visualizer[name]->render(m_geomPass);
 		}
 	}
 
-	if (m_hdr && blur == 0.f) {
-		renderTonemap();
-	}
+	glDepthMask(GL_FALSE);
+	glDisable(GL_DEPTH_TEST);
 
-	if (blur > 0.f) {
-		renderBlur(blur);
-	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	m_gbuffer.bindRead();
+	auto wndSize = m_transforms->viewport().tail(2);
+	GLsizei fw = wndSize[0];
+	GLsizei fh = wndSize[1];
+	GLsizei hw = (GLsizei)(wndSize[0] / 2.f);
+	GLsizei hh = (GLsizei)(wndSize[1] / 2.f);
+	m_gbuffer.blitTo(GBuffer::TEX_POSITION, 0,  0, hw, hh);
+	m_gbuffer.blitTo(GBuffer::TEX_COLOR,    0, hh, hw, fh);
+	m_gbuffer.blitTo(GBuffer::TEX_NORMAL,  hw, hh, fw, fh);
+
 
 #ifdef ENABLE_SCREENCAST
 	if (m_scInfo.recording && !m_scInfo.paused) {
@@ -464,87 +431,6 @@ void Graphene::Impl::render() {
 		m_scInfo.queueMutex.unlock();
 	}
 #endif // ENABLE_SCREENCAST
-}
-
-void Graphene::Impl::renderTonemap() {
-	auto wndSize = m_transforms->viewport().tail(2);
-	auto main = m_backend->getMainSettings();
-	float exposure = main->get<Range>({"groupHDR", "exposure"})->value();
-	glDisable(GL_DEPTH_TEST);
-
-	// compose
-	Buffer::FBO::unbind();
-	glActiveTexture(GL_TEXTURE0);
-	m_fbos[0].bindTex(0);
-	m_tonemap.use();
-	m_tonemap.setUniformVar1f("exposure", exposure);
-	glClear(GL_COLOR_BUFFER_BIT);
-	glViewport(0, 0, wndSize[0], wndSize[1]);
-	m_geomQuad.bind();
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (char *)NULL);
-	m_geomQuad.release();
-
-	glEnable(GL_DEPTH_TEST);
-}
-
-void Graphene::Impl::renderBlur(float ratio) {
-	auto wndSize = m_transforms->viewport().tail(2);
-	auto main = m_backend->getMainSettings();
-	float focalPoint = main->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->value();
-	float focalArea  = main->get<Range>({"groupEffects", "groupFOD", "focalArea"})->value();
-	float exposure   = main->get<Range>({"groupHDR", "exposure"})->value();
-	int ortho = static_cast<int>(m_camera->getOrtho());
-	glDisable(GL_DEPTH_TEST);
-
-	// horizontal gauss
-	m_fbos[1].bindOutput();
-	m_fbos[0].bindTex();
-	m_gaussH.use();
-	glClear(GL_COLOR_BUFFER_BIT);
-	glViewport(0,0, wndSize[0]/2, wndSize[1]/2); // downsampling
-	m_geomQuad.bind();
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (char *)NULL);
-
-	// vertical gauss
-	m_fbos[2].bindOutput();
-	m_fbos[1].bindTex();
-	m_gaussV.use();
-	glClear(GL_COLOR_BUFFER_BIT);
-	// geomQuad still bound here
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (char *)NULL);
-
-	// compose
-	Buffer::FBO::unbind();
-	glActiveTexture(GL_TEXTURE0);
-	m_fbos[0].bindTex(0);
-	glActiveTexture(GL_TEXTURE1);
-	m_fbos[2].bindTex(0);
-	glActiveTexture(GL_TEXTURE2);
-	m_fbos[0].bindTex(1);
-	m_compose.use();
-	m_compose.setUniformVar1i("ortho", ortho);
-	m_compose.setUniformVar1f("ratio", ratio);
-	m_compose.setUniformVar1f("focalPoint", focalPoint);
-	m_compose.setUniformVar1f("focalArea", focalArea);
-	m_compose.setUniformVar1f("near", m_transforms->near());
-	m_compose.setUniformVar1f("far", m_transforms->far());
-	m_compose.setUniformVar1f("exposure", exposure);
-	m_compose.setUniformVar1i("tonemap", static_cast<int>(m_hdr));
-	glClear(GL_COLOR_BUFFER_BIT);
-	glViewport(0, 0, wndSize[0], wndSize[1]);
-	// geomQuad still bound here
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (char *)NULL);
-	m_geomQuad.release();
-
-	glActiveTexture(GL_TEXTURE0);
-	Buffer::Texture::unbind();
-	glActiveTexture(GL_TEXTURE1);
-	Buffer::Texture::unbind();
-	glActiveTexture(GL_TEXTURE2);
-	Buffer::Texture::unbind();
-
-	glEnable(GL_DEPTH_TEST);
-
 }
 
 void Graphene::Impl::modifier(Keys::Modifier mod, bool down) {

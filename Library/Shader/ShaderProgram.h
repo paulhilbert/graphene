@@ -9,9 +9,15 @@
 #define SHADERPROGRAM_H_
 
 #include <iostream>
+#include <map>
 #include <memory>
 #include <vector>
 using std::vector;
+
+#include <boost/optional.hpp>
+#include <boost/none.hpp>
+using boost::optional;
+using boost::none;
 
 #include "Shader.h"
 
@@ -34,7 +40,7 @@ class ShaderProgram {
 		void addShader(std::shared_ptr< Shader<ShaderType> > shader);
 		void addShaders(std::string vertexShader, std::string fragmentShader, std::string geometryShader = "");
 
-		void link();
+		void link(optional<std::map<int, std::string>> outputMap = none);
 		void use();
 
 		void bindAttrib(GLuint pos, const GLchar* name);

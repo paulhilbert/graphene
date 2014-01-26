@@ -25,6 +25,9 @@
 
 #include <GUI/GUIProgressBarPool.h>
 
+#include <Library/Shader/ShaderProgram.h>
+using Shader::ShaderProgram;
+
 namespace FW {
 
 class Graphene;
@@ -73,7 +76,7 @@ class Visualizer {
 
 		/**
 		 *  Returns access handle to framework functionality
-		 *  
+		 *
 		 *  @return Access handle to framework.
 		 *  @see FW::VisualizerHandle
 		 */
@@ -94,8 +97,10 @@ class Visualizer {
 
 		/**
 		 *  Pure virtual method rendering content of inherited visualizers.
+		 *
+		 *  @param program Reference to shader program
 		 */
-		virtual void render() = 0;
+		virtual void render(ShaderProgram& program) = 0;
 
 		/**
 		 *  Virtual method checking whether this visualizer renders HDR.
@@ -129,7 +134,7 @@ class Visualizer {
 		 *  Convenience function for those who don't have initializer list support.
 		 *  Keep in mind that parameter is given as r-value references and std::move'd inside the function.
 		 *  If necessary supply copies.
-		 *  
+		 *
 		 *  @param s0 String to include
 		 */
 		static std::vector<std::string> path(std::string&& s0);
@@ -140,7 +145,7 @@ class Visualizer {
 		 *  Convenience function for those who don't have initializer list support.
 		 *  Keep in mind that parameters are given as r-value references and std::move'd inside the function.
 		 *  If necessary supply copies.
-		 *  
+		 *
 		 *  @param s0 String to include
 		 *  @param s1 String to include
 		 */
@@ -152,7 +157,7 @@ class Visualizer {
 		 *  Convenience function for those who don't have initializer list support.
 		 *  Keep in mind that parameters are given as r-value references and std::move'd inside the function.
 		 *  If necessary supply copies.
-		 *  
+		 *
 		 *  @param s0 String to include
 		 *  @param s1 String to include
 		 *  @param s2 String to include

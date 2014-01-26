@@ -21,7 +21,7 @@ class SingleMesh : virtual public Visualizer {
 		virtual ~SingleMesh();
 
 		void init();
-		void render();
+		void render(ShaderProgram& program);
 		void addProperties();
 		void addModes();
 		void registerEvents();
@@ -30,7 +30,6 @@ class SingleMesh : virtual public Visualizer {
 		fs::path                  m_meshFile;
 		std::shared_ptr<Mesh>     m_mesh;
 		Rendered::Mesh<Mesh>::Ptr m_rm;
-		ShaderProgram::Ptr        m_program;
 
 		float                     m_clippingHeight = 0.f;
 		float                     m_clipRangeMin;
