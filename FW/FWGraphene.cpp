@@ -240,6 +240,11 @@ void Graphene::Impl::initEffects() {
 	blur->setMin(0.f);
 	blur->setMax(1.f);
 	blur->setValue(0.f);
+	auto bloom = fod->add<Range>("Blooming", "bloom");
+	bloom->setDigits(2);
+	bloom->setMin(0.f);
+	bloom->setMax(5.f);
+	bloom->setValue(0.f);
 	auto focalPoint = fod->add<Range>("Focal Point", "focalPoint");
 	focalPoint->setDigits(2);
 	focalPoint->setMin(0.f);
@@ -453,8 +458,10 @@ void Graphene::Impl::renderLightPass() {
 
 	float  exposure = main->get<Range>({"groupHDR", "exposure"})->value();
 	auto   wndSize  = m_transforms->viewport().tail(2);
+	int    ortho = static_cast<int>(m_camera->getOrtho());
 
 	float ratio = main->get<Range>({"groupEffects", "groupFOD", "blur"})->value();
+	float bloom = main->get<Range>({"groupEffects", "groupFOD", "bloom"})->value();
 	float focalPoint = main->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->value();
 	float focalArea = main->get<Range>({"groupEffects", "groupFOD", "focalArea"})->value();
 
@@ -463,9 +470,13 @@ void Graphene::Impl::renderLightPass() {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	m_lightPass.use();
+	m_lightPass.setUniformVar1i("ortho", ortho);
 	m_lightPass.setUniformVar1f("ratio", ratio);
+	m_lightPass.setUniformVar1f("bloom", bloom);
 	m_lightPass.setUniformVar1f("focalPoint", focalPoint);
 	m_lightPass.setUniformVar1f("focalArea", focalArea);
+	m_lightPass.setUniformVar1f("near", m_transforms->near());
+	m_lightPass.setUniformVar1f("far", m_transforms->far());
 	m_lightPass.setUniformVar1f("exposure", exposure);
 	renderFullQuad(wndSize[0], wndSize[1]);
 }

@@ -123,9 +123,18 @@ void GBuffer::bindLightPass(ShaderProgram& program) {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glActiveTexture(GL_TEXTURE0);
 	m_color->bind();
+	glActiveTexture(GL_TEXTURE1);
+	m_depth->bind();
+	glActiveTexture(GL_TEXTURE2);
+	m_blur->bind();
+	glActiveTexture(GL_TEXTURE3);
+	m_bloom->bind();
 
 	program.use();
 	program.setTexture("mapCol", 0);
+	program.setTexture("mapDepth", 1);
+	program.setTexture("mapBlur", 2);
+	program.setTexture("mapBloom", 3);
 }
 
 void GBuffer::bindPostHPass(ShaderProgram& program) {

@@ -6,6 +6,7 @@ const float L_WHITE = 1.5;
 
 uniform int   ortho;
 uniform float ratio;
+uniform float bloom;
 uniform float focalPoint;
 uniform float focalArea;
 uniform float near;
@@ -15,6 +16,7 @@ uniform float exposure;
 uniform sampler2D mapCol;
 uniform sampler2D mapDepth;
 uniform sampler2D mapBlur;
+uniform sampler2D mapBloom;
 
 in vec2 tc;
 out vec4 fragColor;
@@ -23,10 +25,10 @@ out vec4 fragColor;
 vec4 toneMap(in vec4 col, in float exposure);
 
 void main(void) {
-	vec4 diffCol = toneMap(texture2D(mapCol, tc), exposure);
-	vec4 blurCol = toneMap(texture2D(mapBlur, tc), exposure);
+	vec4 diffCol = texture2D(mapCol, tc);
+	vec4 blurCol = texture2D(mapBlur, tc);
+	vec4 bloomCol = texture2D(mapBloom, tc);
 	float depth  = texture2D(mapDepth, tc).r;
-	//vec4 bloomCol = toneMap(texture2D(mapBlur, tc), exposure);
 
 	float z;
 	if (ortho == 0) {
@@ -39,7 +41,7 @@ void main(void) {
 	float blur = abs(z - focalPoint) / focalArea;
 	blur = ratio * clamp(blur, 0.f, 1.f);
 
-	fragColor = (1.f - blur) * diffCol + blur * blurCol;
+	fragColor = toneMap((1.f - blur) * diffCol + blur * blurCol + blur * bloom * (bloomCol * blurCol), exposure);
 }
 
 vec4 toneMap(in vec4 col, in float exposure) {
