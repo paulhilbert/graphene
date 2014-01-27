@@ -61,8 +61,17 @@ void GBuffer::init(int width, int height) {
 	m_depth = Texture::Ptr(new Texture(GL_DEPTH_COMPONENT32F, width, height, (GLfloat*)nullptr));
 	m_depth->bindToRenderbuffer(GL_DEPTH_ATTACHMENT);
 
-	GLenum buffers[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
-	glDrawBuffers(3, buffers);
+	m_blur = Texture::Ptr(new Texture(GL_RGB32F, width, height, (GLfloat*)nullptr));
+	m_blur->bindToRenderbuffer(GL_COLOR_ATTACHMENT3);
+
+	m_bloom = Texture::Ptr(new Texture(GL_RGB32F, width, height, (GLfloat*)nullptr));
+	m_bloom->bindToRenderbuffer(GL_COLOR_ATTACHMENT4);
+
+	m_aux0 = Texture::Ptr(new Texture(GL_RGB32F, width, height, (GLfloat*)nullptr));
+	m_aux0->bindToRenderbuffer(GL_COLOR_ATTACHMENT5);
+
+	m_aux1 = Texture::Ptr(new Texture(GL_RGB32F, width, height, (GLfloat*)nullptr));
+	m_aux1->bindToRenderbuffer(GL_COLOR_ATTACHMENT6);
 
 	auto status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if (status != GL_FRAMEBUFFER_COMPLETE) throw std::runtime_error("Incomplete/incorrect framebuffer setup");
@@ -95,6 +104,9 @@ Texture::Ptr GBuffer::normal() {
 void GBuffer::bindGeomPass(ShaderProgram& program, const Eigen::Vector4f& clearColor, Texture::Ptr diffuse, Texture::Ptr specular) {
 	if (!m_initialized) throw std::runtime_error("Trying to bind uninitialized GBuffer");
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
+	GLenum buffers[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
+	glDrawBuffers(3, buffers);
+
 	clearBuffers(clearColor);
 	glActiveTexture(GL_TEXTURE0);
 	diffuse->bind();
@@ -114,6 +126,35 @@ void GBuffer::bindLightPass(ShaderProgram& program) {
 
 	program.use();
 	program.setTexture("mapCol", 0);
+}
+
+void GBuffer::bindPostHPass(ShaderProgram& program) {
+	if (!m_initialized) throw std::runtime_error("Trying to bind uninitialized GBuffer");
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
+	GLenum buffers[] = {GL_COLOR_ATTACHMENT5, GL_COLOR_ATTACHMENT6};
+	glDrawBuffers(2, buffers);
+
+	glActiveTexture(GL_TEXTURE0);
+	m_color->bind();
+
+	program.use();
+	program.setTexture("mapCol", 0);
+}
+
+void GBuffer::bindPostVPass(ShaderProgram& program) {
+	if (!m_initialized) throw std::runtime_error("Trying to bind uninitialized GBuffer");
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
+	GLenum buffers[] = {GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4};
+	glDrawBuffers(2, buffers);
+
+	glActiveTexture(GL_TEXTURE0);
+	m_aux0->bind();
+	glActiveTexture(GL_TEXTURE1);
+	m_aux1->bind();
+
+	program.use();
+	program.setTexture("mapBlur", 0);
+	program.setTexture("mapBloom", 1);
 }
 
 void GBuffer::release() {

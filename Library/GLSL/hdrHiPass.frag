@@ -1,13 +1,14 @@
 #version 140
 
-uniform sampler2D Tex0;
+uniform sampler2D mapCol;
 
 in vec2 tc;
+
 out vec4 fragColor;
 
 void main(void)
 {
-	vec4 colorMap = texture2D(Tex0, tc);
+	vec4 colorMap = texture2D(mapCol, tc);
 
 //	float Y = dot(vec4(0.30, 0.59, 0.11, 0.0), colorMap);
 //	if (Y > 1.0) {

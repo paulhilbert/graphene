@@ -69,6 +69,7 @@ struct  Graphene::Impl {
 	void         render();
 	void         renderGeometryPass();
 	void         renderLightPass();
+	void         renderPostPass();
 	void         renderFullQuad(int width, int height);
 
 #ifdef ENABLE_SCREENCAST
@@ -111,6 +112,8 @@ struct  Graphene::Impl {
 	GBuffer m_gbuffer;
 	Shader::ShaderProgram m_geomPass;
 	Shader::ShaderProgram m_lightPass;
+	Shader::ShaderProgram m_postHPass;
+	Shader::ShaderProgram m_postVPass;
 	Buffer::Geometry m_geomQuad;
 
 	std::map<std::string, EnvTex> m_envTextures;
@@ -229,41 +232,41 @@ void Graphene::Impl::initTransforms() {
 
 void Graphene::Impl::initEffects() {
 // properties
-// auto main = m_backend->getMainSettings();
-// auto group = main->add<Section>("Effects", "groupEffects");
-// auto fod = group->add<Group>("Field Of Depth", "groupFOD");
-// auto blur = fod->add<Range>("Blur Ratio", "blur");
-// blur->setDigits(2);
-// blur->setMin(0.f);
-// blur->setMax(1.f);
-// blur->setValue(0.f);
-// auto focalPoint = fod->add<Range>("Focal Point", "focalPoint");
-// focalPoint->setDigits(2);
-// focalPoint->setMin(0.f);
-// focalPoint->setMax(1.f);
-// focalPoint->setValue(0.0f);
-// auto focalArea = fod->add<Range>("Focal Area", "focalArea");
-// focalArea->setDigits(2);
-// focalArea->setMin(0.f);
-// focalArea->setMax(1.f);
-// focalArea->setValue(0.5f);
-// if (m_singleMode) group->collapse();
+	auto main = m_backend->getMainSettings();
+	auto group = main->add<Section>("Post Processing", "groupEffects");
+	auto fod = group->add<Group>("Field Of Depth", "groupFOD");
+	auto blur = fod->add<Range>("Blur Ratio", "blur");
+	blur->setDigits(2);
+	blur->setMin(0.f);
+	blur->setMax(1.f);
+	blur->setValue(0.f);
+	auto focalPoint = fod->add<Range>("Focal Point", "focalPoint");
+	focalPoint->setDigits(2);
+	focalPoint->setMin(0.f);
+	focalPoint->setMax(1.f);
+	focalPoint->setValue(0.0f);
+	auto focalArea = fod->add<Range>("Focal Area", "focalArea");
+	focalArea->setDigits(2);
+	focalArea->setMin(0.f);
+	focalArea->setMax(1.f);
+	focalArea->setValue(0.5f);
+	if (m_singleMode) group->collapse();
 
 //// events
-// m_eventHandler->registerReceiver<void (int, int, int, int)>("LEFT_DRAG", "mainapp", [&] (int dx, int dy, int x, int y) {
-	// if (! (m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) ) return;
-	// float newVal = m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalArea"})->value() + (-0.01f * dy);
-	// if (newVal > 1.f) newVal = 1.f;
-	// if (newVal < 0.f) newVal = 0.f;
-	// m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalArea"})->setValue(newVal);
-// });
-// m_eventHandler->registerReceiver<void (int, int, int, int)>("RIGHT_DRAG", "mainapp", [&] (int dx, int dy, int x, int y) {
-	// if (! (m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) ) return;
-	// float newVal = m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->value() + (-0.01f * dy);
-	// if (newVal > 1.f) newVal = 1.f;
-	// if (newVal < 0.f) newVal = 0.f;
-	// m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->setValue(newVal);
-// });
+	m_eventHandler->registerReceiver<void (int, int, int, int)>("LEFT_DRAG", "mainapp", [&] (int dx, int dy, int x, int y) {
+		if (! (m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) ) return;
+		float newVal = m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalArea"})->value() + (-0.01f * dy);
+		if (newVal > 1.f) newVal = 1.f;
+		if (newVal < 0.f) newVal = 0.f;
+		m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalArea"})->setValue(newVal);
+	});
+	m_eventHandler->registerReceiver<void (int, int, int, int)>("RIGHT_DRAG", "mainapp", [&] (int dx, int dy, int x, int y) {
+		if (! (m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) ) return;
+		float newVal = m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->value() + (-0.01f * dy);
+		if (newVal > 1.f) newVal = 1.f;
+		if (newVal < 0.f) newVal = 0.f;
+		m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->setValue(newVal);
+	});
 
 	std::vector<Vector3f>  quadVertices;
 	quadVertices.push_back(Vector3f(-1.f, -1.f, 0.f));
@@ -283,34 +286,43 @@ void Graphene::Impl::initEffects() {
 // shaders and geometries
 	m_geomPass.addShaders(std::string(GLSL_PREFIX) + "geomPass.vert", std::string(GLSL_PREFIX) + "geomPass.frag");
 	m_lightPass.addShaders(std::string(GLSL_PREFIX) + "fullQuad.vert", std::string(GLSL_PREFIX) + "lightPass.frag");
+	m_postHPass.addShaders(std::string(GLSL_PREFIX) + "fullQuad.vert", std::string(GLSL_PREFIX) + "postHPass.frag");
+	m_postVPass.addShaders(std::string(GLSL_PREFIX) + "fullQuad.vert", std::string(GLSL_PREFIX) + "postVPass.frag");
 	std::map<int, std::string>  outputMap;
 	outputMap[0] = "outPos";
 	outputMap[1] = "outCol";
 	outputMap[2] = "outNrm";
 	m_geomPass.link(outputMap);
 	m_lightPass.link();
+	outputMap.clear();
+	outputMap[0] = "blur";
+	outputMap[1] = "bloom";
+	m_postHPass.link(outputMap);
+	m_postVPass.link(outputMap);
 	auto  wndSize = m_transforms->viewport().tail(2);
 	updateEffects(wndSize[0], wndSize[1]);
 	m_eventHandler->registerReceiver<void (int width, int height)>("WINDOW_RESIZE", "mainapp", std::bind(&Graphene::Impl::updateEffects, this, std::placeholders::_1, std::placeholders::_2));
 
 	m_geomQuad.bindVertices(m_lightPass, "position");
+	m_geomQuad.bindVertices(m_postHPass, "position");
+	m_geomQuad.bindVertices(m_postVPass, "position");
 }
 
 void Graphene::Impl::updateEffects(int width, int height) {
 	m_gbuffer.init(width, height);
 
-// float weights[9] = {0.0677841f, 0.0954044f, 0.121786f, 0.140999f, 0.148054f, 0.140999f, 0.121786f, 0.0954044f, 0.0677841f};
-// float offsetsH[9], offsetsV[9];
-// for(int i=0; i<9; i++) {
-	// offsetsH[i] = (i - 4.0f) / float(width/2.0f);
-	// offsetsV[i] = (i - 4.0f) / float(height/2.0f);
-// }
-// m_gaussH.use();
-// m_gaussH.setUniformVar1f("weights", 9, weights);
-// m_gaussH.setUniformVar1f("offsets", 9, offsetsH);
-// m_gaussV.use();
-// m_gaussV.setUniformVar1f("weights", 9, weights);
-// m_gaussV.setUniformVar1f("offsets", 9, offsetsV);
+	float weights[9] = {0.0677841f, 0.0954044f, 0.121786f, 0.140999f, 0.148054f, 0.140999f, 0.121786f, 0.0954044f, 0.0677841f};
+	float offsetsH[9], offsetsV[9];
+	for(int i=0; i<9; i++) {
+		offsetsH[i] = (i - 4.0f) / float(width/2.0f);
+		offsetsV[i] = (i - 4.0f) / float(height/2.0f);
+	}
+	m_postHPass.use();
+	m_postHPass.setUniformVar1f("weights", 9, weights);
+	m_postHPass.setUniformVar1f("offsets", 9, offsetsH);
+	m_postVPass.use();
+	m_postVPass.setUniformVar1f("weights", 9, weights);
+	m_postVPass.setUniformVar1f("offsets", 9, offsetsV);
 }
 
 int Graphene::Impl::run(int fps) {
@@ -383,6 +395,7 @@ void Graphene::Impl::render() {
 	if (!m_gbuffer.initialized()) return;
 
 	renderGeometryPass();
+	renderPostPass();
 	renderLightPass();
 
 
@@ -441,12 +454,36 @@ void Graphene::Impl::renderLightPass() {
 	float  exposure = main->get<Range>({"groupHDR", "exposure"})->value();
 	auto   wndSize  = m_transforms->viewport().tail(2);
 
+	float ratio = main->get<Range>({"groupEffects", "groupFOD", "blur"})->value();
+	float focalPoint = main->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->value();
+	float focalArea = main->get<Range>({"groupEffects", "groupFOD", "focalArea"})->value();
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	m_gbuffer.bindLightPass(m_lightPass);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	m_lightPass.use();
+	m_lightPass.setUniformVar1f("ratio", ratio);
+	m_lightPass.setUniformVar1f("focalPoint", focalPoint);
+	m_lightPass.setUniformVar1f("focalArea", focalArea);
 	m_lightPass.setUniformVar1f("exposure", exposure);
+	renderFullQuad(wndSize[0], wndSize[1]);
+}
+
+void Graphene::Impl::renderPostPass() {
+	auto  wndSize  = m_transforms->viewport().tail(2);
+	m_gbuffer.bindPostHPass(m_postHPass);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	m_postHPass.use();
+	renderFullQuad(wndSize[0], wndSize[1]);
+
+	m_gbuffer.bindPostVPass(m_postVPass);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	m_postVPass.use();
 	renderFullQuad(wndSize[0], wndSize[1]);
 }
 
