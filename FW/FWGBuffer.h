@@ -2,9 +2,16 @@
 #define FWGBUFFER_H_
 
 #include <memory>
+#include <Eigen/Dense>
+
 #include <include/ogl.h>
+#include <include/config.h>
+
 #include <Library/Buffer/Texture.h>
+#include <Library/Buffer/Geometry.h>
+#include <Library/Shader/ShaderProgram.h>
 using Buffer::Texture;
+using Shader::ShaderProgram;
 
 namespace FW {
 
@@ -29,9 +36,11 @@ class GBuffer {
 		Texture::Ptr color();
 		Texture::Ptr normal();
 
-		void bindWrite();
-		void bindRead(Texture::Ptr diffuse, Texture::Ptr specular);
+		void bindWrite(const Eigen::Vector4f& clearColor);
+		void bindRead(ShaderProgram& program, Texture::Ptr diffuse, Texture::Ptr specular);
 		void release();
+
+		void clearBuffers(const Eigen::Vector4f& clearColor);
 
 		void blitTo(GLuint attachment, GLsizei x, GLsizei y, GLsizei w, GLsizei h);
 
@@ -48,8 +57,10 @@ class GBuffer {
 		Texture::Ptr m_color;
 		Texture::Ptr m_normal;
 		Texture::Ptr m_depth;
-};
 
+		ShaderProgram m_clearProg;
+		Buffer::Geometry m_geomQuad;
+};
 
 } // FW
 

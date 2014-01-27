@@ -6,6 +6,27 @@ namespace FW {
 
 
 GBuffer::GBuffer() : m_initialized(false) {
+	m_clearProg.addShaders(std::string(GLSL_PREFIX) + "clearBuffers.vert", std::string(GLSL_PREFIX) + "clearBuffers.frag");
+	std::map<int, std::string>  outputMap;
+	outputMap[0] = "outPos";
+	outputMap[1] = "outCol";
+	outputMap[2] = "outNrm";
+	m_clearProg.link(outputMap);
+
+	std::vector<Vector3f>  quadVertices;
+	quadVertices.push_back(Vector3f(-1.f, -1.f, 0.f));
+	quadVertices.push_back(Vector3f( 1.f, -1.f, 0.f));
+	quadVertices.push_back(Vector3f( 1.f,  1.f, 0.f));
+	quadVertices.push_back(Vector3f(-1.f,  1.f, 0.f));
+	std::vector<GLuint>  quadIndices(6);
+	quadIndices[0] = 0; quadIndices[1] = 1; quadIndices[2] = 2;
+	quadIndices[3] = 0; quadIndices[4] = 2; quadIndices[5] = 3;
+	m_geomQuad.init();
+	m_geomQuad.setVertices(quadVertices);
+	m_geomQuad.setIndices(quadIndices);
+	m_geomQuad.upload();
+	m_geomQuad.enableVertices();
+	m_geomQuad.enableIndices();
 }
 
 GBuffer::GBuffer(int width, int height) : m_initialized(false) {
@@ -71,12 +92,13 @@ Texture::Ptr GBuffer::normal() {
 	return m_normal;
 }
 
-void GBuffer::bindWrite() {
+void GBuffer::bindWrite(const Eigen::Vector4f& clearColor) {
 	if (!m_initialized) throw std::runtime_error("Trying to bind uninitialized GBuffer");
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
+	clearBuffers(clearColor);
 }
 
-void GBuffer::bindRead(Texture::Ptr diffuse, Texture::Ptr specular) {
+void GBuffer::bindRead(ShaderProgram& program, Texture::Ptr diffuse, Texture::Ptr specular) {
 	if (!m_initialized) throw std::runtime_error("Trying to bind uninitialized GBuffer");
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glActiveTexture(GL_TEXTURE0);
@@ -89,10 +111,27 @@ void GBuffer::bindRead(Texture::Ptr diffuse, Texture::Ptr specular) {
 	diffuse->bind();
 	glActiveTexture(GL_TEXTURE4);
 	specular->bind();
+
+	program.use();
+	program.setTexture("mapPos", 0);
+	program.setTexture("mapCol", 1);
+	program.setTexture("mapNrm", 2);
+	program.setTexture("mapDiff", 3);
+	program.setTexture("mapSpec", 4);
 }
 
 void GBuffer::release() {
 	if (!m_initialized) throw std::runtime_error("Trying to release uninitialized GBuffer");
+}
+
+void GBuffer::clearBuffers(const Eigen::Vector4f& clearColor) {
+	m_clearProg.use();
+	m_clearProg.setUniformVec4("clearColor", clearColor.data());
+
+	glViewport(0, 0, m_width, m_height);
+	m_geomQuad.bind();
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (char *)NULL);
+	m_geomQuad.release();
 }
 
 void GBuffer::blitTo(GLuint attachment, GLsizei x, GLsizei y, GLsizei w, GLsizei h) {

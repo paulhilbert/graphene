@@ -47,10 +47,6 @@ struct ScreencastInfo {
 };
 #endif // ENABLE_SCREENCAST
 
-struct EnvMap {
-	Buffer::HdrFile diffuse;
-	Buffer::HdrFile specular;
-};
 
 struct  Graphene::Impl {
 	Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects, std::string hdrPath);
@@ -114,7 +110,6 @@ struct  Graphene::Impl {
 	Shader::ShaderProgram m_lightPass;
 	Buffer::Geometry m_geomQuad;
 
-	std::map<std::string, EnvMap> m_envMaps;
 	std::map<std::string, EnvTex> m_envTextures;
 	std::string m_crtMap;
 };
@@ -212,9 +207,14 @@ void Graphene::Impl::initTransforms() {
 	specularity->setMin(0.0);
 	specularity->setMax(1.0);
 	specularity->setValue(0.0);
-	if (m_envMaps.size()) {
+	auto  refrIndex = groupHDR->add<Range>("Refraction Index", "refrIndex");
+	refrIndex->setDigits(2);
+	refrIndex->setMin(1.0);
+	refrIndex->setMax(4.0);
+	refrIndex->setValue(1.3);
+	if (m_envTextures.size()) {
 		auto  choiceHDR = groupHDR->add<Choice>("Environment Map", "envMap");
-		for (const auto& m : m_envMaps) {
+		for (const auto& m : m_envTextures) {
 			choiceHDR->add(m.first, m.first);
 		}
 		m_crtMap = choiceHDR->value();
@@ -380,14 +380,13 @@ void Graphene::Impl::render() {
 	if (!m_gbuffer.initialized()) return;
 	Eigen::Vector4f  bg = m_backend->getBackgroundColor();
 
-	m_gbuffer.bindWrite();
+	m_gbuffer.bindWrite(bg);
 	m_geomPass.use();
 	m_geomPass.setUniformMat4("mvM", m_transforms->modelview().data());
 	m_geomPass.setUniformMat4("prM", m_transforms->projection().data());
 
-	glClearColor(bg[0], bg[1], bg[2], bg[3]);
 	glDepthMask(GL_TRUE);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 
@@ -410,29 +409,27 @@ void Graphene::Impl::render() {
 	auto   main        = m_backend->getMainSettings();
 	float  exposure    = main->get<Range>({"groupHDR", "exposure"})->value();
 	float  specularity = main->get<Range>({"groupHDR", "specularity"})->value();
+	float  refrIndex   = main->get<Range>({"groupHDR", "refrIndex"})->value();
 
 
-	auto wndSize = m_transforms->viewport().tail(2);
-	auto diff = m_envTextures[m_crtMap].diffuse;
-	auto spec = m_envTextures[m_crtMap].specular;
-	Vector3f camPos = m_camera->getPosition();
+	auto      wndSize = m_transforms->viewport().tail(2);
+	auto      diff    = m_envTextures[m_crtMap].diffuse;
+	auto      spec    = m_envTextures[m_crtMap].specular;
+	Vector3f  camPos  = m_camera->getPosition();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	m_gbuffer.bindRead(diff, spec);
+	m_gbuffer.bindRead(m_lightPass, diff, spec);
 	glClear(GL_COLOR_BUFFER_BIT);
+
 	m_lightPass.use();
 	m_lightPass.setUniformVar1f("exposure", exposure);
 	m_lightPass.setUniformVar1f("specularity", specularity);
+	m_lightPass.setUniformVar1f("refrIndex", refrIndex);
 	m_lightPass.setUniformVec3("camPos", camPos.data());
-	m_lightPass.setTexture("mapPos", 0);
-	m_lightPass.setTexture("mapCol", 1);
-	m_lightPass.setTexture("mapNrm", 2);
-	m_lightPass.setTexture("mapDiff", 3);
-	m_lightPass.setTexture("mapSpec", 4);
 
 	glViewport(0, 0, wndSize[0], wndSize[1]);
 	m_geomQuad.bind();
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (char *)NULL);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (char*)NULL);
 	m_geomQuad.release();
 
 
@@ -492,15 +489,15 @@ void Graphene::Impl::loadHDRMaps(std::string hdrPath) {
 	std::vector<std::string>  maps = Algorithm::setUnion(spec, diff);
 
 	for (const auto& m : maps) {
-		fs::path  pDiff = path / (m + "_diffuse.hdr");
-		fs::path  pSpec = path / (m + "_specular.hdr");
-		EnvMap    envMap;
-		envMap.diffuse.load(pDiff.string());
-		envMap.specular.load(pSpec.string());
+		fs::path         pDiff = path / (m + "_diffuse.hdr");
+		fs::path         pSpec = path / (m + "_specular.hdr");
+		Buffer::HdrFile  diffuse;
+		Buffer::HdrFile  specular;
+		diffuse.load(pDiff.string());
+		specular.load(pSpec.string());
 		EnvTex  envTex;
-		envTex.diffuse   = Buffer::Texture::Ptr(new Buffer::Texture(GL_RGB16F_ARB, envMap.diffuse.width(), envMap.diffuse.height(), envMap.diffuse.data()));
-		envTex.specular  = Buffer::Texture::Ptr(new Buffer::Texture(GL_RGB16F_ARB, envMap.specular.width(), envMap.specular.height(), envMap.specular.data()));
-		m_envMaps[m]     = envMap;
+		envTex.diffuse   = Buffer::Texture::Ptr(new Buffer::Texture(GL_RGB16F_ARB, diffuse.width(), diffuse.height(), diffuse.data()));
+		envTex.specular  = Buffer::Texture::Ptr(new Buffer::Texture(GL_RGB16F_ARB, specular.width(), specular.height(), specular.data()));
 		m_envTextures[m] = envTex;
 	}
 }
