@@ -67,6 +67,9 @@ struct  Graphene::Impl {
 	void         removeVisualizer(std::string visName);
 
 	void         render();
+	void         renderGeometryPass();
+	void         renderLightPass();
+	void         renderFullQuad(int width, int height);
 
 #ifdef ENABLE_SCREENCAST
 	void startScreencast(fs::path outputFile);
@@ -378,8 +381,25 @@ void Graphene::Impl::removeVisualizer(std::string visName) {
 
 void Graphene::Impl::render() {
 	if (!m_gbuffer.initialized()) return;
-	Vector4f  bg          = m_backend->getBackgroundColor();
+
+	renderGeometryPass();
+	renderLightPass();
+
+
+#ifdef ENABLE_SCREENCAST
+	if (m_scInfo.recording && !m_scInfo.paused) {
+		unsigned char* px = new unsigned char[3 * m_scInfo.recWidth * m_scInfo.recHeight];
+		glReadPixels(0, 0, m_scInfo.recWidth, m_scInfo.recHeight, GL_RGB, GL_UNSIGNED_BYTE, (void*)px);
+		m_scInfo.queueMutex.lock();
+		m_scInfo.queue.push(px);
+		m_scInfo.queueMutex.unlock();
+	}
+#endif // ENABLE_SCREENCAST
+}
+
+void Graphene::Impl::renderGeometryPass() {
 	auto      main        = m_backend->getMainSettings();
+	Vector4f  bg          = m_backend->getBackgroundColor();
 	float     specularity = main->get<Range>({"groupHDR", "specularity"})->value();
 	float     refrIndex   = main->get<Range>({"groupHDR", "refrIndex"})->value();
 
@@ -411,12 +431,15 @@ void Graphene::Impl::render() {
 			m_visualizer[name]->render(m_geomPass);
 		}
 	}
+}
+
+void Graphene::Impl::renderLightPass() {
+	auto  main = m_backend->getMainSettings();
 
 	glDepthMask(GL_FALSE);
-	glDisable(GL_DEPTH_TEST);
 
 	float  exposure = main->get<Range>({"groupHDR", "exposure"})->value();
-	auto  wndSize = m_transforms->viewport().tail(2);
+	auto   wndSize  = m_transforms->viewport().tail(2);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	m_gbuffer.bindLightPass(m_lightPass);
@@ -424,22 +447,16 @@ void Graphene::Impl::render() {
 
 	m_lightPass.use();
 	m_lightPass.setUniformVar1f("exposure", exposure);
+	renderFullQuad(wndSize[0], wndSize[1]);
+}
 
-	glViewport(0, 0, wndSize[0], wndSize[1]);
+void Graphene::Impl::renderFullQuad(int width, int height) {
+	glDisable(GL_DEPTH_TEST);
+	glViewport(0, 0, width, height);
 	m_geomQuad.bind();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (char*)NULL);
 	m_geomQuad.release();
-
-
-#ifdef ENABLE_SCREENCAST
-	if (m_scInfo.recording && !m_scInfo.paused) {
-		unsigned char* px = new unsigned char[3 * m_scInfo.recWidth * m_scInfo.recHeight];
-		glReadPixels(0, 0, m_scInfo.recWidth, m_scInfo.recHeight, GL_RGB, GL_UNSIGNED_BYTE, (void*)px);
-		m_scInfo.queueMutex.lock();
-		m_scInfo.queue.push(px);
-		m_scInfo.queueMutex.unlock();
-	}
-#endif // ENABLE_SCREENCAST
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Graphene::Impl::modifier(Keys::Modifier mod, bool down) {
