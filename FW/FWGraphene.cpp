@@ -279,7 +279,7 @@ void Graphene::Impl::initEffects() {
 
 // shaders and geometries
 	m_geomPass.addShaders(std::string(GLSL_PREFIX) + "geomPass.vert", std::string(GLSL_PREFIX) + "geomPass.frag");
-	m_lightPass.addShaders(std::string(GLSL_PREFIX) + "lightPass.vert", std::string(GLSL_PREFIX) + "lightPass.frag");
+	m_lightPass.addShaders(std::string(GLSL_PREFIX) + "fullQuad.vert", std::string(GLSL_PREFIX) + "lightPass.frag");
 	std::map<int, std::string>  outputMap;
 	outputMap[0] = "outPos";
 	outputMap[1] = "outCol";
@@ -378,12 +378,21 @@ void Graphene::Impl::removeVisualizer(std::string visName) {
 
 void Graphene::Impl::render() {
 	if (!m_gbuffer.initialized()) return;
-	Eigen::Vector4f  bg = m_backend->getBackgroundColor();
+	Vector4f  bg          = m_backend->getBackgroundColor();
+	auto      main        = m_backend->getMainSettings();
+	float     specularity = main->get<Range>({"groupHDR", "specularity"})->value();
+	float     refrIndex   = main->get<Range>({"groupHDR", "refrIndex"})->value();
 
-	m_gbuffer.bindWrite(bg);
+	auto      diff        = m_envTextures[m_crtMap].diffuse;
+	auto      spec        = m_envTextures[m_crtMap].specular;
+	Vector3f  viewDir     = (m_camera->getLookAt() - m_camera->getPosition()).normalized();
+	m_gbuffer.bindGeomPass(m_geomPass, bg, diff, spec);
 	m_geomPass.use();
 	m_geomPass.setUniformMat4("mvM", m_transforms->modelview().data());
 	m_geomPass.setUniformMat4("prM", m_transforms->projection().data());
+	m_geomPass.setUniformVar1f("specularity", specularity);
+	m_geomPass.setUniformVar1f("refrIndex", refrIndex);
+	m_geomPass.setUniformVec3("viewDir", viewDir.data());
 
 	glDepthMask(GL_TRUE);
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -406,26 +415,15 @@ void Graphene::Impl::render() {
 	glDepthMask(GL_FALSE);
 	glDisable(GL_DEPTH_TEST);
 
-	auto   main        = m_backend->getMainSettings();
-	float  exposure    = main->get<Range>({"groupHDR", "exposure"})->value();
-	float  specularity = main->get<Range>({"groupHDR", "specularity"})->value();
-	float  refrIndex   = main->get<Range>({"groupHDR", "refrIndex"})->value();
-
-
-	auto      wndSize = m_transforms->viewport().tail(2);
-	auto      diff    = m_envTextures[m_crtMap].diffuse;
-	auto      spec    = m_envTextures[m_crtMap].specular;
-	Vector3f  camPos  = m_camera->getPosition();
+	float  exposure = main->get<Range>({"groupHDR", "exposure"})->value();
+	auto  wndSize = m_transforms->viewport().tail(2);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	m_gbuffer.bindRead(m_lightPass, diff, spec);
+	m_gbuffer.bindLightPass(m_lightPass);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	m_lightPass.use();
 	m_lightPass.setUniformVar1f("exposure", exposure);
-	m_lightPass.setUniformVar1f("specularity", specularity);
-	m_lightPass.setUniformVar1f("refrIndex", refrIndex);
-	m_lightPass.setUniformVec3("camPos", camPos.data());
 
 	glViewport(0, 0, wndSize[0], wndSize[1]);
 	m_geomQuad.bind();

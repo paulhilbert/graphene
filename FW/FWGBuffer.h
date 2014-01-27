@@ -36,8 +36,8 @@ class GBuffer {
 		Texture::Ptr color();
 		Texture::Ptr normal();
 
-		void bindWrite(const Eigen::Vector4f& clearColor);
-		void bindRead(ShaderProgram& program, Texture::Ptr diffuse, Texture::Ptr specular);
+		void bindGeomPass(ShaderProgram& program, const Eigen::Vector4f& clearColor, Texture::Ptr diffuse, Texture::Ptr specular);
+		void bindLightPass(ShaderProgram& program);
 		void release();
 
 		void clearBuffers(const Eigen::Vector4f& clearColor);

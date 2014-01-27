@@ -6,7 +6,7 @@ namespace FW {
 
 
 GBuffer::GBuffer() : m_initialized(false) {
-	m_clearProg.addShaders(std::string(GLSL_PREFIX) + "clearBuffers.vert", std::string(GLSL_PREFIX) + "clearBuffers.frag");
+	m_clearProg.addShaders(std::string(GLSL_PREFIX) + "fullQuad.vert", std::string(GLSL_PREFIX) + "clearBuffers.frag");
 	std::map<int, std::string>  outputMap;
 	outputMap[0] = "outPos";
 	outputMap[1] = "outCol";
@@ -92,32 +92,28 @@ Texture::Ptr GBuffer::normal() {
 	return m_normal;
 }
 
-void GBuffer::bindWrite(const Eigen::Vector4f& clearColor) {
+void GBuffer::bindGeomPass(ShaderProgram& program, const Eigen::Vector4f& clearColor, Texture::Ptr diffuse, Texture::Ptr specular) {
 	if (!m_initialized) throw std::runtime_error("Trying to bind uninitialized GBuffer");
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
 	clearBuffers(clearColor);
-}
-
-void GBuffer::bindRead(ShaderProgram& program, Texture::Ptr diffuse, Texture::Ptr specular) {
-	if (!m_initialized) throw std::runtime_error("Trying to bind uninitialized GBuffer");
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glActiveTexture(GL_TEXTURE0);
-	m_position->bind();
-	glActiveTexture(GL_TEXTURE1);
-	m_color->bind();
-	glActiveTexture(GL_TEXTURE2);
-	m_normal->bind();
-	glActiveTexture(GL_TEXTURE3);
 	diffuse->bind();
-	glActiveTexture(GL_TEXTURE4);
+	glActiveTexture(GL_TEXTURE1);
 	specular->bind();
 
 	program.use();
-	program.setTexture("mapPos", 0);
-	program.setTexture("mapCol", 1);
-	program.setTexture("mapNrm", 2);
-	program.setTexture("mapDiff", 3);
-	program.setTexture("mapSpec", 4);
+	program.setTexture("mapDiff", 0);
+	program.setTexture("mapSpec", 1);
+}
+
+void GBuffer::bindLightPass(ShaderProgram& program) {
+	if (!m_initialized) throw std::runtime_error("Trying to bind uninitialized GBuffer");
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glActiveTexture(GL_TEXTURE0);
+	m_color->bind();
+
+	program.use();
+	program.setTexture("mapCol", 0);
 }
 
 void GBuffer::release() {
