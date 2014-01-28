@@ -32,6 +32,8 @@ using namespace FW::View;
 #include <Library/Buffer/FBO.h>
 #include <Library/Shader/ShaderProgram.h>
 #include <Library/Buffer/Geometry.h>
+#include <Library/Random/RNG.h>
+using Random::RNG;
 
 namespace FW {
 
@@ -69,7 +71,8 @@ struct  Graphene::Impl {
 	void         render();
 	void         renderGeometryPass();
 	void         renderLightPass();
-	void         renderPostPass();
+	void         renderBlurPass();
+	void         renderSSAOPass();
 	void         renderFullQuad(int width, int height);
 
 #ifdef ENABLE_SCREENCAST
@@ -112,8 +115,8 @@ struct  Graphene::Impl {
 	GBuffer m_gbuffer;
 	Shader::ShaderProgram m_geomPass;
 	Shader::ShaderProgram m_lightPass;
-	Shader::ShaderProgram m_postHPass;
-	Shader::ShaderProgram m_postVPass;
+	Shader::ShaderProgram m_blurPass;
+	Shader::ShaderProgram m_ssaoPass;
 	Buffer::Geometry m_geomQuad;
 
 	std::map<std::string, EnvTex> m_envTextures;
@@ -291,8 +294,8 @@ void Graphene::Impl::initEffects() {
 // shaders and geometries
 	m_geomPass.addShaders(std::string(GLSL_PREFIX) + "geomPass.vert", std::string(GLSL_PREFIX) + "geomPass.frag");
 	m_lightPass.addShaders(std::string(GLSL_PREFIX) + "fullQuad.vert", std::string(GLSL_PREFIX) + "lightPass.frag");
-	m_postHPass.addShaders(std::string(GLSL_PREFIX) + "fullQuad.vert", std::string(GLSL_PREFIX) + "postHPass.frag");
-	m_postVPass.addShaders(std::string(GLSL_PREFIX) + "fullQuad.vert", std::string(GLSL_PREFIX) + "postVPass.frag");
+	m_blurPass.addShaders(std::string(GLSL_PREFIX) + "fullQuad.vert", std::string(GLSL_PREFIX) + "blurPass.frag");
+	m_ssaoPass.addShaders(std::string(GLSL_PREFIX) + "fullQuad.vert", std::string(GLSL_PREFIX) + "ssaoPass.frag");
 	std::map<int, std::string>  outputMap;
 	outputMap[0] = "outPos";
 	outputMap[1] = "outCol";
@@ -302,32 +305,84 @@ void Graphene::Impl::initEffects() {
 	outputMap.clear();
 	outputMap[0] = "blur";
 	outputMap[1] = "bloom";
-	m_postHPass.link(outputMap);
-	m_postVPass.link(outputMap);
+	outputMap[2] = "ssao";
+	m_blurPass.link(outputMap);
+	m_ssaoPass.link();
 	auto  wndSize = m_transforms->viewport().tail(2);
 	updateEffects(wndSize[0], wndSize[1]);
 	m_eventHandler->registerReceiver<void (int width, int height)>("WINDOW_RESIZE", "mainapp", std::bind(&Graphene::Impl::updateEffects, this, std::placeholders::_1, std::placeholders::_2));
 
 	m_geomQuad.bindVertices(m_lightPass, "position");
-	m_geomQuad.bindVertices(m_postHPass, "position");
-	m_geomQuad.bindVertices(m_postVPass, "position");
+	m_geomQuad.bindVertices(m_blurPass, "position");
+	m_geomQuad.bindVertices(m_ssaoPass, "position");
 }
 
 void Graphene::Impl::updateEffects(int width, int height) {
 	m_gbuffer.init(width, height);
 
-	float weights[9] = {0.0677841f, 0.0954044f, 0.121786f, 0.140999f, 0.148054f, 0.140999f, 0.121786f, 0.0954044f, 0.0677841f};
-	float offsetsH[9], offsetsV[9];
-	for(int i=0; i<9; i++) {
+	// generate gaussian kernel
+	int kernelWidth = 9;
+	float sigma2 = 4.0f * 4.0f * 2.f;
+	float factor = 1.f / (M_PI*sigma2);
+	float sum = 0.f;
+	float* weights = new float[kernelWidth*kernelWidth];
+	float* offsetsH = new float[kernelWidth];
+	float* offsetsV = new float[kernelWidth];
+	int center = kernelWidth / 2;
+	for(int i=0; i<kernelWidth; i++) {
+		int i2 = (i-center) * (i-center);
+		for(int j=0; j<kernelWidth; j++) {
+			int j2 = (j-center) * (j-center);
+			float w = factor * exp(-(i2+j2) / sigma2);
+			weights[i*kernelWidth + j] = w;
+			sum += w;
+		}
 		offsetsH[i] = (i - 4.0f) / float(width/2.0f);
 		offsetsV[i] = (i - 4.0f) / float(height/2.0f);
 	}
-	m_postHPass.use();
-	m_postHPass.setUniformVar1f("weights", 9, weights);
-	m_postHPass.setUniformVar1f("offsets", 9, offsetsH);
-	m_postVPass.use();
-	m_postVPass.setUniformVar1f("weights", 9, weights);
-	m_postVPass.setUniformVar1f("offsets", 9, offsetsV);
+	for(int i=0; i<kernelWidth; i++) {
+		for(int j=0; j<kernelWidth; j++) {
+			weights[i*kernelWidth + j] /= sum;
+		}
+	}
+	m_blurPass.use();
+	m_blurPass.setUniformVar1f("weights", kernelWidth*kernelWidth, weights);
+	m_blurPass.setUniformVar1f("offsetsH", kernelWidth, offsetsH);
+	m_blurPass.setUniformVar1f("offsetsV", kernelWidth, offsetsV);
+
+	delete [] weights;
+	delete [] offsetsH;
+	delete [] offsetsV;
+
+	// generate noise and random kernels for SSAO
+	int numSamples = 12;
+	auto gen = RNG::uniform01Gen<float>();
+	float* samples = new float[12*3];
+	for (int i=0; i<numSamples; ++i) {
+		Vector3f pos(2.f * gen() - 1.f, 2.f * gen() - 1.f, gen());
+		pos.normalize();
+		pos *= gen();
+		samples[i*3+0] = pos[0];
+		samples[i*3+1] = pos[1];
+		samples[i*3+2] = pos[2];
+	}
+	int noiseSize = 4;
+	float* noise = new float[noiseSize*noiseSize*2];
+	for (int i=0; i<noiseSize*noiseSize; ++i) {
+		Vector2f n(2.f * gen() - 1.f, 2.f * gen() - 1.f);
+		n.normalize();
+		noise[i*2+0] = n[0];
+		noise[i*2+1] = n[1];
+	}
+
+	m_ssaoPass.use();
+	m_ssaoPass.setUniformVar1f("samples", numSamples*3, samples);
+	m_ssaoPass.setUniformVar1f("noise", noiseSize*noiseSize*2, noise);
+	m_ssaoPass.setUniformVar1i("width", width);
+	m_ssaoPass.setUniformVar1i("height", height);
+
+	delete [] samples;
+	delete [] noise;
 }
 
 int Graphene::Impl::run(int fps) {
@@ -400,7 +455,8 @@ void Graphene::Impl::render() {
 	if (!m_gbuffer.initialized()) return;
 
 	renderGeometryPass();
-	renderPostPass();
+	renderSSAOPass();
+	renderBlurPass();
 	renderLightPass();
 
 
@@ -481,20 +537,26 @@ void Graphene::Impl::renderLightPass() {
 	renderFullQuad(wndSize[0], wndSize[1]);
 }
 
-void Graphene::Impl::renderPostPass() {
+void Graphene::Impl::renderBlurPass() {
 	auto  wndSize  = m_transforms->viewport().tail(2);
-	m_gbuffer.bindPostHPass(m_postHPass);
+	m_gbuffer.bindBlurPass(m_blurPass);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	m_postHPass.use();
+	m_blurPass.use();
 	renderFullQuad(wndSize[0], wndSize[1]);
+}
 
-	m_gbuffer.bindPostVPass(m_postVPass);
+void Graphene::Impl::renderSSAOPass() {
+	auto  wndSize  = m_transforms->viewport().tail(2);
+	m_gbuffer.bindSSAOPass(m_ssaoPass);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	m_postVPass.use();
+	m_ssaoPass.use();
+	m_ssaoPass.setUniformMat4("mvM", m_transforms->modelview().data());
+	m_ssaoPass.setUniformMat4("prM", m_transforms->projection().data());
+	m_ssaoPass.setUniformMat3("nmM", m_transforms->normal().data());
 	renderFullQuad(wndSize[0], wndSize[1]);
 }
 

@@ -38,8 +38,8 @@ class GBuffer {
 
 		void bindGeomPass(ShaderProgram& program, const Eigen::Vector4f& clearColor, Texture::Ptr diffuse, Texture::Ptr specular);
 		void bindLightPass(ShaderProgram& program);
-		void bindPostHPass(ShaderProgram& program);
-		void bindPostVPass(ShaderProgram& program);
+		void bindBlurPass(ShaderProgram& program);
+		void bindSSAOPass(ShaderProgram& program);
 		void release();
 
 		void clearBuffers(const Eigen::Vector4f& clearColor);
@@ -62,8 +62,8 @@ class GBuffer {
 
 		Texture::Ptr m_blur;
 		Texture::Ptr m_bloom;
-		Texture::Ptr m_aux0;
-		Texture::Ptr m_aux1;
+		Texture::Ptr m_occlusion;
+		Texture::Ptr m_ssao;
 
 		ShaderProgram m_clearProg;
 		Buffer::Geometry m_geomQuad;
