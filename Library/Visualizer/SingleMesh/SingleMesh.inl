@@ -20,10 +20,17 @@ inline void SingleMesh::init() {
 }
 
 inline void SingleMesh::render(ShaderProgram& program) {
+	float spec = gui()->properties()->get<Range>({"material", "specularity"})->value();
+	float refr = gui()->properties()->get<Range>({"material", "refrIndex"})->value();
+	program.setUniformVar1f("specularity", spec);
+	program.setUniformVar1f("refrIndex", refr);
 	m_rm->render(program);
 }
 
 inline void SingleMesh::addProperties() {
+	auto material = gui()->properties()->add<Section>("Material", "material");
+	material->add<Range>("Specularity", "specularity")->setDigits(2).setMin(0.0).setMax(1.0).setValue(0.0);
+	material->add<Range>("Refraction Index", "refrIndex")->setDigits(2).setMin(1.0).setMax(4.0).setValue(1.3);
 }
 
 inline void SingleMesh::addModes() {

@@ -205,22 +205,8 @@ void Graphene::Impl::initTransforms() {
 		groupRender->collapse();
 	}
 
-	auto  groupHDR = main->add<Section>("HDR Rendering", "groupHDR");
-	auto  exposure = groupHDR->add<Range>("Exposure", "exposure");
-	exposure->setDigits(2);
-	exposure->setMin(0.0);
-	exposure->setMax(2.0);
-	exposure->setValue(0.6);
-	auto  specularity = groupHDR->add<Range>("Specularity", "specularity");
-	specularity->setDigits(2);
-	specularity->setMin(0.0);
-	specularity->setMax(1.0);
-	specularity->setValue(0.0);
-	auto  refrIndex = groupHDR->add<Range>("Refraction Index", "refrIndex");
-	refrIndex->setDigits(2);
-	refrIndex->setMin(1.0);
-	refrIndex->setMax(4.0);
-	refrIndex->setValue(1.3);
+	auto  groupHDR = groupRender->add<Section>("Image Based Lighting", "groupHDR");
+	groupHDR->add<Range>("Exposure", "exposure")->setDigits(2).setMin(0.0).setMax(2.0).setValue(0.6);
 	if (m_envTextures.size()) {
 		auto  choiceHDR = groupHDR->add<Choice>("Environment Map", "envMap");
 		for (const auto& m : m_envTextures) {
@@ -231,49 +217,36 @@ void Graphene::Impl::initTransforms() {
 		                          m_crtMap = m;
 									  });
 	}
+
+	auto fod = groupRender->add<Group>("Field Of Depth", "groupFOD");
+	fod->add<Range>("Blur Ratio", "blur")->setDigits(2).setMin(0.f).setMax(1.f).setValue(0.f);
+	fod->add<Range>("Blooming", "bloom")->setDigits(2).setMin(0.f).setMax(5.f).setValue(0.f);
+	fod->add<Range>("Focal Point", "focalPoint")->setDigits(2).setMin(0.f).setMax(1.f).setValue(0.0f);
+	fod->add<Range>("Focal Area", "focalArea")->setDigits(2).setMin(0.f).setMax(1.f).setValue(0.5f);
+
+	auto ssao = groupRender->add<Group>("Screen-Space Ambient Occlusion", "groupSSAO");
+	ssao->add<Range>("Radius", "radius")->setDigits(2).setMin(0.01f).setMax(5.f).setValue(0.5f);
+	ssao->add<Range>("Exponent", "exponent")->setDigits(2).setMin(1).setMax(5).setValue(2);
+	ssao->add<Bool>("Debug", "debug")->setValue(false);
+
+	if (m_singleMode) groupRender->collapse();
 }
 
 void Graphene::Impl::initEffects() {
-// properties
-	auto main = m_backend->getMainSettings();
-	auto group = main->add<Section>("Post Processing", "groupEffects");
-	auto fod = group->add<Group>("Field Of Depth", "groupFOD");
-	auto blur = fod->add<Range>("Blur Ratio", "blur");
-	blur->setDigits(2);
-	blur->setMin(0.f);
-	blur->setMax(1.f);
-	blur->setValue(0.f);
-	auto bloom = fod->add<Range>("Blooming", "bloom");
-	bloom->setDigits(2);
-	bloom->setMin(0.f);
-	bloom->setMax(5.f);
-	bloom->setValue(0.f);
-	auto focalPoint = fod->add<Range>("Focal Point", "focalPoint");
-	focalPoint->setDigits(2);
-	focalPoint->setMin(0.f);
-	focalPoint->setMax(1.f);
-	focalPoint->setValue(0.0f);
-	auto focalArea = fod->add<Range>("Focal Area", "focalArea");
-	focalArea->setDigits(2);
-	focalArea->setMin(0.f);
-	focalArea->setMax(1.f);
-	focalArea->setValue(0.5f);
-	if (m_singleMode) group->collapse();
-
-//// events
+	// events
 	m_eventHandler->registerReceiver<void (int, int, int, int)>("LEFT_DRAG", "mainapp", [&] (int dx, int dy, int x, int y) {
 		if (! (m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) ) return;
-		float newVal = m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalArea"})->value() + (-0.01f * dy);
+		float newVal = m_backend->getMainSettings()->get<Range>({"groupRendering", "groupFOD", "focalArea"})->value() + (-0.01f * dy);
 		if (newVal > 1.f) newVal = 1.f;
 		if (newVal < 0.f) newVal = 0.f;
-		m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalArea"})->setValue(newVal);
+		m_backend->getMainSettings()->get<Range>({"groupRendering", "groupFOD", "focalArea"})->setValue(newVal);
 	});
 	m_eventHandler->registerReceiver<void (int, int, int, int)>("RIGHT_DRAG", "mainapp", [&] (int dx, int dy, int x, int y) {
 		if (! (m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) ) return;
-		float newVal = m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->value() + (-0.01f * dy);
+		float newVal = m_backend->getMainSettings()->get<Range>({"groupRendering", "groupFOD", "focalPoint"})->value() + (-0.01f * dy);
 		if (newVal > 1.f) newVal = 1.f;
 		if (newVal < 0.f) newVal = 0.f;
-		m_backend->getMainSettings()->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->setValue(newVal);
+		m_backend->getMainSettings()->get<Range>({"groupRendering", "groupFOD", "focalPoint"})->setValue(newVal);
 	});
 
 	std::vector<Vector3f>  quadVertices;
@@ -320,6 +293,10 @@ void Graphene::Impl::initEffects() {
 void Graphene::Impl::updateEffects(int width, int height) {
 	m_gbuffer.init(width, height);
 
+	// update view ray
+	float aspect = m_camera->getAspectRatio(width, height);
+	float tanHalfFov = std::tan(m_camera->getFieldOfView() / 2.f);
+
 	// generate gaussian kernel
 	int kernelWidth = 9;
 	float sigma2 = 4.0f * 4.0f * 2.f;
@@ -349,22 +326,22 @@ void Graphene::Impl::updateEffects(int width, int height) {
 	m_blurPass.setUniformVar1f("weights", kernelWidth*kernelWidth, weights);
 	m_blurPass.setUniformVar1f("offsetsH", kernelWidth, offsetsH);
 	m_blurPass.setUniformVar1f("offsetsV", kernelWidth, offsetsV);
+	//m_blurPass.setUniformVar1f("aspectRatio", aspect);
+	//m_blurPass.setUniformVar1f("tanHalfFov", tanHalfFov);
 
 	delete [] weights;
 	delete [] offsetsH;
 	delete [] offsetsV;
 
 	// generate noise and random kernels for SSAO
-	int numSamples = 12;
+	int numSamples = 100;
 	auto gen = RNG::uniform01Gen<float>();
-	float* samples = new float[12*3];
+	Eigen::MatrixXf samples(3, numSamples);
 	for (int i=0; i<numSamples; ++i) {
 		Vector3f pos(2.f * gen() - 1.f, 2.f * gen() - 1.f, gen());
 		pos.normalize();
 		pos *= gen();
-		samples[i*3+0] = pos[0];
-		samples[i*3+1] = pos[1];
-		samples[i*3+2] = pos[2];
+		samples.col(i) = pos;
 	}
 	int noiseSize = 4;
 	float* noise = new float[noiseSize*noiseSize*2];
@@ -376,13 +353,17 @@ void Graphene::Impl::updateEffects(int width, int height) {
 	}
 
 	m_ssaoPass.use();
-	m_ssaoPass.setUniformVar1f("samples", numSamples*3, samples);
+	m_ssaoPass.setUniformVec3("samples", samples.data(), numSamples);
 	m_ssaoPass.setUniformVar1f("noise", noiseSize*noiseSize*2, noise);
-	m_ssaoPass.setUniformVar1i("width", width);
-	m_ssaoPass.setUniformVar1i("height", height);
+	m_ssaoPass.setUniformVar1i("numSamples", numSamples);
+	//m_ssaoPass.setUniformVar1f("aspectRatio", aspect);
+	//m_ssaoPass.setUniformVar1f("tanHalfFov", tanHalfFov);
 
-	delete [] samples;
 	delete [] noise;
+
+	//m_lightPass.use();
+	//m_lightPass.setUniformVar1f("aspectRatio", aspect);
+	//m_lightPass.setUniformVar1f("tanHalfFov", tanHalfFov);
 }
 
 int Graphene::Impl::run(int fps) {
@@ -474,8 +455,6 @@ void Graphene::Impl::render() {
 void Graphene::Impl::renderGeometryPass() {
 	auto      main        = m_backend->getMainSettings();
 	Vector4f  bg          = m_backend->getBackgroundColor();
-	float     specularity = main->get<Range>({"groupHDR", "specularity"})->value();
-	float     refrIndex   = main->get<Range>({"groupHDR", "refrIndex"})->value();
 
 	auto      diff        = m_envTextures[m_crtMap].diffuse;
 	auto      spec        = m_envTextures[m_crtMap].specular;
@@ -484,8 +463,6 @@ void Graphene::Impl::renderGeometryPass() {
 	m_geomPass.use();
 	m_geomPass.setUniformMat4("mvM", m_transforms->modelview().data());
 	m_geomPass.setUniformMat4("prM", m_transforms->projection().data());
-	m_geomPass.setUniformVar1f("specularity", specularity);
-	m_geomPass.setUniformVar1f("refrIndex", refrIndex);
 	m_geomPass.setUniformVec3("viewDir", viewDir.data());
 
 	glDepthMask(GL_TRUE);
@@ -512,14 +489,15 @@ void Graphene::Impl::renderLightPass() {
 
 	glDepthMask(GL_FALSE);
 
-	float  exposure = main->get<Range>({"groupHDR", "exposure"})->value();
+	float  exposure = main->get<Range>({"groupRendering", "groupHDR", "exposure"})->value();
 	auto   wndSize  = m_transforms->viewport().tail(2);
 	int    ortho = static_cast<int>(m_camera->getOrtho());
 
-	float ratio = main->get<Range>({"groupEffects", "groupFOD", "blur"})->value();
-	float bloom = main->get<Range>({"groupEffects", "groupFOD", "bloom"})->value();
-	float focalPoint = main->get<Range>({"groupEffects", "groupFOD", "focalPoint"})->value();
-	float focalArea = main->get<Range>({"groupEffects", "groupFOD", "focalArea"})->value();
+	float ratio = main->get<Range>({"groupRendering", "groupFOD", "blur"})->value();
+	float bloom = main->get<Range>({"groupRendering", "groupFOD", "bloom"})->value();
+	float focalPoint = main->get<Range>({"groupRendering", "groupFOD", "focalPoint"})->value();
+	float focalArea = main->get<Range>({"groupRendering", "groupFOD", "focalArea"})->value();
+	int debugSSAO = main->get<Bool>({"groupRendering", "groupSSAO", "debug"})->value() ? 1 : 0;
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	m_gbuffer.bindLightPass(m_lightPass);
@@ -534,6 +512,7 @@ void Graphene::Impl::renderLightPass() {
 	m_lightPass.setUniformVar1f("near", m_transforms->near());
 	m_lightPass.setUniformVar1f("far", m_transforms->far());
 	m_lightPass.setUniformVar1f("exposure", exposure);
+	m_lightPass.setUniformVar1i("debugSSAO", debugSSAO);
 	renderFullQuad(wndSize[0], wndSize[1]);
 }
 
@@ -543,7 +522,11 @@ void Graphene::Impl::renderBlurPass() {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	auto main = m_backend->getMainSettings();
+	int debugSSAO = main->get<Bool>({"groupRendering", "groupSSAO", "debug"})->value() ? 1 : 0;
+
 	m_blurPass.use();
+	m_blurPass.setUniformVar1i("debugSSAO", debugSSAO);
 	renderFullQuad(wndSize[0], wndSize[1]);
 }
 
@@ -553,10 +536,16 @@ void Graphene::Impl::renderSSAOPass() {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	auto  main = m_backend->getMainSettings();
+	float radius = main->get<Range>({"groupRendering", "groupSSAO", "radius"})->value();
+	float power = main->get<Range>({"groupRendering", "groupSSAO", "exponent"})->value();
+
 	m_ssaoPass.use();
 	m_ssaoPass.setUniformMat4("mvM", m_transforms->modelview().data());
 	m_ssaoPass.setUniformMat4("prM", m_transforms->projection().data());
-	m_ssaoPass.setUniformMat3("nmM", m_transforms->normal().data());
+	//m_ssaoPass.setUniformMat3("nmM", m_transforms->normal().data());
+	m_ssaoPass.setUniformVar1f("radius", radius);
+	m_ssaoPass.setUniformVar1f("power", power);
 	renderFullQuad(wndSize[0], wndSize[1]);
 }
 

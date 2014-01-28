@@ -78,9 +78,9 @@ void ShaderProgram::setUniformVec2(const GLchar* name, const float* values) {
 	glUniform2fv(location, 1, values);
 }
 
-void ShaderProgram::setUniformVec3(const GLchar* name, const float* values) {
+void ShaderProgram::setUniformVec3(const GLchar* name, const float* values, int count) {
 	GLint location = getUniformVarLocation(name);
-	glUniform3fv(location, 1, values);
+	glUniform3fv(location, count, values);
 }
 
 void ShaderProgram::setUniformVec4(const GLchar* name, const float* values) {

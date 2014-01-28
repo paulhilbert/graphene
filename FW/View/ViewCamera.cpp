@@ -77,6 +77,21 @@ Geometry::Ray::Ptr Camera::getPickRay() {
 	return m_pickRay;
 }
 
+float Camera::getAspectRatio() const {
+	auto trans = m_transforms.lock();
+	int w = trans->viewport()[2];
+	int h = trans->viewport()[3];
+	return getAspectRatio(w, h);
+}
+
+float Camera::getAspectRatio(int width, int height) const {
+	return (float)(width > height ? width : height) / (width > height ? height : width);
+}
+
+float Camera::getFieldOfView() const {
+	return 40.f;
+}
+
 void Camera::updatePickRay(int x, int y) {
 	auto trans = m_transforms.lock();
 	Eigen::Vector3f farPoint  = Eigen::unProject( Eigen::Vector3f(static_cast<float>(x), static_cast<float>(y), 1.f), trans->modelview(), trans->projection(), trans->viewport() );
@@ -98,8 +113,8 @@ void Camera::updateTransforms() {
 }
 
 Eigen::Matrix4f Camera::getProjectionMatrix(int w, int h, float near, float far) {
-	float aspect = (float)(w > h ? w : h) / (w > h ? h : w);
-	Eigen::Matrix4f pr = Eigen::perspective(40.f, aspect, near, far);
+	float aspect = getAspectRatio(w, h);
+	Eigen::Matrix4f pr = Eigen::perspective(getFieldOfView(), aspect, near, far);
 	if (m_ortho) {
 		auto trans = m_transforms.lock();
 		Eigen::Vector4f lookAt;

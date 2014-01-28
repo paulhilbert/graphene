@@ -112,6 +112,27 @@ class Camera {
 		 */
 		void updateTransforms();
 
+		/**
+		 *  Get view aspect ratio.
+		 *  Returns aspect ratio of screen dimensions.
+		 */
+		float getAspectRatio() const;
+
+		/**
+		 *  Get view aspect ratio.
+		 *
+		 *  @param width Width of screen.
+		 *  @param height Height of screen.
+		 *  Returns aspect ratio of screen dimensions.
+		 */
+		float getAspectRatio(int width, int height) const;
+
+		/**
+		 *  Get field of view.
+		 *  Returns camera's field of view.
+		 */
+		float getFieldOfView() const;
+
 	protected:
 		void updatePickRay(int x, int y);
 

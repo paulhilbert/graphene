@@ -28,9 +28,9 @@ class Qt5Range : public QObject, public Range {
 		Qt5Range(std::string label, QLabel* labelWidget);
 		virtual ~Qt5Range();
 
-		void setMin(double min);
-		void setMax(double max);
-		void setDigits(int digits);
+		Range& setMin(double min);
+		Range& setMax(double max);
+		Range& setDigits(int digits);
 
 		void show();
 		void hide();

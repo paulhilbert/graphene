@@ -52,7 +52,7 @@ class ShaderProgram {
 		void setUniformVar1i(const GLchar* name, GLsizei count, const int* values);
 		void setUniformVar1b(const GLchar* name, bool value);
 		void setUniformVec2(const GLchar* name, const float* values);
-		void setUniformVec3(const GLchar* name, const float* values);
+		void setUniformVec3(const GLchar* name, const float* values, int count = 1);
 		void setUniformVec4(const GLchar* name, const float* values);
 		void setUniformMat2(const GLchar* name, const float* values);
 		void setUniformMat3(const GLchar* name, const float* values);

@@ -131,7 +131,7 @@ typename PropertyType::Ptr Container::get(const std::vector<std::string>& path) 
 	}
 
 	auto findIt = m_idMap.find(path[0]);
-	if (findIt == m_idMap.end()) throw std::runtime_error("Child does not exist");
+	if (findIt == m_idMap.end()) throw std::runtime_error(std::string("Child \"")+(path[0])+"\" does not exist");
 	auto child = m_children[findIt->second];
 	if (path.size() == 1) {
 		return std::dynamic_pointer_cast<PropertyType>(child);

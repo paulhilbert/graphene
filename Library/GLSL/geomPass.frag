@@ -1,7 +1,7 @@
 #version 330
 
-uniform float specularity;
-uniform float refrIndex;
+uniform float specularity = 0.0;
+uniform float refrIndex = 1.3;
 
 uniform vec3      viewDir;
 uniform sampler2D mapDiff;

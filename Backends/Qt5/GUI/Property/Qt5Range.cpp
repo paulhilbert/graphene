@@ -26,28 +26,31 @@ Qt5Range::Qt5Range(std::string label, QLabel* labelWidget) : Range(label), m_lab
 Qt5Range::~Qt5Range() {
 }
 
-void Qt5Range::setMin(double min) {
+Range& Qt5Range::setMin(double min) {
 	double curValue = value();
 	m_minimum = min;
 	if (m_maximum < min) m_maximum = min;
 	updateSlider();
 	if (curValue < min) setValue(min);
 	updateLabel(value());
+	return *this;
 }
 
-void Qt5Range::setMax(double max) {
+Range& Qt5Range::setMax(double max) {
 	double curValue = value();
 	m_maximum = max;
 	if (m_minimum > max) m_minimum = max;
 	updateSlider();
 	if (curValue > max) setValue(max);
 	updateLabel(value());
+	return *this;
 }
 
-void Qt5Range::setDigits(int digits) {
+Range& Qt5Range::setDigits(int digits) {
 	m_digits = digits;
 	updateSlider();
 	updateLabel(value());
+	return *this;
 }
 
 void Qt5Range::show() {

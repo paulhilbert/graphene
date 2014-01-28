@@ -1,13 +1,17 @@
-#version 140
+#version 330
 
 uniform float weights[9*9];
 uniform float offsetsH[9];
 uniform float offsetsV[9];
+uniform int   debugSSAO = 0;
 
 uniform sampler2D mapCol;
 uniform sampler2D mapOcclusion;
 
-in vec2 tc;
+in VertexData {
+	smooth vec2 tc;
+	noperspective vec3 viewRay;
+} vertexIn;
 
 out vec4 blur;
 out vec4 bloom;
@@ -21,7 +25,7 @@ void main (void) {
 
 	for(i=0; i<9; i++) {
 		for(j=0; j<9; j++) {
-			vec2 coord = tc + vec2(offsetsH[i], offsetsV[j]);
+			vec2 coord = vertexIn.tc + vec2(offsetsH[i], offsetsV[j]);
 			if (coord.x < 0.f || coord.y < 0.f || coord.x >= 1.f || coord.y >= 1.f) continue;
 			vec4 col = texture2D(mapCol, coord);
 			blur += col * weights[i*9+j];
@@ -29,4 +33,5 @@ void main (void) {
 			ssao += texture2D(mapOcclusion, coord) * weights[i*9+j];
 		}
 	}
+	if (debugSSAO != 0) ssao = texture2D(mapOcclusion, vertexIn.tc);
 }

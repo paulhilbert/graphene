@@ -166,13 +166,13 @@ void GBuffer::bindSSAOPass(ShaderProgram& program) {
 	m_position->bind();
 	glActiveTexture(GL_TEXTURE1);
 	m_normal->bind();
-	glActiveTexture(GL_TEXTURE2);
-	m_depth->bind();
+	//glActiveTexture(GL_TEXTURE2);
+	//m_depth->bind();
 
 	program.use();
 	program.setTexture("mapPos", 0);
 	program.setTexture("mapNrm", 1);
-	program.setTexture("mapDepth", 2);
+	//program.setTexture("mapDepth", 2);
 }
 
 void GBuffer::release() {

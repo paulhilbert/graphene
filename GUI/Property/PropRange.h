@@ -65,14 +65,14 @@ class Range : public Base, public Notify<void (double)>, public Value<double>, p
 		 *
 		 *  @param min Minimum value to set.
 		 */
-		virtual void setMin(double min) = 0;
+		virtual Range& setMin(double min) = 0;
 
 		/**
 		 *  Set maximum value choosable.
 		 *
 		 *  @param max Maximum value to set.
 		 */
-		virtual void setMax(double max) = 0;
+		virtual Range& setMax(double max) = 0;
 
 		/**
 		 *  Set number of digits after the period (and therefore precision).
@@ -81,7 +81,7 @@ class Range : public Base, public Notify<void (double)>, public Value<double>, p
 		 *
 		 *  @param digits Number of digits after the period.
 		 */
-		virtual void setDigits(int digits) = 0;
+		virtual Range& setDigits(int digits) = 0;
 };
 
 } // Property
