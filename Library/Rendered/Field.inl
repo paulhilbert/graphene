@@ -13,27 +13,6 @@ inline RenderKernel::RenderKernel() {
 inline RenderKernel::~RenderKernel() {
 }
 
-inline void RenderKernel::init() {
-	this->initShader();
-	m_prog.link();
-}
-
-inline ShaderProgram& RenderKernel::program() {
-	return m_prog;
-}
-
-inline const ShaderProgram& RenderKernel::program() const {
-	return m_prog;
-}
-
-inline ShaderProgram& RenderKernel::programHDR() {
-	return m_progHDR;
-}
-
-inline const ShaderProgram& RenderKernel::programHDR() const {
-	return m_progHDR;
-}
-
 /// ANNOTATION ///
 
 inline Annotation::Annotation(const std::vector<int>& indices, std::string name, Field* field) : m_indices(indices), m_name(name), m_field(field) {
@@ -94,7 +73,6 @@ inline void Annotation::colorize(const ScalarField& field, const CMap&  colorMap
 /// RENDEREDFIELD ///
 
 inline Field::Field(RGBA baseColor, RenderKernel::Ptr kernel) : m_color(baseColor), m_visible(true), m_kernel(kernel) {
-	m_kernel->init();
 }
 
 inline Field::~Field() {
@@ -108,33 +86,56 @@ inline bool Field::getVisible() const {
 	return m_visible;
 }
 
-inline void Field::set(const std::vector<Eigen::Vector3f>& points) {
+inline void Field::set(const std::vector<Eigen::Vector3f>& points, const std::vector<Eigen::Vector3f>* normals, const std::vector<RGBA>* colors) {
 	m_pointCount = static_cast<unsigned int>(points.size());
-	m_colors = Annotation::Colors(m_pointCount, m_color);
+
 	m_geometry.reset();
 	m_geometry = std::shared_ptr<Buffer::Geometry>(new Buffer::Geometry());
 	m_geometry->init();
 	m_geometry->addVertices(points);
+
+	if (normals) {
+		if (normals->size() == m_pointCount) {
+			m_geometry->addNormals(*normals);
+		} else {
+			throw std::runtime_error("Mismatch of point and normal count.");
+		}
+	} else {
+		std::vector<Eigen::Vector3f> nrms(m_pointCount, Eigen::Vector3f::Zero());
+		m_geometry->addNormals(nrms);
+	}
+
+	m_baseColors.clear();
+	if (colors) {
+		if (colors->size() == m_pointCount) {
+			m_baseColors = *colors;
+		} else {
+			throw std::runtime_error("Mismatch of point and color count.");
+		}
+	} else {
+		m_baseColors = std::vector<RGBA>(m_pointCount, m_color);
+	}
+	m_colors = m_baseColors;
 	m_geometry->addColors(m_colors);
+
 	m_geometry->upload();
 	m_geometry->enableVertices();
+	m_geometry->enableNormals();
 	m_geometry->enableColors();
-	m_geometry->bindVertices(m_kernel->program(), "position");
-	m_geometry->bindColors(m_kernel->program(), "color");
 }
 
-inline void Field::render(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix, const Eigen::Matrix3f&) {
+inline void Field::render(ShaderProgram& program) {
 	if (!m_visible || !m_geometry) return;
-	m_kernel->program().use();
-	m_kernel->program().setUniformMat4("mvM", mvMatrix.data());
-	m_kernel->program().setUniformMat4("prM", prMatrix.data());
-	//m_kernel->program().setUniformVec4("color", &m_color[0]);
+	m_geometry->bindVertices(program, "position");
+	m_geometry->bindNormals(program, "normals");
+	m_geometry->bindColors(program, "color");
+	m_geometry->bind();
 
 	// store blend mode and enable blending
-	GLboolean blendEnabled;
-	glGetBooleanv(GL_BLEND, &blendEnabled);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//GLboolean blendEnabled;
+	//glGetBooleanv(GL_BLEND, &blendEnabled);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// render
 	m_geometry->bind();
@@ -142,36 +143,7 @@ inline void Field::render(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f
 	m_geometry->release();
 
 	// restore blend mode
-	if (!blendEnabled) glDisable(GL_BLEND);
-}
-
-inline void Field::renderHDR(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix, const Eigen::Matrix3f&, FW::EnvTex envTex, float specularity, const Eigen::Vector3f& viewDir) {
-	if (!m_visible || !m_geometry) return;
-	m_kernel->programHDR().use();
-	m_kernel->programHDR().setUniformMat4("mvM", mvMatrix.data());
-	m_kernel->programHDR().setUniformMat4("prM", prMatrix.data());
-	m_kernel->programHDR().setUniformVec3("viewDir", viewDir.data());
-	m_kernel->programHDR().setUniformVar1f("specularity", specularity);
-	//m_kernel->program().setUniformVec4("color", &m_color[0]);
-
-	// store blend mode and enable blending
-	GLboolean blendEnabled;
-	glGetBooleanv(GL_BLEND, &blendEnabled);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	glActiveTexture(GL_TEXTURE0);
-	envTex.diffuse->bind();
-	glActiveTexture(GL_TEXTURE1);
-	envTex.specular->bind();
-
-	// render
-	m_geometry->bind();
-	m_kernel->renderElementsHDR(m_pointCount);
-	m_geometry->release();
-
-	// restore blend mode
-	if (!blendEnabled) glDisable(GL_BLEND);
+	//if (!blendEnabled) glDisable(GL_BLEND);
 }
 
 inline Annotation::Ptr Field::operator[](std::string name) {
@@ -221,7 +193,7 @@ inline void Field::removeAnnotation(std::string name) {
 }
 
 inline void Field::clearAnnotations() {
-	for (auto& c : m_colors) c = m_color;
+	for (unsigned int i=0; i<m_colors.size(); ++i) m_colors[i] = m_baseColors.size() ? m_baseColors[i] : m_color;
 	upload();
 	m_annotations.clear();
 }

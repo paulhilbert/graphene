@@ -7,12 +7,18 @@ const float L_WHITE = 1.5;
 uniform int   ortho;
 uniform float ratio;
 uniform float bloom;
+uniform float ssaoFactor;
 uniform float focalPoint;
 uniform float focalArea;
 uniform float near;
 uniform float far;
 uniform float exposure;
 uniform int   debugSSAO = 0;
+
+uniform int ssaoActive;
+uniform int blurActive;
+uniform int bloomActive;
+uniform int fodBloom;
 
 uniform sampler2D mapCol;
 uniform sampler2D mapDepth;
@@ -47,8 +53,12 @@ void main(void) {
 	float blur = abs(z - focalPoint) / focalArea;
 	blur = ratio * clamp(blur, 0.f, 1.f);
 
-	fragColor = toneMap((1.f - blur) * light * diffCol + light * blur * blurCol + light * blur * bloom * (bloomCol * blurCol), exposure);
-	if (debugSSAO != 0) fragColor = vec4(light, light, light, 1.0);
+	float l = (ssaoActive != 0) ? (ssaoFactor*light + (1.0 - ssaoFactor)) : 1.0;
+	float blr = (blurActive != 0) ? blur : 0.0;
+	float blm = (bloomActive != 0 && blurActive != 0) ? (fodBloom != 0 ? bloom * blur : bloom) : 0.0;
+
+	fragColor = toneMap((1.f - blr) * l * diffCol + l * blr * blurCol + l * blm * (bloomCol * blurCol), exposure);
+	if (ssaoActive != 0 && debugSSAO != 0) fragColor = vec4(light, light, light, 1.0);
 }
 
 vec4 toneMap(in vec4 col, in float exposure) {

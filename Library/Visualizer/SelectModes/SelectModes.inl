@@ -97,9 +97,9 @@ inline void SelectModes<Entities, Entity>::init(EntitiesPtr entities) {
 }
 
 template <class Entities, class Entity>
-inline void SelectModes<Entities, Entity>::render() {
-	m_areaSelect->render();
-	m_paintSelect->render();
+inline void SelectModes<Entities, Entity>::render(ShaderProgram& program) {
+	//m_areaSelect->render();
+	//m_paintSelect->render();
 }
 
 template <class Entities, class Entity>

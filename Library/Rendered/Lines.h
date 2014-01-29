@@ -23,7 +23,6 @@ class LineRenderKernel : public RenderKernel {
 		LineRenderKernel(int lineWidth);
 		virtual ~LineRenderKernel();
 
-		void initShader() override;
 		void renderElements(int pointCount) override;
 
 		void setThickness(int thickness);

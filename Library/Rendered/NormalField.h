@@ -1,11 +1,23 @@
 #ifndef NORMALFIELD_H_
 #define NORMALFIELD_H_
 
-#include "Field.h"
+#include <boost/optional.hpp>
+#include <boost/none.hpp>
+using boost::optional;
+using boost::none;
+
+#include <include/common.h>
+
+#include <Library/Colors/Map.h>
+using Colors::RGBA;
+
+#include "../Buffer/Geometry.h"
+#include "../Shader/ShaderProgram.h"
+using Shader::ShaderProgram;
 
 namespace Rendered {
 
-class NormalField : public Field {
+class NormalField {
 	public:
 		typedef std::shared_ptr<NormalField> Ptr;
 		typedef std::weak_ptr<NormalField> WPtr;
@@ -13,15 +25,20 @@ class NormalField : public Field {
 		typedef std::weak_ptr<const NormalField> ConstWPtr;
 
 	public:
-		NormalField(RGBA baseColor, RenderKernel::Ptr kernel);
+		NormalField(RGBA baseColor);
 		virtual ~NormalField();
 
-		void set(const std::vector<Eigen::Vector3f>& points, const std::vector<Eigen::Vector3f>& normals);
-		void render(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix, const Eigen::Matrix3f& nmMatrix);
-		void renderHDR(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix, const Eigen::Matrix3f& nmMatrix, FW::EnvTex envTex, float specularity, const Eigen::Vector3f& viewDir);
+
+		void setVisible(bool visible);
+		bool getVisible() const;
+
+		template <typename Func>
 
 	protected:
-		void set(const std::vector<Eigen::Vector3f>& points) {}
+		RGBA m_color;
+		unsigned int m_pointCount;
+		std::shared_ptr<Buffer::Geometry> m_geometry;
+		bool m_visible;
 };
 
 #include "NormalField.inl"

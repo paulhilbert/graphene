@@ -14,6 +14,11 @@ inline void SingleMesh::init() {
 	}
 	gui()->log()->info("Loaded mesh with "+lexical_cast<std::string>(Traits::numVertices(*m_mesh))+" vertices and "+lexical_cast<std::string>(Traits::numFaces(*m_mesh))+" faces.");
 
+	auto vertices = Traits::vertexPositions(*m_mesh);
+	for (const auto& v : vertices) {
+		m_bbox.extend(v);
+	}
+
 	m_rm = std::make_shared<Rendered::Mesh<Mesh>>(m_mesh, false);
 
 	registerEvents();
@@ -24,7 +29,20 @@ inline void SingleMesh::render(ShaderProgram& program) {
 	float refr = gui()->properties()->get<Range>({"material", "refrIndex"})->value();
 	program.setUniformVar1f("specularity", spec);
 	program.setUniformVar1f("refrIndex", refr);
+
+	bool clipping = gui()->modes()->group("showGroup")->option("showClip")->active();
+	if (clipping) {
+		Eigen::Vector3f clipNormal = Eigen::Vector3f(0, 0, 1);
+		program.setUniformVec3("clipNormal", clipNormal.data());
+		program.setUniformVar1f("clipDistance", m_clippingHeight);
+		glEnable(GL_CLIP_DISTANCE0);
+	}
+
 	m_rm->render(program);
+
+	if (clipping) {
+		glDisable(GL_CLIP_DISTANCE0);
+	}
 }
 
 inline void SingleMesh::addProperties() {
@@ -61,4 +79,8 @@ inline void SingleMesh::registerEvents() {
 		if (m_clippingHeight < m_clipRangeMin) m_clippingHeight = m_clipRangeMin;
 		if (m_clippingHeight > m_clipRangeMax) m_clippingHeight = m_clipRangeMax;
 	});
+}
+
+inline BoundingBox SingleMesh::boundingBox() const {
+	return m_bbox;
 }

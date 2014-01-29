@@ -18,10 +18,8 @@ inline void SinglePointCloud::init() {
 	addClouds(m_paths);
 }
 
-inline void SinglePointCloud::render() {
-	auto optTex = fw()->environmentMaps();
-	if (optTex) m_rendered->renderHDR(fw()->transforms()->modelview(), fw()->transforms()->projection(), fw()->transforms()->normal(), optTex.get(), 0.0f, fw()->transforms()->viewDirection());
-	else m_rendered->render(fw()->transforms()->modelview(), fw()->transforms()->projection(), fw()->transforms()->normal());
+inline void SinglePointCloud::render(ShaderProgram& program) {
+	m_rendered->render(program);
 }
 
 inline void SinglePointCloud::addProperties() {
@@ -55,6 +53,10 @@ inline void SinglePointCloud::addProperties() {
 inline void SinglePointCloud::registerEvents() {
 }
 
+inline BoundingBox SinglePointCloud::boundingBox() const {
+	return m_bbox;
+}
+
 inline void SinglePointCloud::addClouds(const GUI::Property::Paths& paths) {
 	for (const auto& p : paths) {
 		if (!fs::exists(p)) {
@@ -74,6 +76,10 @@ inline void SinglePointCloud::addClouds(const GUI::Property::Paths& paths) {
 	}
 	Tools::adjust(m_cloud, m_upAxis, m_scale, m_recenter);
 	uploadCloud();
+
+	for (const auto& p : *m_cloud) {
+		m_bbox.extend(p.getVector3fMap());
+	}
 }
 
 inline void SinglePointCloud::exportCloud(const fs::path& path) {

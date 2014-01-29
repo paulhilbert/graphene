@@ -42,7 +42,7 @@ class Vectors : public Field {
 		virtual ~Vectors();
 
 		template <class InputIterator>
-		void setFromPCLCloudNormals(InputIterator first, InputIterator last, float factor = 1.f);
+		void setFromPCLCloudNormals(InputIterator first, InputIterator last, std::vector<RGBA>* colors = nullptr, float factor = 1.f);
 };
 
 #include "Vectors.inl"

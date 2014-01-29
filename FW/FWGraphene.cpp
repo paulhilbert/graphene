@@ -219,12 +219,18 @@ void Graphene::Impl::initTransforms() {
 	}
 
 	auto fod = groupRender->add<Group>("Field Of Depth", "groupFOD");
+	fod->add<Bool>("Blur Enabled", "blurEnabled")->setValue(true);
+	fod->add<Bool>("Blooming Enabled", "bloomEnabled")->setValue(true);
+	fod->add<Bool>("Bloom Only Blurred", "fodBloom")->setValue(true);
 	fod->add<Range>("Blur Ratio", "blur")->setDigits(2).setMin(0.f).setMax(1.f).setValue(0.f);
 	fod->add<Range>("Blooming", "bloom")->setDigits(2).setMin(0.f).setMax(5.f).setValue(0.f);
+	fod->add<Range>("Bloom Threshold", "bloomCut")->setDigits(2).setMin(0.f).setMax(2.f).setValue(1.f);
 	fod->add<Range>("Focal Point", "focalPoint")->setDigits(2).setMin(0.f).setMax(1.f).setValue(0.0f);
 	fod->add<Range>("Focal Area", "focalArea")->setDigits(2).setMin(0.f).setMax(1.f).setValue(0.5f);
 
 	auto ssao = groupRender->add<Group>("Screen-Space Ambient Occlusion", "groupSSAO");
+	ssao->add<Bool>("Enabled", "ssaoActive")->setValue(true);
+	ssao->add<Range>("Factor", "ssaoFactor")->setDigits(2).setMin(0.01f).setMax(1.f).setValue(1.f);
 	ssao->add<Range>("Radius", "radius")->setDigits(2).setMin(0.01f).setMax(5.f).setValue(0.5f);
 	ssao->add<Range>("Exponent", "exponent")->setDigits(2).setMin(1).setMax(5).setValue(2);
 	ssao->add<Bool>("Debug", "debug")->setValue(false);
@@ -435,9 +441,48 @@ void Graphene::Impl::removeVisualizer(std::string visName) {
 void Graphene::Impl::render() {
 	if (!m_gbuffer.initialized()) return;
 
+	// determine bounding box
+	BoundingBox bbox;
+	if (m_singleMode) {
+		for (const auto& vis : m_visualizer) {
+			bbox.extend(vis.second->boundingBox());
+		}
+	} else {
+		auto  names = m_backend->getActiveVisualizerNames();
+		for (const auto& name : names) {
+			bbox.extend(m_visualizer[name]->boundingBox());
+		}
+	}
+	float farDist = 0.f, nearDist = std::numeric_limits<float>::max(), dist;
+	Vector3f camPos = m_camera->getPosition();
+	Vector3f camDir = (m_camera->getLookAt() - camPos).normalized();
+	dist = (bbox.corner(BoundingBox::BottomLeftFloor) - camPos).dot(camDir);
+	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	dist = (bbox.corner(BoundingBox::BottomRightFloor) - camPos).dot(camDir);
+	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	dist = (bbox.corner(BoundingBox::TopLeftFloor) - camPos).dot(camDir);
+	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	dist = (bbox.corner(BoundingBox::TopRightFloor) - camPos).dot(camDir);
+	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	dist = (bbox.corner(BoundingBox::BottomLeftCeil) - camPos).dot(camDir);
+	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	dist = (bbox.corner(BoundingBox::BottomRightCeil) - camPos).dot(camDir);
+	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	dist = (bbox.corner(BoundingBox::TopLeftCeil) - camPos).dot(camDir);
+	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	dist = (bbox.corner(BoundingBox::TopRightCeil) - camPos).dot(camDir);
+	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	nearDist = std::max(nearDist, 0.05f);
+	m_camera->setClipping(nearDist, farDist);
+
+	auto main = m_backend->getMainSettings();
+	bool ssaoActive =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value();
+	bool blurActive = main->get<Bool>({"groupRendering", "groupFOD", "blurEnabled"})->value();
+	bool bloomActive = main->get<Bool>({"groupRendering", "groupFOD", "bloomEnabled"})->value();
+
 	renderGeometryPass();
-	renderSSAOPass();
-	renderBlurPass();
+	if (ssaoActive) renderSSAOPass();
+	if (ssaoActive || blurActive)	renderBlurPass();
 	renderLightPass();
 
 
@@ -493,6 +538,12 @@ void Graphene::Impl::renderLightPass() {
 	auto   wndSize  = m_transforms->viewport().tail(2);
 	int    ortho = static_cast<int>(m_camera->getOrtho());
 
+	bool blurActive = main->get<Bool>({"groupRendering", "groupFOD", "blurEnabled"})->value();
+	bool bloomActive = main->get<Bool>({"groupRendering", "groupFOD", "bloomEnabled"})->value();
+	bool fodBloom = main->get<Bool>({"groupRendering", "groupFOD", "fodBloom"})->value();
+	bool ssaoActive =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value();
+	float ssaoFactor =  main->get<Range>({"groupRendering", "groupSSAO", "ssaoFactor"})->value();
+
 	float ratio = main->get<Range>({"groupRendering", "groupFOD", "blur"})->value();
 	float bloom = main->get<Range>({"groupRendering", "groupFOD", "bloom"})->value();
 	float focalPoint = main->get<Range>({"groupRendering", "groupFOD", "focalPoint"})->value();
@@ -507,11 +558,16 @@ void Graphene::Impl::renderLightPass() {
 	m_lightPass.setUniformVar1i("ortho", ortho);
 	m_lightPass.setUniformVar1f("ratio", ratio);
 	m_lightPass.setUniformVar1f("bloom", bloom);
+	m_lightPass.setUniformVar1f("ssaoFactor", ssaoFactor);
 	m_lightPass.setUniformVar1f("focalPoint", focalPoint);
 	m_lightPass.setUniformVar1f("focalArea", focalArea);
 	m_lightPass.setUniformVar1f("near", m_transforms->near());
 	m_lightPass.setUniformVar1f("far", m_transforms->far());
 	m_lightPass.setUniformVar1f("exposure", exposure);
+	m_lightPass.setUniformVar1i("blurActive", blurActive ? 1 : 0);
+	m_lightPass.setUniformVar1i("bloomActive", bloomActive ? 1 : 0);
+	m_lightPass.setUniformVar1i("ssaoActive", ssaoActive ? 1 : 0);
+	m_lightPass.setUniformVar1i("fodBloom", fodBloom ? 1 : 0);
 	m_lightPass.setUniformVar1i("debugSSAO", debugSSAO);
 	renderFullQuad(wndSize[0], wndSize[1]);
 }
@@ -524,9 +580,17 @@ void Graphene::Impl::renderBlurPass() {
 
 	auto main = m_backend->getMainSettings();
 	int debugSSAO = main->get<Bool>({"groupRendering", "groupSSAO", "debug"})->value() ? 1 : 0;
+	float bloomCut = main->get<Range>({"groupRendering", "groupFOD", "bloomCut"})->value();
+	bool ssaoActive =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value();
+	bool blurActive = main->get<Bool>({"groupRendering", "groupFOD", "blurEnabled"})->value();
+	bool bloomActive = main->get<Bool>({"groupRendering", "groupFOD", "bloomEnabled"})->value();
 
 	m_blurPass.use();
+	m_blurPass.setUniformVar1i("ssaoActive", ssaoActive);
+	m_blurPass.setUniformVar1i("blurActive", blurActive);
+	m_blurPass.setUniformVar1i("bloomActive", bloomActive);
 	m_blurPass.setUniformVar1i("debugSSAO", debugSSAO);
+	m_blurPass.setUniformVar1f("bloomCut", bloomCut);
 	renderFullQuad(wndSize[0], wndSize[1]);
 }
 

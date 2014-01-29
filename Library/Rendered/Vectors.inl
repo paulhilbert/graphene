@@ -13,10 +13,6 @@ inline VectorRenderKernel::VectorRenderKernel(int lineWidth) : RenderKernel(), m
 inline VectorRenderKernel::~VectorRenderKernel() {
 }
 
-inline void VectorRenderKernel::initShader() {
-	m_prog.addShaders(std::string(GLSL_PREFIX)+"vectors.vert", std::string(GLSL_PREFIX)+"vectors.frag", std::string(GLSL_PREFIX)+"vectors.geom");
-}
-
 inline void VectorRenderKernel::renderElements(int pointCount) {
 	glLineWidth(m_lineWidth);
 	glDrawArrays(GL_LINES, 0, pointCount);
@@ -36,12 +32,12 @@ inline Vectors::~Vectors() {
 }
 
 template <class InputIterator>
-inline void Vectors::setFromPCLCloudNormals(InputIterator first, InputIterator last, float factor) {
+inline void Vectors::setFromPCLCloudNormals(InputIterator first, InputIterator last, std::vector<RGBA>* colors, float factor) {
 	std::vector<Eigen::Vector3f> normals(2*std::distance(first, last));
 	unsigned int idx=0;
 	for (; first != last; ++first) {
 		normals[idx++] = first->getVector3fMap();
 		normals[idx++] = first->getVector3fMap() + factor * first->getNormalVector3fMap();
 	}
-	this->set(normals);
+	this->set(normals, nullptr, colors);
 }

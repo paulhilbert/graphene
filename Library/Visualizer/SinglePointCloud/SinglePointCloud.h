@@ -34,9 +34,11 @@ class SinglePointCloud : virtual public Visualizer {
 		virtual ~SinglePointCloud();
 
 		void init();
-		void render();
+		void render(ShaderProgram& program);
 		void addProperties();
 		void registerEvents();
+
+		virtual BoundingBox boundingBox() const;
 
 	protected:
 		void addClouds(const GUI::Property::Paths& paths);
@@ -52,6 +54,7 @@ class SinglePointCloud : virtual public Visualizer {
 		std::string              m_upAxis;
 		float                    m_scale;
 		bool                     m_recenter;
+		BoundingBox              m_bbox;
 };
 
 #include "SinglePointCloud.inl"

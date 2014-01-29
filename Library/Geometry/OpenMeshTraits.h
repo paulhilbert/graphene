@@ -40,7 +40,7 @@ struct OpenMeshTraits {
 	// element access
 	static std::vector<VertexId> vertices(const MeshType& mesh);
 	static std::vector<FaceId> faces(const MeshType& mesh);
-	
+
 
 	// element properties
 	static PositionType vertexPosition(const MeshType& mesh, VertexId id);

@@ -13,10 +13,6 @@ inline LineRenderKernel::LineRenderKernel(int lineWidth) : RenderKernel(), m_lin
 inline LineRenderKernel::~LineRenderKernel() {
 }
 
-inline void LineRenderKernel::initShader() {
-	m_prog.addShaders(std::string(GLSL_PREFIX)+"points.vert", std::string(GLSL_PREFIX)+"points.frag");
-}
-
 inline void LineRenderKernel::renderElements(int pointCount) {
 	glLineWidth(m_lineWidth);
 	glDrawArrays(GL_LINES, 0, pointCount);

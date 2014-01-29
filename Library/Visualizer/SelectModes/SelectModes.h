@@ -36,7 +36,7 @@ class SelectModes : virtual public Visualizer {
 		virtual ~SelectModes();
 
 		void init(EntitiesPtr entities);
-		void render();
+		void render(ShaderProgram& program);
 		void addProperties();
 		void registerEvents();
 		void addModes();

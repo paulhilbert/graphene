@@ -9,7 +9,7 @@
 #define RENDEREDCLOUD_H_
 
 #include <include/config.h>
-#include "NormalField.h"
+#include "Field.h"
 
 namespace Rendered {
 
@@ -22,9 +22,7 @@ class CloudRenderKernel : public RenderKernel {
 		CloudRenderKernel(int pointSize);
 		virtual ~CloudRenderKernel();
 
-		void initShader() override;
 		void renderElements(int pointCount) override;
-		void renderElementsHDR(int pointCount) override;
 
 		void setThickness(int thickness);
 
@@ -32,18 +30,18 @@ class CloudRenderKernel : public RenderKernel {
 		int m_pointSize;
 };
 
-class Cloud : public NormalField {
+class Cloud : public Field {
 	public:
 		typedef std::shared_ptr<Cloud> Ptr;
 		typedef std::weak_ptr<Cloud>   WPtr;
-		typedef NormalField Base;
+		typedef Field Base;
 
 	public:
 		Cloud(RGBA baseColor, int pointSize = 2);
 		virtual ~Cloud();
 
 		template <class InputIterator>
-		void setFromPCLCloud(InputIterator first, InputIterator last);
+		void setFromPCLCloud(InputIterator first, InputIterator last, std::vector<RGBA>* colors = nullptr);
 };
 
 #include "Cloud.inl"

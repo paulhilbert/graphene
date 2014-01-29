@@ -26,10 +26,13 @@ class SingleMesh : virtual public Visualizer {
 		void addModes();
 		void registerEvents();
 
+		virtual BoundingBox boundingBox() const;
+
 	protected:
 		fs::path                  m_meshFile;
 		std::shared_ptr<Mesh>     m_mesh;
 		Rendered::Mesh<Mesh>::Ptr m_rm;
+		BoundingBox               m_bbox;
 
 		float                     m_clippingHeight = 0.f;
 		float                     m_clipRangeMin;

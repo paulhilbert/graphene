@@ -28,21 +28,9 @@ class RenderKernel {
 		RenderKernel();
 		virtual ~RenderKernel();
 
-		void init();
-		virtual void initShader() = 0;
 		virtual void renderElements(int pointCount) = 0;
-		virtual void renderElementsHDR(int pointCount) {}
 
 		virtual void setThickness(int thickness) = 0;
-
-		ShaderProgram& program();
-		const ShaderProgram& program() const;
-		ShaderProgram& programHDR();
-		const ShaderProgram& programHDR() const;
-
-	protected:
-		ShaderProgram  m_prog;
-		ShaderProgram  m_progHDR;
 };
 
 class Field;
@@ -95,10 +83,9 @@ class Field {
 		void setVisible(bool visible);
 		bool getVisible() const;
 
-		virtual void set(const std::vector<Eigen::Vector3f>& points);
+		void set(const std::vector<Eigen::Vector3f>& points, const std::vector<Eigen::Vector3f>* normals = nullptr, const std::vector<RGBA>* colors = nullptr);
 
-		virtual void render(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix, const Eigen::Matrix3f& nrmMatrix);
-		virtual void renderHDR(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix, const Eigen::Matrix3f& nrmMatrix, FW::EnvTex envTex, float specularity, const Eigen::Vector3f& viewDir);
+		void render(ShaderProgram& program);
 
 		Annotation::Ptr operator[](std::string name);
 		Annotation::Ptr annotate(const std::vector<int>& indices, std::string name, bool checkIntersections = false);
@@ -122,6 +109,7 @@ class Field {
 		GeometryPtr         m_geometry;
 		unsigned int        m_pointCount;
 		Annotation::Colors  m_colors;
+		Annotation::Colors  m_baseColors;
 		RenderKernel::Ptr   m_kernel;
 };
 

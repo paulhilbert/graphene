@@ -87,6 +87,13 @@ class Camera {
 		bool getOrtho() const;
 
 		/**
+		 *  Set near and far clipping plane distances.
+		 *  @param nearPlane Distance to near plane.
+		 *  @param farPlane Distance to far plane.
+		 */
+		void setClipping(float nearPlane, float farPlane);
+
+		/**
 		 *  Set active camera control.
 		 *  @param control Pointer to class inheriting CameraControl to be used as control mode.
 		 */
@@ -147,6 +154,8 @@ class Camera {
 		Geometry::Ray::Ptr         m_pickRay;
 
 		bool                       m_ortho;
+		float                      m_near;
+		float                      m_far;
 };
 
 } // View

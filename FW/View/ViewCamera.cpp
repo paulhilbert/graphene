@@ -16,7 +16,7 @@
 namespace FW {
 namespace View {
 
-Camera::Camera(CameraControl::Ptr control, Events::EventHandler::Ptr eventHandler, Transforms::WPtr transforms) : m_control(control), m_eventHandler(eventHandler), m_transforms(transforms), m_pickRay(new Geometry::Ray()), m_ortho(false) {
+Camera::Camera(CameraControl::Ptr control, Events::EventHandler::Ptr eventHandler, Transforms::WPtr transforms) : m_control(control), m_eventHandler(eventHandler), m_transforms(transforms), m_pickRay(new Geometry::Ray()), m_ortho(false), m_near(0.1), m_far(400.f) {
 	registerEvents();
 	updateTransforms();
 	updatePickRay(0, 0);
@@ -63,6 +63,12 @@ bool Camera::getOrtho() const {
 	return m_ortho;
 }
 
+void Camera::setClipping(float nearPlane, float farPlane) {
+	m_near = nearPlane;
+	m_far  = farPlane;
+	updateTransforms();
+}
+
 void Camera::setControl(CameraControl::Ptr control) {
 	// move new camera control to current position
 	control->moveTo(m_control);
@@ -100,14 +106,12 @@ void Camera::updatePickRay(int x, int y) {
 }
 
 void Camera::updateTransforms() {
-	float near = 0.1f;
-	float far = 400.f;
 	auto trans = m_transforms.lock();
 	trans->modelview() = m_control->getViewTransformation();
-	trans->projection() = getProjectionMatrix(trans->viewport()[2], trans->viewport()[3], near, far);
+	trans->projection() = getProjectionMatrix(trans->viewport()[2], trans->viewport()[3], m_near, m_far);
 	trans->normal() = trans->modelview().block<3,3>(0,0).inverse().transpose();
-	trans->near() = near;
-	trans->far() = far;
+	trans->near() = m_near;
+	trans->far() = m_far;
 	trans->cameraPosition() = m_control->getPosition();
 	trans->lookAt() = m_control->getLookAt();
 }

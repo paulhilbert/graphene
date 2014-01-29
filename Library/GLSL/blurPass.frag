@@ -3,7 +3,11 @@
 uniform float weights[9*9];
 uniform float offsetsH[9];
 uniform float offsetsV[9];
+uniform int   ssaoActive;
+uniform int   blurActive;
+uniform int   bloomActive;
 uniform int   debugSSAO = 0;
+uniform float bloomCut = 1.0;
 
 uniform sampler2D mapCol;
 uniform sampler2D mapOcclusion;
@@ -28,10 +32,10 @@ void main (void) {
 			vec2 coord = vertexIn.tc + vec2(offsetsH[i], offsetsV[j]);
 			if (coord.x < 0.f || coord.y < 0.f || coord.x >= 1.f || coord.y >= 1.f) continue;
 			vec4 col = texture2D(mapCol, coord);
-			blur += col * weights[i*9+j];
-			bloom += (col.r > 1.0 || col.g > 1.0 || col.b > 1.0) ? col*weights[i*9+j] : vec4(0.0);
-			ssao += texture2D(mapOcclusion, coord) * weights[i*9+j];
+			if (blurActive != 0) blur += col * weights[i*9+j];
+			if (bloomActive != 0 && blurActive != 0) bloom += (col.r > bloomCut || col.g > bloomCut || col.b > bloomCut) ? col*weights[i*9+j] : vec4(0.0);
+			if (ssaoActive != 0) ssao += texture2D(mapOcclusion, coord) * weights[i*9+j];
 		}
 	}
-	if (debugSSAO != 0) ssao = texture2D(mapOcclusion, vertexIn.tc);
+	if (ssaoActive != 0 && debugSSAO != 0) ssao = texture2D(mapOcclusion, vertexIn.tc);
 }

@@ -27,7 +27,7 @@ class PointCloudEditor : public SinglePointCloud, public SelectModes<Cloud, Poin
 		virtual ~PointCloudEditor();
 
 		void init();
-		void render();
+		void render(ShaderProgram& program);
 		void addProperties();
 		void registerEvents();
 

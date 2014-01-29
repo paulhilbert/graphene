@@ -18,9 +18,9 @@ inline void PointCloudEditor::init() {
 	registerEvents();
 }
 
-inline void PointCloudEditor::render() {
-	SinglePointCloud::render();
-	SelectModes::render();
+inline void PointCloudEditor::render(ShaderProgram& program) {
+	SinglePointCloud::render(program);
+	SelectModes::render(program);
 }
 
 inline void PointCloudEditor::addProperties() {

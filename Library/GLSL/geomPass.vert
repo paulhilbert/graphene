@@ -5,7 +5,6 @@ uniform mat4 prM;
 
 uniform vec3 clipNormal;
 uniform float clipDistance;
-uniform int clipping = 0;
 
 in vec3 position;
 in vec3 normal;
@@ -22,7 +21,5 @@ void main(void) {
 	fsCol = color;
 	fsNrm = normal;
 
-	if (clipping != 0) {
-		gl_ClipDistance[0] = -dot(position.xyz, clipNormal) + clipDistance;
-	}
+	gl_ClipDistance[0] = -dot(position.xyz, clipNormal) + clipDistance;
 }

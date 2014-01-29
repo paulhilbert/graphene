@@ -28,9 +28,12 @@
 #include <Library/Shader/ShaderProgram.h>
 using Shader::ShaderProgram;
 
+
 namespace FW {
 
 class Graphene;
+
+typedef Eigen::AlignedBox<float, 3> BoundingBox;
 
 /**
  *  @brief Base class for custom visualizers
@@ -108,6 +111,8 @@ class Visualizer {
 		 *  @return True iff this visualizer renders HDR and therefore needs tonemapping
 		 */
 		virtual bool isHDR() const;
+
+		virtual BoundingBox boundingBox() const = 0;
 
 		/**
 		 *  Execute given function in a separate thread.
