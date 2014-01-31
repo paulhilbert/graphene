@@ -84,9 +84,9 @@ inline void MultiPointCloud::addClouds(const GUI::Property::Paths& paths) {
 	addNormals("Main Cloud Normals", rgbaWhite(), m_cloud, false);
 }
 
-inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA color, Cloud::Ptr cloud, bool visible) {
+inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA color, Cloud::Ptr cloud, bool visible, bool ignoreNormals) {
 	RC::Ptr rc(new RC(color, 1));
-	rc->setFromPCLCloud(cloud->begin(), cloud->end(), nullptr);
+	rc->setFromPCLCloud(cloud->begin(), cloud->end(), nullptr, ignoreNormals);
 	rc->setVisible(visible);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
 	tree->add(name, {name}, visible);
@@ -99,9 +99,9 @@ inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA col
 	return rc;
 }
 
-inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, Cloud::Ptr cloud, std::vector<RGBA>* colors, bool visible) {
+inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, Cloud::Ptr cloud, std::vector<RGBA>* colors, bool visible, bool ignoreNormals) {
 	RC::Ptr rc(new RC(rgbaInvisible(), 1));
-	rc->setFromPCLCloud(cloud->begin(), cloud->end(), colors);
+	rc->setFromPCLCloud(cloud->begin(), cloud->end(), colors, ignoreNormals);
 	rc->setVisible(visible);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
 	tree->add(name, {name}, visible);

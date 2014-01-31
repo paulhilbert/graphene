@@ -49,8 +49,8 @@ class MultiPointCloud : virtual public Visualizer {
 
 	protected:
 		void    addClouds(const GUI::Property::Paths& paths);
-		RC::Ptr addCloud(std::string name, RGBA color, Cloud::Ptr cloud, bool visible = true);
-		RC::Ptr addCloud(std::string name, Cloud::Ptr cloud, std::vector<RGBA>* color, bool visible = true);
+		RC::Ptr addCloud(std::string name, RGBA color, Cloud::Ptr cloud, bool visible = true, bool ignoreNormals = false);
+		RC::Ptr addCloud(std::string name, Cloud::Ptr cloud, std::vector<RGBA>* color, bool visible = true, bool ignoreNormals = false);
 		RV::Ptr addNormals(std::string name, RGBA color, Cloud::Ptr cloud, bool visible = true, float factor = 1.f);
 		RL::Ptr addLines(std::string name, RGBA color, const std::vector<Vector3f>& points, bool visible = true);
 		void    removeField(std::string name);

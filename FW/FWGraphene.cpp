@@ -491,9 +491,9 @@ void Graphene::Impl::render() {
 	m_camera->setClipping(nearDist, farDist);
 
 	auto  main        = m_backend->getMainSettings();
-	bool  ssaoActive  =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value() && main->get<Range>({"groupRendering", "groupSSAO", "ssaoFactor"})->value() > 0.f;
-	bool  blurActive  = main->get<Bool>({"groupRendering", "groupFOD", "blurEnabled"})->value() && main->get<Range>({"groupRendering", "groupFOD", "blur"})->value() > 0.f;
-	bool  bloomActive = main->get<Bool>({"groupRendering", "groupFOD", "bloomEnabled"})->value() && main->get<Range>({"groupRendering", "groupFOD", "bloom"})->value() > 0.f;
+	bool  ssaoActive  =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value();
+	bool  blurActive  = main->get<Bool>({"groupRendering", "groupFOD", "blurEnabled"})->value();
+	bool  bloomActive = main->get<Bool>({"groupRendering", "groupFOD", "bloomEnabled"})->value();
 
 	renderGeometryPass();
 	if (ssaoActive) renderSSAOPass();
@@ -562,10 +562,10 @@ void Graphene::Impl::renderLightPass() {
 	auto   wndSize     = m_transforms->viewport().tail(2);
 	int    ortho       = static_cast<int>(m_camera->getOrtho());
 
-	bool   blurActive  = main->get<Bool>({"groupRendering", "groupFOD", "blurEnabled"})->value() && main->get<Range>({"groupRendering", "groupFOD", "blur"})->value() > 0.f;
-	bool   bloomActive = main->get<Bool>({"groupRendering", "groupFOD", "bloomEnabled"})->value() && main->get<Range>({"groupRendering", "groupFOD", "bloom"})->value() > 0.f;
+	bool   blurActive  = main->get<Bool>({"groupRendering", "groupFOD", "blurEnabled"})->value();
+	bool   bloomActive = main->get<Bool>({"groupRendering", "groupFOD", "bloomEnabled"})->value();
 	bool   fodBloom    = main->get<Bool>({"groupRendering", "groupFOD", "fodBloom"})->value();
-	bool   ssaoActive  =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value() && main->get<Range>({"groupRendering", "groupSSAO", "ssaoFactor"})->value() > 0.f;
+	bool   ssaoActive  =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value();
 	float  ssaoFactor  =  main->get<Range>({"groupRendering", "groupSSAO", "ssaoFactor"})->value();
 
 	float  ratio       = main->get<Range>({"groupRendering", "groupFOD", "blur"})->value();
@@ -610,9 +610,9 @@ void Graphene::Impl::renderBlurPass() {
 
 	auto   main        = m_backend->getMainSettings();
 	float  bloomCut    = main->get<Range>({"groupRendering", "groupFOD", "bloomCut"})->value();
-	bool   ssaoActive  =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value() && main->get<Range>({"groupRendering", "groupSSAO", "ssaoFactor"})->value() > 0.f;
-	bool   blurActive  = main->get<Bool>({"groupRendering", "groupFOD", "blurEnabled"})->value() && main->get<Range>({"groupRendering", "groupFOD", "blur"})->value() > 0.f;
-	bool   bloomActive = main->get<Bool>({"groupRendering", "groupFOD", "bloomEnabled"})->value() && main->get<Range>({"groupRendering", "groupFOD", "bloom"})->value() > 0.f;
+	bool   ssaoActive  =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value();
+	bool   blurActive  = main->get<Bool>({"groupRendering", "groupFOD", "blurEnabled"})->value();
+	bool   bloomActive = main->get<Bool>({"groupRendering", "groupFOD", "bloomEnabled"})->value();
 #ifdef DEBUG_SHADER
 	int    debugSSAO   = main->get<Bool>({"groupRendering", "debug", "debugSSAO"})->value() ? 1 : 0;
 #endif

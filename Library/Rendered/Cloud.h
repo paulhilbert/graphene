@@ -41,7 +41,7 @@ class Cloud : public Field {
 		virtual ~Cloud();
 
 		template <class InputIterator>
-		void setFromPCLCloud(InputIterator first, InputIterator last, std::vector<RGBA>* colors = nullptr);
+		void setFromPCLCloud(InputIterator first, InputIterator last, std::vector<RGBA>* colors = nullptr, bool ignoreNormals = false);
 };
 
 #include "Cloud.inl"

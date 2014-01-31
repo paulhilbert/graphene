@@ -33,10 +33,10 @@ inline Cloud::~Cloud() {
 }
 
 template <class InputIterator>
-inline void Cloud::setFromPCLCloud(InputIterator first, InputIterator last, std::vector<RGBA>* colors) {
+inline void Cloud::setFromPCLCloud(InputIterator first, InputIterator last, std::vector<RGBA>* colors, bool ignoreNormals) {
 	std::vector<Eigen::Vector3f> points(std::distance(first, last));
 	std::vector<Eigen::Vector3f> normals(std::distance(first, last));
 	std::transform(first, last, points.begin(), [&](const typename InputIterator::value_type& point) { return point.getVector3fMap(); });
-	std::transform(first, last, normals.begin(), [&](const typename InputIterator::value_type& point) { return point.getNormalVector3fMap(); });
-	this->set(points, &normals, colors);
+	if (!ignoreNormals) std::transform(first, last, normals.begin(), [&](const typename InputIterator::value_type& point) { return point.getNormalVector3fMap(); });
+	this->set(points, (ignoreNormals ? nullptr : &normals), colors);
 }
