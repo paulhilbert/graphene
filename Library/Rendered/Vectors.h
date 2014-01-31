@@ -22,7 +22,6 @@ class VectorRenderKernel : public RenderKernel {
 		VectorRenderKernel(int lineWidth);
 		virtual ~VectorRenderKernel();
 
-		void initShader() override;
 		void renderElements(int pointCount) override;
 
 		void setThickness(int thickness);

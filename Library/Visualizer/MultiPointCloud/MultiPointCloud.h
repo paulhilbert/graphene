@@ -41,17 +41,17 @@ class MultiPointCloud : virtual public Visualizer {
 		virtual ~MultiPointCloud();
 
 		void init();
-		void render();
+		void render(ShaderProgram& program);
 		void addProperties();
 		void registerEvents();
 
-		virtual bool isHDR() const;
+		virtual BoundingBox boundingBox() const;
 
 	protected:
 		void    addClouds(const GUI::Property::Paths& paths);
-//		RC::Ptr addCloud(std::string name, RGBA color, const std::vector<Vector3f>& points, bool visible = true);
 		RC::Ptr addCloud(std::string name, RGBA color, Cloud::Ptr cloud, bool visible = true);
-		RV::Ptr addNormals(std::string name, RGBA color, Cloud::Ptr cloud, bool visible = true);
+		RC::Ptr addCloud(std::string name, Cloud::Ptr cloud, std::vector<RGBA>* color, bool visible = true);
+		RV::Ptr addNormals(std::string name, RGBA color, Cloud::Ptr cloud, bool visible = true, float factor = 1.f);
 		RL::Ptr addLines(std::string name, RGBA color, const std::vector<Vector3f>& points, bool visible = true);
 		void    removeField(std::string name);
 		void    exportCloud(const fs::path& path);
@@ -61,6 +61,7 @@ class MultiPointCloud : virtual public Visualizer {
 		GUI::Property::Paths     m_paths;
 		Cloud::Ptr               m_cloud;
 		RFPtrs                   m_rf;
+		BoundingBox              m_bbox;
 };
 
 #include "MultiPointCloud.inl"

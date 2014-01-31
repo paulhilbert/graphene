@@ -7,11 +7,47 @@ inline bool OpenMeshTraits<TriMesh>::loadFromFile(MeshType& mesh, const std::str
 	opt += OpenMesh::IO::Options::FaceNormal;
 	opt += OpenMesh::IO::Options::VertexNormal;
 	opt += OpenMesh::IO::Options::VertexColor;
-	
+
+	mesh.request_vertex_normals();
+	mesh.request_face_normals();
 	bool success = OpenMesh::IO::read_mesh(mesh, path, opt);
-	
+
 	if (success) {
 		mesh.triangulate();
+		// If no face normals were loaded, estimate them.
+		if (!opt.face_has_normal()) {
+			mesh.update_face_normals();
+		}
+		// If no vertex normals were loaded, estimate them.
+		// Note that OpenMesh requires face normals to be available for this.
+		//if (!opt.vertex_has_normal()) {
+			mesh.update_normals();
+		//}
+		// If no vertex colors were loaded, set a default value for all vertices.
+		if (!opt.vertex_has_color()) {
+			for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) {
+				mesh.set_color(it.handle(), InternalOpenMeshTraits::Color(1,1,1,1));
+			}
+		}
+	}
+	return success;
+}
+
+template <class OpenMeshType>
+inline bool OpenMeshTraits<OpenMeshType>::loadFromFile(MeshType& mesh, const std::string& path) {
+	// The options define which properties we would like to have loaded.
+	// After the read_mesh call, "opt" will contain the attributes which
+	// were actually present in the file.
+	OpenMesh::IO::Options opt;
+	opt += OpenMesh::IO::Options::FaceNormal;
+	opt += OpenMesh::IO::Options::VertexNormal;
+	opt += OpenMesh::IO::Options::VertexColor;
+
+	mesh.request_vertex_normals();
+	mesh.request_face_normals();
+	bool success = OpenMesh::IO::read_mesh(mesh, path, opt);
+
+	if (success) {
 		// If no face normals were loaded, estimate them.
 		if (!opt.face_has_normal()) {
 			mesh.update_face_normals();
@@ -29,11 +65,6 @@ inline bool OpenMeshTraits<TriMesh>::loadFromFile(MeshType& mesh, const std::str
 		}
 	}
 	return success;
-}
-
-template <class OpenMeshType>
-inline bool OpenMeshTraits<OpenMeshType>::loadFromFile(MeshType& mesh, const std::string& path) {
-	return OpenMesh::IO::read_mesh(mesh, path);
 }
 
 template <class OpenMeshType>
@@ -73,7 +104,7 @@ inline typename OpenMeshTraits<OpenMeshType>::PositionType OpenMeshTraits<OpenMe
 
 template <class OpenMeshType>
 inline typename OpenMeshTraits<OpenMeshType>::NormalType OpenMeshTraits<OpenMeshType>::vertexNormal(const MeshType& mesh, VertexId id) {
-	return NormalType(mesh.normal(mesh.vertex_handle(id)).data());
+	return NormalType(mesh.normal(mesh.vertex_handle(id)).data()).normalized();
 }
 
 template <class OpenMeshType>
@@ -98,7 +129,7 @@ template <class OpenMeshType>
 inline std::vector<typename OpenMeshTraits<OpenMeshType>::NormalType> OpenMeshTraits<OpenMeshType>::vertexNormals(const MeshType& mesh) {
 	std::vector<NormalType> normals(mesh.n_vertices());
 	unsigned int i=0;
-	for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) normals[i++] = NormalType(mesh.normal(it.handle()).data());
+	for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) normals[i++] = NormalType(mesh.normal(it.handle()).data()).normalized();
 	return normals;
 }
 

@@ -14,6 +14,7 @@ uniform float near;
 uniform float far;
 uniform float exposure;
 uniform int   debugSSAO = 0;
+uniform int   debugNormals = 0;
 
 uniform int ssaoActive;
 uniform int blurActive;
@@ -59,6 +60,7 @@ void main(void) {
 
 	fragColor = toneMap((1.f - blr) * l * diffCol + l * blr * blurCol + l * blm * (bloomCol * blurCol), exposure);
 	if (ssaoActive != 0 && debugSSAO != 0) fragColor = vec4(light, light, light, 1.0);
+	if (debugNormals != 0) fragColor = diffCol;
 }
 
 vec4 toneMap(in vec4 col, in float exposure) {

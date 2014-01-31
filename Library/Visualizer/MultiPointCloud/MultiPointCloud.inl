@@ -17,28 +17,14 @@ inline void MultiPointCloud::init() {
 	addClouds(m_paths);
 }
 
-inline void MultiPointCloud::render() {
+inline void MultiPointCloud::render(ShaderProgram& program) {
 	if (!m_cloud || !m_cloud->size()) return;
 
-	auto mvMatrix = fw()->transforms()->modelview();
-	auto prMatrix = fw()->transforms()->projection();
-	auto nmMatrix = fw()->transforms()->normal();
-
-	auto optTex = fw()->environmentMaps();
-	if (optTex) {
-		m_rf["Main Cloud"]->renderHDR(mvMatrix, prMatrix, nmMatrix, optTex.get(), fw()->specularity(), fw()->transforms()->viewDirection());
-		m_rf["Main Cloud Normals"]->render(mvMatrix, prMatrix, nmMatrix);
-		for (const auto& cloud : m_rf) {
-			std::string name = cloud.first;
-			if (name != "Main Cloud" && name != "Main Cloud Normals") cloud.second->render(mvMatrix, prMatrix, nmMatrix);
-		}
-	} else {
-		m_rf["Main Cloud"]->render(mvMatrix, prMatrix, nmMatrix);
-		m_rf["Main Cloud Normals"]->render(mvMatrix, prMatrix, nmMatrix);
-		for (const auto& cloud : m_rf) {
-			std::string name = cloud.first;
-			if (name != "Main Cloud" && name != "Main Cloud Normals") cloud.second->render(mvMatrix, prMatrix, nmMatrix);
-		}
+	m_rf["Main Cloud"]->render(program);
+	m_rf["Main Cloud Normals"]->render(program);
+	for (const auto& cloud : m_rf) {
+		std::string name = cloud.first;
+		if (name != "Main Cloud" && name != "Main Cloud Normals") cloud.second->render(program);
 	}
 }
 
@@ -80,8 +66,8 @@ inline void MultiPointCloud::addProperties() {
 inline void MultiPointCloud::registerEvents() {
 }
 
-inline bool MultiPointCloud::isHDR() const {
-	return true;
+inline BoundingBox MultiPointCloud::boundingBox() const {
+	return m_bbox;
 }
 
 inline void MultiPointCloud::addClouds(const GUI::Property::Paths& paths) {
@@ -98,33 +84,49 @@ inline void MultiPointCloud::addClouds(const GUI::Property::Paths& paths) {
 	addNormals("Main Cloud Normals", rgbaWhite(), m_cloud, false);
 }
 
-//inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA color, const std::vector<Vector3f>& points, bool visible) {
-//	RC::Ptr rc(new RC(color, 1));
-//	rc->set(points);
-//	rc->setVisible(visible);
-//	auto tree = gui()->properties()->get<Tree>(path("visibility"));
-//	tree->add(name, {name}, visible);
-//	m_rf[name] = std::dynamic_pointer_cast<RF>(rc);
-//	return rc;
-//}
-
 inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA color, Cloud::Ptr cloud, bool visible) {
 	RC::Ptr rc(new RC(color, 1));
-	rc->setFromPCLCloud(cloud->begin(), cloud->end());
+	rc->setFromPCLCloud(cloud->begin(), cloud->end(), nullptr);
 	rc->setVisible(visible);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
 	tree->add(name, {name}, visible);
 	m_rf[name] = std::dynamic_pointer_cast<RF>(rc);
+
+	for (const auto& p : *cloud) {
+		m_bbox.extend(p.getVector3fMap());
+	}
+
 	return rc;
 }
 
-inline Rendered::Vectors::Ptr MultiPointCloud::addNormals(std::string name, RGBA color, Cloud::Ptr cloud, bool visible) {
+inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, Cloud::Ptr cloud, std::vector<RGBA>* colors, bool visible) {
+	RC::Ptr rc(new RC(rgbaInvisible(), 1));
+	rc->setFromPCLCloud(cloud->begin(), cloud->end(), colors);
+	rc->setVisible(visible);
+	auto tree = gui()->properties()->get<Tree>(path("visibility"));
+	tree->add(name, {name}, visible);
+	m_rf[name] = std::dynamic_pointer_cast<RF>(rc);
+
+	for (const auto& p : *cloud) {
+		m_bbox.extend(p.getVector3fMap());
+	}
+
+	return rc;
+}
+
+inline Rendered::Vectors::Ptr MultiPointCloud::addNormals(std::string name, RGBA color, Cloud::Ptr cloud, bool visible, float factor) {
 	RV::Ptr rv(new RV(color));
-	rv->setFromPCLCloudNormals(cloud->begin(), cloud->end());
+	rv->setFromPCLCloudNormals(cloud->begin(), cloud->end(), nullptr, factor);
 	rv->setVisible(visible);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
 	tree->add(name, {name}, visible);
 	m_rf[name] = std::dynamic_pointer_cast<RF>(rv);
+
+	for (unsigned int i=0; i<cloud->size(); ++i) {
+		m_bbox.extend(cloud->points[i].getVector3fMap());
+		m_bbox.extend(cloud->points[i].getVector3fMap() + factor * cloud->points[i].getNormalVector3fMap());
+	}
+
 	return rv;
 }
 
@@ -135,6 +137,11 @@ inline Rendered::Lines::Ptr MultiPointCloud::addLines(std::string name, RGBA col
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
 	tree->add(name, {name}, visible);
 	m_rf[name] = std::dynamic_pointer_cast<RF>(rl);
+
+	for (const auto& p : points) {
+		m_bbox.extend(p);
+	}
+
 	return rl;
 }
 

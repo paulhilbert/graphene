@@ -35,6 +35,8 @@ using namespace FW::View;
 #include <Library/Random/RNG.h>
 using Random::RNG;
 
+#define DEBUG_SHADER
+
 namespace FW {
 
 #ifdef ENABLE_SCREENCAST
@@ -218,7 +220,7 @@ void Graphene::Impl::initTransforms() {
 									  });
 	}
 
-	auto fod = groupRender->add<Group>("Field Of Depth", "groupFOD");
+	auto  fod = groupRender->add<Group>("Field Of Depth", "groupFOD");
 	fod->add<Bool>("Blur Enabled", "blurEnabled")->setValue(true);
 	fod->add<Bool>("Blooming Enabled", "bloomEnabled")->setValue(true);
 	fod->add<Bool>("Bloom Only Blurred", "fodBloom")->setValue(true);
@@ -228,12 +230,24 @@ void Graphene::Impl::initTransforms() {
 	fod->add<Range>("Focal Point", "focalPoint")->setDigits(2).setMin(0.f).setMax(1.f).setValue(0.0f);
 	fod->add<Range>("Focal Area", "focalArea")->setDigits(2).setMin(0.f).setMax(1.f).setValue(0.5f);
 
-	auto ssao = groupRender->add<Group>("Screen-Space Ambient Occlusion", "groupSSAO");
-	ssao->add<Bool>("Enabled", "ssaoActive")->setValue(true);
+	auto  ssao = groupRender->add<Group>("Screen-Space Ambient Occlusion", "groupSSAO");
+	ssao->add<Bool>("Enabled", "ssaoActive")->setValue(false);
 	ssao->add<Range>("Factor", "ssaoFactor")->setDigits(2).setMin(0.01f).setMax(1.f).setValue(1.f);
 	ssao->add<Range>("Radius", "radius")->setDigits(2).setMin(0.01f).setMax(5.f).setValue(0.5f);
 	ssao->add<Range>("Exponent", "exponent")->setDigits(2).setMin(1).setMax(5).setValue(2);
-	ssao->add<Bool>("Debug", "debug")->setValue(false);
+	auto  ssaoSamples = ssao->add<Range>("Samples", "samples");
+	ssaoSamples->setDigits(0).setMin(1).setMax(128);
+	ssaoSamples->setValue(50);
+	ssaoSamples->setCallback([&] (float) {
+	                            auto wndSize = m_transforms->viewport().tail(2);
+	                            updateEffects(wndSize[0], wndSize[1]);
+									 });
+
+#ifdef DEBUG_SHADER
+	auto  debug = groupRender->add<Group>("Debug", "debug");
+	debug->add<Bool>("Normals", "debugNormals")->setValue(false);;
+	debug->add<Bool>("SSAO", "debugSSAO")->setValue(false);
+#endif
 
 	if (m_singleMode) groupRender->collapse();
 }
@@ -241,19 +255,19 @@ void Graphene::Impl::initTransforms() {
 void Graphene::Impl::initEffects() {
 	// events
 	m_eventHandler->registerReceiver<void (int, int, int, int)>("LEFT_DRAG", "mainapp", [&] (int dx, int dy, int x, int y) {
-		if (! (m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) ) return;
-		float newVal = m_backend->getMainSettings()->get<Range>({"groupRendering", "groupFOD", "focalArea"})->value() + (-0.01f * dy);
-		if (newVal > 1.f) newVal = 1.f;
-		if (newVal < 0.f) newVal = 0.f;
-		m_backend->getMainSettings()->get<Range>({"groupRendering", "groupFOD", "focalArea"})->setValue(newVal);
-	});
+	                                                               if (!(m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) ) return;
+	                                                               float newVal = m_backend->getMainSettings()->get<Range>({"groupRendering", "groupFOD", "focalArea"})->value() + (-0.01f * dy);
+	                                                               if (newVal > 1.f) newVal = 1.f;
+	                                                               if (newVal < 0.f) newVal = 0.f;
+	                                                               m_backend->getMainSettings()->get<Range>({"groupRendering", "groupFOD", "focalArea"})->setValue(newVal);
+																					});
 	m_eventHandler->registerReceiver<void (int, int, int, int)>("RIGHT_DRAG", "mainapp", [&] (int dx, int dy, int x, int y) {
-		if (! (m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) ) return;
-		float newVal = m_backend->getMainSettings()->get<Range>({"groupRendering", "groupFOD", "focalPoint"})->value() + (-0.01f * dy);
-		if (newVal > 1.f) newVal = 1.f;
-		if (newVal < 0.f) newVal = 0.f;
-		m_backend->getMainSettings()->get<Range>({"groupRendering", "groupFOD", "focalPoint"})->setValue(newVal);
-	});
+	                                                               if (!(m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) ) return;
+	                                                               float newVal = m_backend->getMainSettings()->get<Range>({"groupRendering", "groupFOD", "focalPoint"})->value() + (-0.01f * dy);
+	                                                               if (newVal > 1.f) newVal = 1.f;
+	                                                               if (newVal < 0.f) newVal = 0.f;
+	                                                               m_backend->getMainSettings()->get<Range>({"groupRendering", "groupFOD", "focalPoint"})->setValue(newVal);
+																					});
 
 	std::vector<Vector3f>  quadVertices;
 	quadVertices.push_back(Vector3f(-1.f, -1.f, 0.f));
@@ -300,76 +314,77 @@ void Graphene::Impl::updateEffects(int width, int height) {
 	m_gbuffer.init(width, height);
 
 	// update view ray
-	float aspect = m_camera->getAspectRatio(width, height);
-	float tanHalfFov = std::tan(m_camera->getFieldOfView() / 2.f);
+	float  aspect     = m_camera->getAspectRatio(width, height);
+	float  tanHalfFov = std::tan(m_camera->getFieldOfView() / 2.f);
 
 	// generate gaussian kernel
-	int kernelWidth = 9;
-	float sigma2 = 4.0f * 4.0f * 2.f;
-	float factor = 1.f / (M_PI*sigma2);
-	float sum = 0.f;
-	float* weights = new float[kernelWidth*kernelWidth];
-	float* offsetsH = new float[kernelWidth];
-	float* offsetsV = new float[kernelWidth];
-	int center = kernelWidth / 2;
-	for(int i=0; i<kernelWidth; i++) {
-		int i2 = (i-center) * (i-center);
-		for(int j=0; j<kernelWidth; j++) {
-			int j2 = (j-center) * (j-center);
-			float w = factor * exp(-(i2+j2) / sigma2);
-			weights[i*kernelWidth + j] = w;
+	int    kernelWidth = 9;
+	float  sigma2      = 4.0f * 4.0f * 2.f;
+	float  factor      = 1.f / (M_PI * sigma2);
+	float  sum         = 0.f;
+	float* weights     = new float[kernelWidth * kernelWidth];
+	float* offsetsH    = new float[kernelWidth];
+	float* offsetsV    = new float[kernelWidth];
+	int    center      = kernelWidth / 2;
+	for (int i = 0; i < kernelWidth; i++) {
+		int  i2 = (i - center) * (i - center);
+		for (int j = 0; j < kernelWidth; j++) {
+			int    j2 = (j - center) * (j - center);
+			float  w  = factor * exp(-(i2 + j2) / sigma2);
+			weights[i * kernelWidth + j] = w;
 			sum += w;
 		}
-		offsetsH[i] = (i - 4.0f) / float(width/2.0f);
-		offsetsV[i] = (i - 4.0f) / float(height/2.0f);
+		offsetsH[i] = (i - 4.0f) / float(width / 2.0f);
+		offsetsV[i] = (i - 4.0f) / float(height / 2.0f);
 	}
-	for(int i=0; i<kernelWidth; i++) {
-		for(int j=0; j<kernelWidth; j++) {
-			weights[i*kernelWidth + j] /= sum;
+	for (int i = 0; i < kernelWidth; i++) {
+		for (int j = 0; j < kernelWidth; j++) {
+			weights[i * kernelWidth + j] /= sum;
 		}
 	}
 	m_blurPass.use();
-	m_blurPass.setUniformVar1f("weights", kernelWidth*kernelWidth, weights);
+	m_blurPass.setUniformVar1f("weights", kernelWidth * kernelWidth, weights);
 	m_blurPass.setUniformVar1f("offsetsH", kernelWidth, offsetsH);
 	m_blurPass.setUniformVar1f("offsetsV", kernelWidth, offsetsV);
-	//m_blurPass.setUniformVar1f("aspectRatio", aspect);
-	//m_blurPass.setUniformVar1f("tanHalfFov", tanHalfFov);
+	// m_blurPass.setUniformVar1f("aspectRatio", aspect);
+	// m_blurPass.setUniformVar1f("tanHalfFov", tanHalfFov);
 
 	delete [] weights;
 	delete [] offsetsH;
 	delete [] offsetsV;
 
 	// generate noise and random kernels for SSAO
-	int numSamples = 100;
-	auto gen = RNG::uniform01Gen<float>();
-	Eigen::MatrixXf samples(3, numSamples);
-	for (int i=0; i<numSamples; ++i) {
-		Vector3f pos(2.f * gen() - 1.f, 2.f * gen() - 1.f, gen());
+	auto             main       = m_backend->getMainSettings();
+	int              numSamples =  main->get<Range>({"groupRendering", "groupSSAO", "samples"})->value();
+	auto             gen        = RNG::uniform01Gen<float>();
+	Eigen::MatrixXf  samples(3, numSamples);
+	for (int i = 0; i < numSamples; ++i) {
+		Vector3f  pos(2.f * gen() - 1.f, 2.f * gen() - 1.f, gen());
 		pos.normalize();
 		pos *= gen();
 		samples.col(i) = pos;
 	}
-	int noiseSize = 4;
-	float* noise = new float[noiseSize*noiseSize*2];
-	for (int i=0; i<noiseSize*noiseSize; ++i) {
-		Vector2f n(2.f * gen() - 1.f, 2.f * gen() - 1.f);
+	int    noiseSize = 4;
+	float* noise     = new float[noiseSize * noiseSize * 2];
+	for (int i = 0; i < noiseSize * noiseSize; ++i) {
+		Vector2f  n(2.f * gen() - 1.f, 2.f * gen() - 1.f);
 		n.normalize();
-		noise[i*2+0] = n[0];
-		noise[i*2+1] = n[1];
+		noise[i * 2 + 0] = n[0];
+		noise[i * 2 + 1] = n[1];
 	}
 
 	m_ssaoPass.use();
 	m_ssaoPass.setUniformVec3("samples", samples.data(), numSamples);
-	m_ssaoPass.setUniformVar1f("noise", noiseSize*noiseSize*2, noise);
+	m_ssaoPass.setUniformVar1f("noise", noiseSize * noiseSize * 2, noise);
 	m_ssaoPass.setUniformVar1i("numSamples", numSamples);
-	//m_ssaoPass.setUniformVar1f("aspectRatio", aspect);
-	//m_ssaoPass.setUniformVar1f("tanHalfFov", tanHalfFov);
+	// m_ssaoPass.setUniformVar1f("aspectRatio", aspect);
+	// m_ssaoPass.setUniformVar1f("tanHalfFov", tanHalfFov);
 
 	delete [] noise;
 
-	//m_lightPass.use();
-	//m_lightPass.setUniformVar1f("aspectRatio", aspect);
-	//m_lightPass.setUniformVar1f("tanHalfFov", tanHalfFov);
+	// m_lightPass.use();
+	// m_lightPass.setUniformVar1f("aspectRatio", aspect);
+	// m_lightPass.setUniformVar1f("tanHalfFov", tanHalfFov);
 }
 
 int Graphene::Impl::run(int fps) {
@@ -442,7 +457,7 @@ void Graphene::Impl::render() {
 	if (!m_gbuffer.initialized()) return;
 
 	// determine bounding box
-	BoundingBox bbox;
+	BoundingBox  bbox;
 	if (m_singleMode) {
 		for (const auto& vis : m_visualizer) {
 			bbox.extend(vis.second->boundingBox());
@@ -453,36 +468,36 @@ void Graphene::Impl::render() {
 			bbox.extend(m_visualizer[name]->boundingBox());
 		}
 	}
-	float farDist = 0.f, nearDist = std::numeric_limits<float>::max(), dist;
-	Vector3f camPos = m_camera->getPosition();
-	Vector3f camDir = (m_camera->getLookAt() - camPos).normalized();
-	dist = (bbox.corner(BoundingBox::BottomLeftFloor) - camPos).dot(camDir);
-	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
-	dist = (bbox.corner(BoundingBox::BottomRightFloor) - camPos).dot(camDir);
-	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
-	dist = (bbox.corner(BoundingBox::TopLeftFloor) - camPos).dot(camDir);
-	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
-	dist = (bbox.corner(BoundingBox::TopRightFloor) - camPos).dot(camDir);
-	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
-	dist = (bbox.corner(BoundingBox::BottomLeftCeil) - camPos).dot(camDir);
-	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
-	dist = (bbox.corner(BoundingBox::BottomRightCeil) - camPos).dot(camDir);
-	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
-	dist = (bbox.corner(BoundingBox::TopLeftCeil) - camPos).dot(camDir);
-	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
-	dist = (bbox.corner(BoundingBox::TopRightCeil) - camPos).dot(camDir);
-	farDist = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	float     farDist = 0.f, nearDist = std::numeric_limits<float>::max(), dist;
+	Vector3f  camPos  = m_camera->getPosition();
+	Vector3f  camDir  = (m_camera->getLookAt() - camPos).normalized();
+	dist     = (bbox.corner(BoundingBox::BottomLeftFloor) - camPos).dot(camDir);
+	farDist  = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	dist     = (bbox.corner(BoundingBox::BottomRightFloor) - camPos).dot(camDir);
+	farDist  = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	dist     = (bbox.corner(BoundingBox::TopLeftFloor) - camPos).dot(camDir);
+	farDist  = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	dist     = (bbox.corner(BoundingBox::TopRightFloor) - camPos).dot(camDir);
+	farDist  = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	dist     = (bbox.corner(BoundingBox::BottomLeftCeil) - camPos).dot(camDir);
+	farDist  = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	dist     = (bbox.corner(BoundingBox::BottomRightCeil) - camPos).dot(camDir);
+	farDist  = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	dist     = (bbox.corner(BoundingBox::TopLeftCeil) - camPos).dot(camDir);
+	farDist  = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
+	dist     = (bbox.corner(BoundingBox::TopRightCeil) - camPos).dot(camDir);
+	farDist  = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
 	nearDist = std::max(nearDist, 0.05f);
 	m_camera->setClipping(nearDist, farDist);
 
-	auto main = m_backend->getMainSettings();
-	bool ssaoActive =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value();
-	bool blurActive = main->get<Bool>({"groupRendering", "groupFOD", "blurEnabled"})->value();
-	bool bloomActive = main->get<Bool>({"groupRendering", "groupFOD", "bloomEnabled"})->value();
+	auto  main        = m_backend->getMainSettings();
+	bool  ssaoActive  =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value() && main->get<Range>({"groupRendering", "groupSSAO", "ssaoFactor"})->value() > 0.f;
+	bool  blurActive  = main->get<Bool>({"groupRendering", "groupFOD", "blurEnabled"})->value() && main->get<Range>({"groupRendering", "groupFOD", "blur"})->value() > 0.f;
+	bool  bloomActive = main->get<Bool>({"groupRendering", "groupFOD", "bloomEnabled"})->value() && main->get<Range>({"groupRendering", "groupFOD", "bloom"})->value() > 0.f;
 
 	renderGeometryPass();
 	if (ssaoActive) renderSSAOPass();
-	if (ssaoActive || blurActive)	renderBlurPass();
+	if (ssaoActive || blurActive) renderBlurPass();
 	renderLightPass();
 
 
@@ -498,17 +513,26 @@ void Graphene::Impl::render() {
 }
 
 void Graphene::Impl::renderGeometryPass() {
-	auto      main        = m_backend->getMainSettings();
-	Vector4f  bg          = m_backend->getBackgroundColor();
+	auto      main    = m_backend->getMainSettings();
+	Vector4f  bg      = m_backend->getBackgroundColor();
 
-	auto      diff        = m_envTextures[m_crtMap].diffuse;
-	auto      spec        = m_envTextures[m_crtMap].specular;
-	Vector3f  viewDir     = (m_camera->getLookAt() - m_camera->getPosition()).normalized();
+	auto  diff        = m_envTextures[m_crtMap].diffuse;
+	auto  spec        = m_envTextures[m_crtMap].specular;
+#ifdef DEBUG_SHADER
+	int  debugNormals = main->get<Bool>({"groupRendering", "debug", "debugNormals"})->value() ? 1 : 0;
+#endif
+
+	//Vector3f  viewDir = (m_camera->getLookAt() - m_camera->getPosition()).normalized();
+	Vector3f  camPos = m_camera->getPosition();
 	m_gbuffer.bindGeomPass(m_geomPass, bg, diff, spec);
 	m_geomPass.use();
 	m_geomPass.setUniformMat4("mvM", m_transforms->modelview().data());
 	m_geomPass.setUniformMat4("prM", m_transforms->projection().data());
-	m_geomPass.setUniformVec3("viewDir", viewDir.data());
+	m_geomPass.setUniformVec3("camPos", camPos.data());
+#ifdef DEBUG_SHADER
+	m_geomPass.setUniformVar1i("debugNormals", debugNormals);
+#endif
+
 
 	glDepthMask(GL_TRUE);
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -534,21 +558,24 @@ void Graphene::Impl::renderLightPass() {
 
 	glDepthMask(GL_FALSE);
 
-	float  exposure = main->get<Range>({"groupRendering", "groupHDR", "exposure"})->value();
-	auto   wndSize  = m_transforms->viewport().tail(2);
-	int    ortho = static_cast<int>(m_camera->getOrtho());
+	float  exposure    = main->get<Range>({"groupRendering", "groupHDR", "exposure"})->value();
+	auto   wndSize     = m_transforms->viewport().tail(2);
+	int    ortho       = static_cast<int>(m_camera->getOrtho());
 
-	bool blurActive = main->get<Bool>({"groupRendering", "groupFOD", "blurEnabled"})->value();
-	bool bloomActive = main->get<Bool>({"groupRendering", "groupFOD", "bloomEnabled"})->value();
-	bool fodBloom = main->get<Bool>({"groupRendering", "groupFOD", "fodBloom"})->value();
-	bool ssaoActive =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value();
-	float ssaoFactor =  main->get<Range>({"groupRendering", "groupSSAO", "ssaoFactor"})->value();
+	bool   blurActive  = main->get<Bool>({"groupRendering", "groupFOD", "blurEnabled"})->value() && main->get<Range>({"groupRendering", "groupFOD", "blur"})->value() > 0.f;
+	bool   bloomActive = main->get<Bool>({"groupRendering", "groupFOD", "bloomEnabled"})->value() && main->get<Range>({"groupRendering", "groupFOD", "bloom"})->value() > 0.f;
+	bool   fodBloom    = main->get<Bool>({"groupRendering", "groupFOD", "fodBloom"})->value();
+	bool   ssaoActive  =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value() && main->get<Range>({"groupRendering", "groupSSAO", "ssaoFactor"})->value() > 0.f;
+	float  ssaoFactor  =  main->get<Range>({"groupRendering", "groupSSAO", "ssaoFactor"})->value();
 
-	float ratio = main->get<Range>({"groupRendering", "groupFOD", "blur"})->value();
-	float bloom = main->get<Range>({"groupRendering", "groupFOD", "bloom"})->value();
-	float focalPoint = main->get<Range>({"groupRendering", "groupFOD", "focalPoint"})->value();
-	float focalArea = main->get<Range>({"groupRendering", "groupFOD", "focalArea"})->value();
-	int debugSSAO = main->get<Bool>({"groupRendering", "groupSSAO", "debug"})->value() ? 1 : 0;
+	float  ratio       = main->get<Range>({"groupRendering", "groupFOD", "blur"})->value();
+	float  bloom       = main->get<Range>({"groupRendering", "groupFOD", "bloom"})->value();
+	float  focalPoint  = main->get<Range>({"groupRendering", "groupFOD", "focalPoint"})->value();
+	float  focalArea   = main->get<Range>({"groupRendering", "groupFOD", "focalArea"})->value();
+#ifdef DEBUG_SHADER
+	int  debugNormals  = main->get<Bool>({"groupRendering", "debug", "debugNormals"})->value() ? 1 : 0;
+	int  debugSSAO     = main->get<Bool>({"groupRendering", "debug", "debugSSAO"})->value() ? 1 : 0;
+#endif
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	m_gbuffer.bindLightPass(m_lightPass);
@@ -568,46 +595,53 @@ void Graphene::Impl::renderLightPass() {
 	m_lightPass.setUniformVar1i("bloomActive", bloomActive ? 1 : 0);
 	m_lightPass.setUniformVar1i("ssaoActive", ssaoActive ? 1 : 0);
 	m_lightPass.setUniformVar1i("fodBloom", fodBloom ? 1 : 0);
+#ifdef DEBUG_SHADER
+	m_lightPass.setUniformVar1i("debugNormals", debugNormals);
 	m_lightPass.setUniformVar1i("debugSSAO", debugSSAO);
+#endif
 	renderFullQuad(wndSize[0], wndSize[1]);
 }
 
 void Graphene::Impl::renderBlurPass() {
-	auto  wndSize  = m_transforms->viewport().tail(2);
+	auto  wndSize = m_transforms->viewport().tail(2);
 	m_gbuffer.bindBlurPass(m_blurPass);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	auto main = m_backend->getMainSettings();
-	int debugSSAO = main->get<Bool>({"groupRendering", "groupSSAO", "debug"})->value() ? 1 : 0;
-	float bloomCut = main->get<Range>({"groupRendering", "groupFOD", "bloomCut"})->value();
-	bool ssaoActive =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value();
-	bool blurActive = main->get<Bool>({"groupRendering", "groupFOD", "blurEnabled"})->value();
-	bool bloomActive = main->get<Bool>({"groupRendering", "groupFOD", "bloomEnabled"})->value();
+	auto   main        = m_backend->getMainSettings();
+	float  bloomCut    = main->get<Range>({"groupRendering", "groupFOD", "bloomCut"})->value();
+	bool   ssaoActive  =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value() && main->get<Range>({"groupRendering", "groupSSAO", "ssaoFactor"})->value() > 0.f;
+	bool   blurActive  = main->get<Bool>({"groupRendering", "groupFOD", "blurEnabled"})->value() && main->get<Range>({"groupRendering", "groupFOD", "blur"})->value() > 0.f;
+	bool   bloomActive = main->get<Bool>({"groupRendering", "groupFOD", "bloomEnabled"})->value() && main->get<Range>({"groupRendering", "groupFOD", "bloom"})->value() > 0.f;
+#ifdef DEBUG_SHADER
+	int    debugSSAO   = main->get<Bool>({"groupRendering", "debug", "debugSSAO"})->value() ? 1 : 0;
+#endif
 
 	m_blurPass.use();
 	m_blurPass.setUniformVar1i("ssaoActive", ssaoActive);
 	m_blurPass.setUniformVar1i("blurActive", blurActive);
 	m_blurPass.setUniformVar1i("bloomActive", bloomActive);
+#ifdef DEBUG_SHADER
 	m_blurPass.setUniformVar1i("debugSSAO", debugSSAO);
+#endif
 	m_blurPass.setUniformVar1f("bloomCut", bloomCut);
 	renderFullQuad(wndSize[0], wndSize[1]);
 }
 
 void Graphene::Impl::renderSSAOPass() {
-	auto  wndSize  = m_transforms->viewport().tail(2);
+	auto  wndSize = m_transforms->viewport().tail(2);
 	m_gbuffer.bindSSAOPass(m_ssaoPass);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	auto  main = m_backend->getMainSettings();
-	float radius = main->get<Range>({"groupRendering", "groupSSAO", "radius"})->value();
-	float power = main->get<Range>({"groupRendering", "groupSSAO", "exponent"})->value();
+	auto   main   = m_backend->getMainSettings();
+	float  radius = main->get<Range>({"groupRendering", "groupSSAO", "radius"})->value();
+	float  power  = main->get<Range>({"groupRendering", "groupSSAO", "exponent"})->value();
 
 	m_ssaoPass.use();
 	m_ssaoPass.setUniformMat4("mvM", m_transforms->modelview().data());
 	m_ssaoPass.setUniformMat4("prM", m_transforms->projection().data());
-	//m_ssaoPass.setUniformMat3("nmM", m_transforms->normal().data());
+	// m_ssaoPass.setUniformMat3("nmM", m_transforms->normal().data());
 	m_ssaoPass.setUniformVar1f("radius", radius);
 	m_ssaoPass.setUniformVar1f("power", power);
 	renderFullQuad(wndSize[0], wndSize[1]);
