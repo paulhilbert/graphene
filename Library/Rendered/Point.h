@@ -10,6 +10,8 @@
 
 #include <Eigen/Dense>
 
+#include "Lines.h"
+
 #include "../Buffer/Geometry.h"
 #include "../Shader/ShaderProgram.h"
 
@@ -30,16 +32,17 @@ class Point {
 		inline const Eigen::Vector3f& getPosition() {return m_position;}
 		inline const Eigen::Vector4f& getColor() {return m_color;}
 		inline int getLineWidth() {return m_lineWidth;}
+		
+		void updateRenderedLines();
 
-		void render(const Eigen::Matrix4f& mvMatrix, const Eigen::Matrix4f& prMatrix);
+		void render(ShaderProgram& program);
 
 	protected:
 		Eigen::Vector3f m_position;
 		Eigen::Vector4f m_color;
 		int m_lineWidth;
 
-		Buffer::Geometry        m_geom;
-		Shader::ShaderProgram   m_prog;
+		Lines::Ptr m_renderedLines;
 };
 
 }
