@@ -16,6 +16,13 @@ struct Conversion {
 	static HSV  rgb2hsv   (RGB  rgb);
 //	template <class Scalar>
 	static HSVA rgba2hsva (RGBA rgba);
+
+	static RGB rgbHue(RGB rgb, float h);
+	static RGBA rgbaHue(RGBA rgba, float h);
+	static RGB rgbSaturation(RGB rgb, float s);
+	static RGBA rgbaSaturation(RGBA rgba, float s);
+	static RGB rgbValue(RGB rgb, float v);
+	static RGBA rgbaValue(RGBA rgba, float v);
 };
 
 //template <class Scalar>
@@ -135,6 +142,40 @@ inline HSVA Conversion::rgba2hsva(RGBA rgba) {
 
 	return HSVA(h,s,v,rgba[3]);
 }
+
+inline RGB Conversion::rgbHue(RGB rgb, float h) {
+	auto hsv = rgb2hsv(rgb);
+	hsv[0] = h;
+	return hsv2rgb(hsv);
+}
+
+inline RGBA Conversion::rgbaHue(RGBA rgba, float h) {
+	rgba.head(3) = rgbHue(rgba.head(3), h);
+	return rgba;
+}
+
+inline RGB Conversion::rgbSaturation(RGB rgb, float s) {
+	auto hsv = rgb2hsv(rgb);
+	hsv[1] = s;
+	return hsv2rgb(hsv);
+}
+
+inline RGBA Conversion::rgbaSaturation(RGBA rgba, float s) {
+	rgba.head(3) = rgbSaturation(rgba.head(3), s);
+	return rgba;
+}
+
+inline RGB Conversion::rgbValue(RGB rgb, float v) {
+	auto hsv = rgb2hsv(rgb);
+	hsv[2] = v;
+	return hsv2rgb(hsv);
+}
+
+inline RGBA Conversion::rgbaValue(RGBA rgba, float v) {
+	rgba.head(3) = rgbValue(rgba.head(3), v);
+	return rgba;
+}
+
 
 } /* Colors */
 
