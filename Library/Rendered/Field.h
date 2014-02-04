@@ -113,8 +113,6 @@ class Field {
 		RenderKernel::Ptr   m_kernel;
 };
 
-#include "Field.inl"
-
 } // Rendered
 
 #endif /* RENDEREDFIELD_H_ */

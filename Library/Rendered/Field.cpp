@@ -4,42 +4,45 @@
  * To Public License, Version 2, as published by Sam Hocevar. See
  * the COPYING file for more details */
 
+#include "Field.h"
+
+namespace Rendered {
 
 /// RENDERKERNEL ///
 
-inline RenderKernel::RenderKernel() {
+RenderKernel::RenderKernel() {
 }
 
-inline RenderKernel::~RenderKernel() {
+RenderKernel::~RenderKernel() {
 }
 
 /// ANNOTATION ///
 
-inline Annotation::Annotation(const std::vector<int>& indices, std::string name, Field* field) : m_indices(indices), m_name(name), m_field(field) {
+Annotation::Annotation(const std::vector<int>& indices, std::string name, Field* field) : m_indices(indices), m_name(name), m_field(field) {
 }
 
-inline Annotation::~Annotation() {
+Annotation::~Annotation() {
 }
 
-inline const std::vector<int>& Annotation::indices() const {
+const std::vector<int>& Annotation::indices() const {
 	return m_indices;
 }
 
-inline std::vector<int>& Annotation::indices() {
+std::vector<int>& Annotation::indices() {
 	return m_indices;
 }
 
-inline void Annotation::remove() {
+void Annotation::remove() {
 	m_field->removeAnnotation(m_name);
 }
 
 
-inline void Annotation::colorize(RGBA color) {
+void Annotation::colorize(RGBA color) {
 	Colors colors(m_indices.size(), color);
 	colorize(colors);
 }
 
-inline void Annotation::colorize(const Colors& colors) {
+void Annotation::colorize(const Colors& colors) {
 	if (m_indices.size() != colors.size()) throw std::runtime_error("Invalid color array size");
 	Colors& oldColors = m_field->getColors();
 	for (unsigned int i = 0; i < m_indices.size(); ++i) {
@@ -48,20 +51,20 @@ inline void Annotation::colorize(const Colors& colors) {
 	m_field->upload();
 }
 
-inline void Annotation::colorize(const CAssign& colorMap) {
+void Annotation::colorize(const CAssign& colorMap) {
 	Colors& colors = m_field->getColors();
 	for (const auto& idx : m_indices) colors[idx] = colorMap(idx);
 	m_field->upload();
 }
 
-inline void Annotation::colorize(const Scalars& scalars, const CMap&  colorMap) {
+void Annotation::colorize(const Scalars& scalars, const CMap&  colorMap) {
 	if (scalars.size() != m_indices.size()) throw std::runtime_error("Invalid scalar array size");
 	auto& colors = m_field->getColors();
 	for (unsigned int i = 0; i < m_indices.size(); ++i) colors[m_indices[i]] = colorMap(scalars[i]);
 	m_field->upload();
 }
 
-inline void Annotation::colorize(const ScalarField& field, const CMap&  colorMap) {
+void Annotation::colorize(const ScalarField& field, const CMap&  colorMap) {
 	auto& colors = m_field->getColors();
 	for (unsigned int i = 0; i < m_indices.size(); ++i) colors[m_indices[i]] = colorMap(field(m_indices[i]));
 	m_field->upload();
@@ -72,21 +75,21 @@ inline void Annotation::colorize(const ScalarField& field, const CMap&  colorMap
 
 /// RENDEREDFIELD ///
 
-inline Field::Field(RGBA baseColor, RenderKernel::Ptr kernel) : m_color(baseColor), m_visible(true), m_kernel(kernel) {
+Field::Field(RGBA baseColor, RenderKernel::Ptr kernel) : m_color(baseColor), m_visible(true), m_kernel(kernel) {
 }
 
-inline Field::~Field() {
+Field::~Field() {
 }
 
-inline void Field::setVisible(bool visible) {
+void Field::setVisible(bool visible) {
 	m_visible = visible;
 }
 
-inline bool Field::getVisible() const {
+bool Field::getVisible() const {
 	return m_visible;
 }
 
-inline void Field::set(const std::vector<Eigen::Vector3f>& points, const std::vector<Eigen::Vector3f>* normals, const std::vector<RGBA>* colors) {
+void Field::set(const std::vector<Eigen::Vector3f>& points, const std::vector<Eigen::Vector3f>* normals, const std::vector<RGBA>* colors) {
 	m_pointCount = static_cast<unsigned int>(points.size());
 
 	m_geometry.reset();
@@ -124,7 +127,7 @@ inline void Field::set(const std::vector<Eigen::Vector3f>& points, const std::ve
 	m_geometry->enableColors();
 }
 
-inline void Field::render(ShaderProgram& program) {
+void Field::render(ShaderProgram& program) {
 	if (!m_visible || !m_geometry) return;
 	m_geometry->bindVertices(program, "position");
 	m_geometry->bindNormals(program, "normals");
@@ -146,12 +149,12 @@ inline void Field::render(ShaderProgram& program) {
 	//if (!blendEnabled) glDisable(GL_BLEND);
 }
 
-inline Annotation::Ptr Field::operator[](std::string name) {
+Annotation::Ptr Field::operator[](std::string name) {
 	if (m_annotations.find(name) == m_annotations.end()) throw std::runtime_error("Annotation with that name does not exist.");
 	return m_annotations[name];
 }
 
-inline Annotation::Ptr Field::annotate(const std::vector<int>& indices, std::string name, bool checkIntersections) {
+Annotation::Ptr Field::annotate(const std::vector<int>& indices, std::string name, bool checkIntersections) {
 	if (m_annotations.find(name) != m_annotations.end()) throw std::runtime_error("Annotation with that name already exists.");
 	std::vector<int> cleanedIndices;
 	if (indices.size()) cleanedIndices = indices;
@@ -177,45 +180,47 @@ inline Annotation::Ptr Field::annotate(const std::vector<int>& indices, std::str
 	return annotation;
 }
 
-inline Annotation::Ptr Field::annotateAll(std::string name) {
+Annotation::Ptr Field::annotateAll(std::string name) {
 	return annotate(std::vector<int>(), name, false);
 }
 
-inline bool Field::hasAnnotation(std::string name) const {
+bool Field::hasAnnotation(std::string name) const {
 	return m_annotations.find(name) != m_annotations.end();
 }
 
-inline void Field::removeAnnotation(std::string name) {
+void Field::removeAnnotation(std::string name) {
 	auto foundIt = m_annotations.find(name);
 	if (foundIt == m_annotations.end()) throw std::runtime_error("Annotation does not exist.");
 	foundIt->second->colorize(m_color);
 	m_annotations.erase(foundIt);
 }
 
-inline void Field::clearAnnotations() {
+void Field::clearAnnotations() {
 	for (unsigned int i=0; i<m_colors.size(); ++i) m_colors[i] = m_baseColors.size() ? m_baseColors[i] : m_color;
 	upload();
 	m_annotations.clear();
 }
 
-inline void Field::setThickness(int thickness) {
+void Field::setThickness(int thickness) {
 	m_kernel->setThickness(thickness);
 }
 
-inline Annotation::Colors& Field::getColors() {
+Annotation::Colors& Field::getColors() {
 	return m_colors;
 }
 
-inline const Annotation::Colors& Field::getColors() const {
+const Annotation::Colors& Field::getColors() const {
 	return m_colors;
 }
 
-inline void Field::setColors(const Annotation::Colors& colors) {
+void Field::setColors(const Annotation::Colors& colors) {
 	m_colors = colors;
 	upload();
 }
 
-inline void Field::upload() {
+void Field::upload() {
 	m_geometry->setColors(m_colors);
 	m_geometry->upload();
 }
+
+} // Rendered
