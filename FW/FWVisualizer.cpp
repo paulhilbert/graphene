@@ -33,15 +33,26 @@ bool Visualizer::isHDR() const {
 	return false;
 }
 
-void Visualizer::execute(Job task, Job finally) {
-	m_tasks.push_back(std::make_tuple(std::move(std::async(std::launch::async, task)), std::move(finally), GUI::ProgressBar::Ptr()));
+Task::Ptr Visualizer::task(Task::Id id) {
+	if (m_tasks.find(id) == m_tasks.end()) return nullptr;
+	return m_tasks[id];
 }
 
-void Visualizer::execute(JobWithBar task, Job finally, std::string taskName, int steps) {
-	if (!m_pool) return;
-	auto bar = m_pool->create(taskName, steps);
-	m_tasks.push_back(std::make_tuple(std::async(std::launch::async, task, [&] (int done, int todo) { bar->poll(done, todo); }), finally, bar));
+Task::Ptr Visualizer::addTask(Task::Id id, Task::Computation computation) {
+	auto task = std::make_shared<Task>(id, computation);
+	m_tasks[id] = task;
+	return task;
 }
+
+//void Visualizer::execute(Job task, Job finally) {
+	//m_tasks.push_back(std::make_tuple(std::move(std::async(std::launch::async, task)), std::move(finally), GUI::ProgressBar::Ptr()));
+//}
+
+//void Visualizer::execute(JobWithBar task, Job finally, std::string taskName, int steps) {
+	//if (!m_pool) return;
+	//auto bar = m_pool->create(taskName, steps);
+	//m_tasks.push_back(std::make_tuple(std::async(std::launch::async, task, [&] (int done, int todo) { bar->poll(done, todo); }), finally, bar));
+//}
 
 std::vector<std::string> Visualizer::path(std::string&& s0) {
 	std::vector<std::string> p(1, s0);
@@ -77,11 +88,14 @@ void Visualizer::setProgressBarPool(GUI::ProgressBarPool::Ptr pool) {
 }
 
 void Visualizer::waitForTasks() {
-	Algorithm::remove(m_tasks, [&] (const Task& task) {
-		if (std::get<0>(task).wait_for(std::chrono::milliseconds(1)) != std::future_status::ready) return false;
-		if (std::get<1>(task)) std::get<1>(task)();
-		return true;
-	});
+	for (auto& t : m_tasks) {
+		t.second->poll();
+	}
+	//Algorithm::remove(m_tasks, [&] (const Task& task) {
+		//if (std::get<0>(task).wait_for(std::chrono::milliseconds(1)) != std::future_status::ready) return false;
+		//if (std::get<1>(task)) std::get<1>(task)();
+		//return true;
+	//});
 }
 
 } // FW

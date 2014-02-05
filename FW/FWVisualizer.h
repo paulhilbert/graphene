@@ -22,6 +22,7 @@
 
 #include <FW/FWVisualizerHandle.h>
 #include <GUI/GUIVisualizerHandle.h>
+#include <FW/FWTask.h>
 
 #include <GUI/GUIProgressBarPool.h>
 
@@ -49,7 +50,7 @@ class Visualizer {
 		/** weak pointer to this class */
 		typedef std::weak_ptr<Visualizer> WPtr;
 		/** defines a function to process in a separate thread */
-		typedef std::function<void (void)>    Job;
+		//typedef std::function<void (void)>    Job;
 		/** defines a progress bar callback function. Parameters are (int done, int todo). */
 		typedef std::function<void (int, int)> ProgressBar;
 		/** defines a function to process in a separate thread, provided a progress bar */
@@ -112,7 +113,28 @@ class Visualizer {
 		 */
 		virtual bool isHDR() const;
 
+		/**
+		 *  Pure virtual method returning bounding box.
+		 *
+		 *  @return Bounding box of rendered geometry in world coordinates.
+		 */
 		virtual BoundingBox boundingBox() const = 0;
+
+		/**
+		 *  Returns task with given id.
+		 *
+		 *  @Returns Task with given id or nullptr if not existent.
+		 */
+		Task::Ptr task(Task::Id id);
+
+		/**
+		 *  Adds new task and returns shared pointer to it.
+		 *
+		 *  @param id Task id.
+		 *  @param computation Function object to compute when task is run.
+		 *  @returns Shared pointer to created task.
+		 */
+		Task::Ptr addTask(Task::Id id, Task::Computation computation);
 
 		/**
 		 *  Execute given function in a separate thread.
@@ -120,7 +142,7 @@ class Visualizer {
 		 *  @param task Callback function to execute independently.
 		 *  @param finally Callback function to call after successfully executing task.
 		 */
-		void execute(Job task, Job finally);
+		//void execute(Job task, Job finally);
 
 		/**
 		 *  Execute given function in a separate thread, provided a progress bar.
@@ -130,7 +152,7 @@ class Visualizer {
 		 *  @param taskName Label for task used in the GUI.
 		 *  @param steps (Optional) parameter specifying number of steps after which progress bar is updated.
 		 */
-		void execute(JobWithBar task, Job finally, std::string taskName, int steps = 1);
+		//void execute(JobWithBar task, Job finally, std::string taskName, int steps = 1);
 		//void execute(JobWithPool task, Job finally);
 
 		/**
@@ -174,15 +196,16 @@ class Visualizer {
 		void setProgressBarPool(GUI::ProgressBarPool::Ptr m_pool);
 		void waitForTasks();
 
-	protected:
-		typedef std::tuple<std::future<void>, Job, GUI::ProgressBar::Ptr> Task;
+	//protected:
+		//typedef std::tuple<std::future<void>, Job, GUI::ProgressBar::Ptr> Task;
 
 	protected:
 		std::string                       m_id;
 		FW::VisualizerHandle::Ptr         m_fw;
 		GUI::VisualizerHandle::Ptr        m_gui;
-		std::vector<Task>                 m_tasks;
+		//std::vector<Task>                 m_tasks;
 		GUI::ProgressBarPool::Ptr         m_pool;
+		std::map<Task::Id, Task::Ptr>     m_tasks;
 };
 
 
