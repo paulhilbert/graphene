@@ -4,8 +4,6 @@ project(graphene)
 set (graphene_VERSION_MAJOR 1)
 set (graphene_VERSION_MINOR 0)
 
-option( USE_BOOST_SERIALIZATION "If enabled task persistency is possible in visualizers" ON )
-
 configure_file (
   "${PROJECT_SOURCE_DIR}/config.h.in"
   "${PROJECT_SOURCE_DIR}/include/config.h"
@@ -46,11 +44,7 @@ if(Boost_FOUND AND OPENGL_FOUND AND GLEW_FOUND)
 	include_directories(${OPENGL_INCLUDE_DIR})
 	include_directories(${GLEW_INCLUDE_DIRS})
 	add_library(Graphene SHARED ${obj} ${lib})
-	if (USE_BOOST_SERIALIZATION)
-		target_link_libraries(Graphene ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} "rgbe" "dl" "boost_serialization")
-	else (USE_BOOST_SERIALIZATION)
-		target_link_libraries(Graphene ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} "rgbe" "dl")
-	endif(USE_BOOST_SERIALIZATION)
+	target_link_libraries(Graphene ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} "rgbe" "dl")
 	add_executable(graphene "graphene.cpp")
 	target_link_libraries(graphene Graphene)
 
