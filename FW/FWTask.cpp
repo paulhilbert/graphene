@@ -1,5 +1,7 @@
 #include "FWTask.h"
 
+#include <GUI/GUIBackend.h>
+
 
 namespace FW {
 
@@ -86,10 +88,10 @@ void Task::poll() {
 			m_depFuture.get(); // get() in order to invalidate the future
 			// after waiting for dependencies we call pre() in this thread
 			if (m_pre) m_pre();
-			if (m_comp) m_future = std::async(std::launch::async,
+			m_future = std::async(std::launch::async,
 				                               [&] () {
 				                                  if (m_persistent && fs::exists(m_file) && m_ifunc(m_file)) return;
-				                                  if (m_comp) m_comp();
+															 m_comp();
 														 });
 		}
 	}

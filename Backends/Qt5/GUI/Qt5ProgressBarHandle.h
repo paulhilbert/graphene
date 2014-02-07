@@ -23,16 +23,16 @@ class Qt5ProgressBarHandle : public QObject, public ProgressBar {
 		typedef std::weak_ptr<Qt5ProgressBarHandle> WPtr;
 
 	public:
-		Qt5ProgressBarHandle(ProgressBarPool* pool, int idx, std::string label, int steps = 1);
+		Qt5ProgressBarHandle(int idx, std::string label, int steps = 1);
 		virtual ~Qt5ProgressBarHandle();
 
 		void poll(float progress);
 
 	signals:
-		void polled(float progress);
+		void polled(int idx, float progress);
+		void sigDestroy(int idx);
 
 	protected:
-		ProgressBarPool* m_pool;
 		int m_idx;
 };
 

@@ -17,6 +17,7 @@
 #include <QtCore/QString>
 
 #include "Qt5ProgressBarPool.h"
+#include "Qt5ProgressBarPoolHandle.h"
 
 namespace GUI {
 

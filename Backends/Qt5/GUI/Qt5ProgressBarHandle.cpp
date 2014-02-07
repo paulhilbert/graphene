@@ -10,15 +10,15 @@
 namespace GUI {
 
 
-Qt5ProgressBarHandle::Qt5ProgressBarHandle(ProgressBarPool* pool, int idx, std::string label, int steps) : ProgressBar(label, steps), m_pool(pool), m_idx(idx) {
+Qt5ProgressBarHandle::Qt5ProgressBarHandle(int idx, std::string label, int steps) : ProgressBar(label, steps), m_idx(idx) {
 }
 
 Qt5ProgressBarHandle::~Qt5ProgressBarHandle() {
-	m_pool->remove(m_idx);
+	emit sigDestroy(m_idx);
 }
 
 void Qt5ProgressBarHandle::poll(float progress) {
-	emit polled(progress);
+	emit polled(m_idx, progress);
 }
 
 } // GUI

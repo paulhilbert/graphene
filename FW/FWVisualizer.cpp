@@ -44,6 +44,12 @@ Task::Ptr Visualizer::addTask(Task::Id id, Task::Computation computation) {
 	return task;
 }
 
+Task::Ptr Visualizer::addTask(Task::Id id, Task::IOComputation computation) {
+	auto task = std::make_shared<Task>(id, std::bind(computation, m_pool));
+	m_tasks[id] = task;
+	return task;
+}
+
 //void Visualizer::execute(Job task, Job finally) {
 	//m_tasks.push_back(std::make_tuple(std::move(std::async(std::launch::async, task)), std::move(finally), GUI::ProgressBar::Ptr()));
 //}

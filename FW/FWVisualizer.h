@@ -49,13 +49,7 @@ class Visualizer {
 		typedef std::shared_ptr<Visualizer> Ptr;
 		/** weak pointer to this class */
 		typedef std::weak_ptr<Visualizer> WPtr;
-		/** defines a function to process in a separate thread */
-		//typedef std::function<void (void)>    Job;
-		/** defines a progress bar callback function. Parameters are (int done, int todo). */
-		typedef std::function<void (int, int)> ProgressBar;
 		/** defines a function to process in a separate thread, provided a progress bar */
-		typedef std::function<void (ProgressBar)>        JobWithBar;
-//		typedef std::function<void (IO::AbstractProgressBarPool::Ptr)>    JobWithPool;
 		friend class Graphene;
 
 	public:
@@ -137,23 +131,13 @@ class Visualizer {
 		Task::Ptr addTask(Task::Id id, Task::Computation computation);
 
 		/**
-		 *  Execute given function in a separate thread.
+		 *  Adds new task and returns shared pointer to it.
 		 *
-		 *  @param task Callback function to execute independently.
-		 *  @param finally Callback function to call after successfully executing task.
+		 *  @param id Task id.
+		 *  @param computation Function object to compute when task is run.
+		 *  @returns Shared pointer to created task.
 		 */
-		//void execute(Job task, Job finally);
-
-		/**
-		 *  Execute given function in a separate thread, provided a progress bar.
-		 *
-		 *  @param task Callback function to execute independently (function is given a progress bar).
-		 *  @param finally Callback function to call after successfully executing task.
-		 *  @param taskName Label for task used in the GUI.
-		 *  @param steps (Optional) parameter specifying number of steps after which progress bar is updated.
-		 */
-		//void execute(JobWithBar task, Job finally, std::string taskName, int steps = 1);
-		//void execute(JobWithPool task, Job finally);
+		Task::Ptr addTask(Task::Id id, Task::IOComputation computation);
 
 		/**
 		 *  Assemble string vector (used in graphene as a path) out of given parameter.

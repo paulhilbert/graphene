@@ -5,8 +5,11 @@
 #include <functional>
 #include <string>
 #include <future>
+#include <boost/variant.hpp>
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
+
+#include <GUI/GUIProgressBarPool.h>
 
 namespace FW {
 
@@ -17,14 +20,17 @@ class Task {
 		friend class Visualizer;
 
 	public:
-		typedef std::shared_ptr<Task>                  Ptr;
-		typedef std::weak_ptr<Task>                    WPtr;
-		typedef std::shared_ptr<const Task>            ConstPtr;
-		typedef std::weak_ptr<const Task>              ConstWPtr;
-		typedef std::function<void (void)>             Computation;
-		typedef std::string                            Id;
-		typedef std::function<bool (const fs::path&)>  IFunc;
-		typedef std::function<bool (const fs::path&)>  OFunc;
+		typedef std::shared_ptr<Task>                                     Ptr;
+		typedef std::weak_ptr<Task>                                       WPtr;
+		typedef std::shared_ptr<const Task>                               ConstPtr;
+		typedef std::weak_ptr<const Task>                                 ConstWPtr;
+		typedef std::function<void (int, int)>                            ProgressBar;
+		typedef std::function<ProgressBar (std::string name, int steps)>  RequestProgressBar;
+		typedef std::function<void (void)>                                Computation;
+		typedef std::function<void (::GUI::ProgressBarPool::Ptr)>         IOComputation;
+		typedef std::string                                               Id;
+		typedef std::function<bool (const fs::path&)>                     IFunc;
+		typedef std::function<bool (const fs::path&)>                     OFunc;
 
 	public:
 		Task(Id id, Computation computation);
@@ -50,8 +56,9 @@ class Task {
 		bool deserialize();
 
 	protected:
-		Id                      m_id;
-		Computation             m_comp;
+		Id           m_id;
+		Computation  m_comp;
+
 		Computation             m_pre  = nullptr;
 		Computation             m_post = nullptr;
 		std::vector<Task::Ptr>  m_dependencies;

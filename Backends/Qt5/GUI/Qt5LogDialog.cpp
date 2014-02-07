@@ -46,7 +46,10 @@ void Qt5LogDialog::clear() {
 }
 
 ProgressBarPool::Ptr Qt5LogDialog::progressBarPool() {
-	return std::dynamic_pointer_cast<ProgressBarPool>(m_barPool);
+	Qt5ProgressBarPoolHandle::Ptr pool(new Qt5ProgressBarPoolHandle());
+	QObject::connect(pool.get(), SIGNAL(sigCreate(QString, int)), m_barPool.get(), SLOT(create(QString, int)));
+	QObject::connect(m_barPool.get(), SIGNAL(sendBar(ProgressBar::Ptr)), pool.get(), SLOT(receiveBar(ProgressBar::Ptr)));
+	return std::dynamic_pointer_cast<ProgressBarPool>(pool);
 }
 
 QString Qt5LogDialog::format(const std::string& text) {

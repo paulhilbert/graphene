@@ -8,6 +8,10 @@
 #ifndef QT5PROGRESSBARPOOL_H_
 #define QT5PROGRESSBARPOOL_H_
 
+#include <mutex>
+#include <map>
+
+#include <QtCore/QSignalMapper>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QVBoxLayout>
 
@@ -16,13 +20,12 @@
 
 namespace GUI {
 
-class Qt5ProgressBarPool : public QObject, public ProgressBarPool {
+class Qt5ProgressBarPool : public QObject {
 	Q_OBJECT
 
 	public:
-		typedef std::shared_ptr<Qt5ProgressBarPool> Ptr;
-		typedef std::weak_ptr<Qt5ProgressBarPool> WPtr;
-		friend class Qt5ProgressBar;
+		typedef std::shared_ptr<Qt5ProgressBarPool>  Ptr;
+		typedef std::weak_ptr<Qt5ProgressBarPool>    WPtr;
 
 	public:
 		Qt5ProgressBarPool();
@@ -32,14 +35,24 @@ class Qt5ProgressBarPool : public QObject, public ProgressBarPool {
 		void      hide();
 		QWidget*  widget();
 
-	protected:
-		ProgressBar::Ptr createProgressBar(std::string label, int steps);
+		void  setBarCountChangeCallback(std::function<void (int)> callback);
+
+	public slots:
+		void create(QString label, int steps);
 		void removeProgressBar(int index);
+		void poll(int index, float progress);
+
+	signals:
+		void sendBar(ProgressBar::Ptr bar);
 
 	protected:
-		QWidget*                          m_area;
-		QVBoxLayout*                      m_box;
-		std::vector<Qt5ProgressBar::Ptr>  m_bars;
+		QWidget* m_area;
+		QVBoxLayout* m_box;
+		std::map<int, Qt5ProgressBar::Ptr>  m_bars;
+		std::mutex                          m_mutex;
+		//QSignalMapper*                      m_mapper;
+		int                                 m_lastIndex;
+		std::function<void (int)>           m_callback;
 };
 
 } // GUI

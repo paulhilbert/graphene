@@ -30,7 +30,6 @@ class Qt5ProgressBar : public QObject {
 
 		QWidget* widget();
 
-	public slots:
 		void poll(float progress);
 
 	protected:
