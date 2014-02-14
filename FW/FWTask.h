@@ -43,8 +43,8 @@ class Task {
 
 		void makePersistent(const fs::path& file, OFunc serialize, IFunc deserialize);
 
-		void run();
-		void runInThread();
+		void run(bool ignorePersist = false, bool ignorePersistDepends = false);
+		void runInThread(bool ignorePersist = false, bool ignorePersistDepends = false);
 
 		bool computed() const;
 
@@ -69,6 +69,7 @@ class Task {
 		fs::path                m_file;
 		OFunc                   m_ofunc;
 		IFunc                   m_ifunc;
+		bool                    m_ignorePersist;
 };
 
 

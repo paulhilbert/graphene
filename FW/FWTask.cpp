@@ -31,30 +31,28 @@ void Task::makePersistent(const fs::path& file, OFunc serialize, IFunc deseriali
 	m_ifunc      = deserialize;
 }
 
-void Task::run() {
-#ifdef USE_BOOST_SERIALIZATION
-	if (m_persistent && fs::exists(m_file)) {
-		if (deserialize()) {
-			m_done = true;
-			return;
-		}
-	}
-#endif
+void Task::run(bool ignorePersist, bool ignorePersistDepends) {
+	m_ignorePersist = ignorePersist;
 	for (auto d : m_dependencies) {
-		if (!d->computed()) d->run();
+		if (!d->computed()) d->run(ignorePersistDepends, ignorePersistDepends);
 	}
+
+	if (!m_ignorePersist && m_persistent && fs::exists(m_file) && m_ifunc(m_file)) {
+		m_done = true;
+		return;
+	}
+
 	if (m_pre) m_pre();
 	m_comp();
 	if (m_post) m_post();
-#ifdef USE_BOOST_SERIALIZATION
-	if (m_persistent) serialize();
-#endif
+	if (m_persistent) m_ofunc(m_file);
 	m_done = true;
 }
 
-void Task::runInThread() {
+void Task::runInThread(bool ignorePersist, bool ignorePersistDepends) {
+	m_ignorePersist = ignorePersist;
 	for (auto d : m_dependencies) {
-		if (!d->computed()) d->runInThread();
+		if (!d->computed()) d->runInThread(ignorePersistDepends, ignorePersistDepends);
 	}
 	m_depFuture = std::async(std::launch::async,
 	                         [&] () {
@@ -90,7 +88,8 @@ void Task::poll() {
 			if (m_pre) m_pre();
 			m_future = std::async(std::launch::async,
 				                               [&] () {
-				                                  if (m_persistent && fs::exists(m_file) && m_ifunc(m_file)) return;
+				                                  if (!m_ignorePersist && m_persistent && fs::exists(m_file) && m_ifunc(m_file)) return;
+															 std::cout << "calling compute on " << m_id << "\n";
 															 m_comp();
 														 });
 		}

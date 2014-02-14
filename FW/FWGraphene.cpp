@@ -221,8 +221,8 @@ void Graphene::Impl::initTransforms() {
 	}
 
 	auto  fod = groupRender->add<Group>("Field Of Depth", "groupFOD");
-	fod->add<Bool>("Blur Enabled", "blurEnabled")->setValue(true);
-	fod->add<Bool>("Blooming Enabled", "bloomEnabled")->setValue(true);
+	fod->add<Bool>("Blur Enabled", "blurEnabled")->setValue(false);
+	fod->add<Bool>("Blooming Enabled", "bloomEnabled")->setValue(false);
 	fod->add<Bool>("Bloom Only Blurred", "fodBloom")->setValue(true);
 	fod->add<Range>("Blur Ratio", "blur")->setDigits(2).setMin(0.f).setMax(1.f).setValue(0.f);
 	fod->add<Range>("Blooming", "bloom")->setDigits(2).setMin(0.f).setMax(5.f).setValue(0.f);

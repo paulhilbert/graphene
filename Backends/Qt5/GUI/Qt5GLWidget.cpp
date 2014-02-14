@@ -7,6 +7,8 @@
 
 #include "Qt5GLWidget.h"
 
+#include <QtGui/QGuiApplication>
+
 #include <FW/Events/EventsKeys.h>
 
 namespace GUI {
@@ -132,6 +134,40 @@ void Qt5GLWidget::wheelEvent(QWheelEvent* event) {
 }
 
 bool Qt5GLWidget::eventFilter(QObject*, QEvent* event) {
+	if (event->type() == QEvent::FocusOut) {
+		FW::Events::Signal n0("MODIFIER_RELEASE"), n1("MODIFIER_RELEASE"), n2("MODIFIER_RELEASE"), n3("MODIFIER_RELEASE");
+		n0.addParam(FW::Events::Keys::SHIFT);
+		n1.addParam(FW::Events::Keys::CTRL);
+		n2.addParam(FW::Events::Keys::ALT);
+		n3.addParam(FW::Events::Keys::ALTGR);
+		m_eventHandler->notify(n0);
+		m_eventHandler->notify(n1);
+		m_eventHandler->notify(n2);
+		m_eventHandler->notify(n3);
+	}
+	if (event->type() == QEvent::FocusIn) {
+		auto mod = QGuiApplication::queryKeyboardModifiers();
+		if (mod & Qt::ShiftModifier) {
+			FW::Events::Signal s("MODIFIER_PRESS");
+			s.addParam(FW::Events::Keys::SHIFT);
+			m_eventHandler->notify(s);
+		}
+		if (mod & Qt::ControlModifier) {
+			FW::Events::Signal s("MODIFIER_PRESS");
+			s.addParam(FW::Events::Keys::CTRL);
+			m_eventHandler->notify(s);
+		}
+		if (mod & Qt::AltModifier) {
+			FW::Events::Signal s("MODIFIER_PRESS");
+			s.addParam(FW::Events::Keys::ALT);
+			m_eventHandler->notify(s);
+		}
+		if (mod & Qt::MetaModifier) {
+			FW::Events::Signal s("MODIFIER_PRESS");
+			s.addParam(FW::Events::Keys::ALTGR);
+			m_eventHandler->notify(s);
+		}
+	}
 	if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
 		QKeyEvent* keyEvent = (QKeyEvent*)event;
 		std::string suffix = event->type() == QEvent::KeyPress ? "_PRESS" : "_RELEASE";
