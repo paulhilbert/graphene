@@ -17,7 +17,7 @@ Point::Point(const Eigen::Vector3f& position, const Eigen::Vector4f& color, int 
 	m_position = position;
 	m_color = color;
 	m_lineWidth = lineWidth;
-	
+
 	updateRenderedLines();
 }
 
@@ -38,7 +38,7 @@ void Point::setLineWidth(int lineWidth) {
 
 void Point::updateRenderedLines() {
 	m_renderedLines = Lines::Ptr(new Lines(m_color, m_lineWidth));
-	
+
 	vector<Eigen::Vector3f> vertices;
 	const float size = 0.1f;
 	vertices.push_back(Eigen::Vector3f(0.f,  0.f, -size) + m_position);
@@ -47,7 +47,7 @@ void Point::updateRenderedLines() {
 	vertices.push_back(Eigen::Vector3f(0.f,  size, 0.f) + m_position);
 	vertices.push_back(Eigen::Vector3f( size, 0.f, 0.f) + m_position);
 	vertices.push_back(Eigen::Vector3f(-size, 0.f, 0.f) + m_position);
-	
+
 	m_renderedLines->set(vertices);
 }
 

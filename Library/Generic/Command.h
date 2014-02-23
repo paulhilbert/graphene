@@ -18,10 +18,8 @@ using boost::function_types::result_type;
 #include <boost/mpl/transform.hpp>
 
 #include <boost/type_traits/is_void.hpp>
-using boost::is_void;
 
 #include <boost/type_traits/remove_reference.hpp>
-using boost::remove_reference;
 
 #include <boost/mpl/for_each.hpp>
 using boost::mpl::for_each;
@@ -53,7 +51,7 @@ class BaseCommand {
 
 template <class Sig>
 class Command : public BaseCommand {
-	struct remove_ref { template <class T> struct apply { typedef typename remove_reference<T>::type type; }; };
+	struct remove_ref { template <class T> struct apply { typedef typename boost::remove_reference<T>::type type; }; };
 
 	// callback type
 	typedef std::function<Sig> Receiver;
@@ -61,7 +59,7 @@ class Command : public BaseCommand {
 	typedef typename boost::mpl::transform< parameter_types<Sig>, remove_ref>::type ParamTypes;
 	// return type
 	typedef typename result_type<Sig>::type ResultType;
-	enum { IsVoidResult = is_void<ResultType>::value };
+	enum { IsVoidResult = boost::is_void<ResultType>::value };
 	// executor
 	typedef Generic::Executor< int_<function_arity<Sig>::value>, ParamTypes, ResultType > Executor;
 	

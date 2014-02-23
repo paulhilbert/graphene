@@ -129,9 +129,9 @@ void Field::set(const std::vector<Eigen::Vector3f>& points, const std::vector<Ei
 
 void Field::render(ShaderProgram& program) {
 	if (!m_visible || !m_geometry) return;
-	m_geometry->bindVertices(program, "position");
-	m_geometry->bindNormals(program, "normals");
-	m_geometry->bindColors(program, "color");
+	//m_geometry->bindVertices(program, "position");
+	//m_geometry->bindNormals(program, "normal");
+	//m_geometry->bindColors(program, "color");
 	m_geometry->bind();
 
 	// store blend mode and enable blending

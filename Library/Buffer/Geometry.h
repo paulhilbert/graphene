@@ -11,6 +11,7 @@
 #include <iostream>
 #include <map>
 #include <set>
+#include <memory>
 using std::map;
 
 #include <Eigen/Dense>
@@ -29,6 +30,12 @@ namespace Buffer {
 
 
 class Geometry {
+	public:
+		typedef std::shared_ptr<Geometry> Ptr;
+		typedef std::weak_ptr<Geometry> WPtr;
+		typedef std::shared_ptr<const Geometry> ConstPtr;
+		typedef std::weak_ptr<const Geometry> ConstWPtr;
+
 	public:
 		typedef VBO<GLfloat,2> VBO2f;
 		typedef VBO<GLfloat,3> VBO3f;

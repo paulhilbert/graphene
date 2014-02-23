@@ -76,7 +76,8 @@ inline void MultiPointCloud::addClouds(const GUI::Property::Paths& paths) {
 			gui()->log()->error("File \""+p.string()+"\" does not exist. Skipping this file.");
 			continue;
 		}
-		Cloud::Ptr singleCloud = Tools::loadPointCloud(p);
+		std::vector<Eigen::Vector4f> colors;
+		Cloud::Ptr singleCloud = Tools::loadPointCloud(p, colors);
 		gui()->log()->verbose("Loaded point cloud with "+lexical_cast<std::string>(singleCloud->size())+" points.");
 		m_cloud->insert(m_cloud->end(), singleCloud->begin(), singleCloud->end());
 	}
@@ -85,7 +86,8 @@ inline void MultiPointCloud::addClouds(const GUI::Property::Paths& paths) {
 }
 
 inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA color, Cloud::Ptr cloud, bool visible, bool ignoreNormals) {
-	RC::Ptr rc(new RC(color, 1));
+	int thickness = gui()->properties()->get<Range>({"groupRendering", "thickness"})->value();
+	RC::Ptr rc(new RC(color, thickness));
 	rc->setFromPCLCloud(cloud->begin(), cloud->end(), nullptr, ignoreNormals);
 	rc->setVisible(visible);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
@@ -100,7 +102,8 @@ inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA col
 }
 
 inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, Cloud::Ptr cloud, std::vector<RGBA>* colors, bool visible, bool ignoreNormals) {
-	RC::Ptr rc(new RC(rgbaInvisible(), 1));
+	int thickness = gui()->properties()->get<Range>({"groupRendering", "thickness"})->value();
+	RC::Ptr rc(new RC(rgbaInvisible(), thickness));
 	rc->setFromPCLCloud(cloud->begin(), cloud->end(), colors, ignoreNormals);
 	rc->setVisible(visible);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
@@ -115,7 +118,8 @@ inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, Cloud::P
 }
 
 inline Rendered::Vectors::Ptr MultiPointCloud::addNormals(std::string name, RGBA color, Cloud::Ptr cloud, bool visible, float factor) {
-	RV::Ptr rv(new RV(color));
+	int thickness = gui()->properties()->get<Range>({"groupRendering", "thickness"})->value();
+	RV::Ptr rv(new RV(color, thickness));
 	rv->setFromPCLCloudNormals(cloud->begin(), cloud->end(), nullptr, factor);
 	rv->setVisible(visible);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
@@ -131,7 +135,8 @@ inline Rendered::Vectors::Ptr MultiPointCloud::addNormals(std::string name, RGBA
 }
 
 inline Rendered::Lines::Ptr MultiPointCloud::addLines(std::string name, RGBA color, const std::vector<Vector3f>& points, bool visible) {
-	RL::Ptr rl(new RL(color));
+	int thickness = gui()->properties()->get<Range>({"groupRendering", "thickness"})->value();
+	RL::Ptr rl(new RL(color, thickness));
 	rl->set(points);
 	rl->setVisible(visible);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
