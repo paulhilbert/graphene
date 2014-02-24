@@ -488,7 +488,11 @@ void Graphene::Impl::render() {
 	dist     = (bbox.corner(BoundingBox::TopRightCeil) - camPos).dot(camDir);
 	farDist  = std::max(farDist, dist); nearDist = std::min(nearDist, dist);
 	nearDist = std::max(nearDist, 0.05f);
+	//nearDist -= 0.01;
+	farDist += 10.f;
 	m_camera->setClipping(nearDist, farDist);
+	m_lightPass.setUniformVar1f("near", m_transforms->near());
+	m_lightPass.setUniformVar1f("far", m_transforms->far());
 
 	auto  main        = m_backend->getMainSettings();
 	bool  ssaoActive  =  main->get<Bool>({"groupRendering", "groupSSAO", "ssaoActive"})->value();

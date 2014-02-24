@@ -51,6 +51,10 @@ void main(void) {
 	} else {
 		z = depth;
 	}
+	if (z >= 0.999) {
+		fragColor = diffCol;
+		return;
+	}
 	float blur = abs(z - focalPoint) / focalArea;
 	blur = ratio * clamp(blur, 0.f, 1.f);
 
