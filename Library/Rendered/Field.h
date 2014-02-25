@@ -100,7 +100,7 @@ class Field {
 		Annotation::Colors& getColors();
 		const Annotation::Colors& getColors() const;
 		void setColors(const Annotation::Colors& colors);
-		void upload();
+		virtual void upload();
 
 	protected:
 		RGBA                m_color;
