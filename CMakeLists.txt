@@ -68,7 +68,7 @@ install (FILES "bin/createBase" "bin/createVisualizer" DESTINATION bin)
 install (DIRECTORY FW DESTINATION include/graphene FILES_MATCHING PATTERN "*.h" PATTERN "*.inl")
 install (DIRECTORY GUI DESTINATION include/graphene FILES_MATCHING PATTERN "*.h" PATTERN "*.inl")
 install (DIRECTORY include DESTINATION include/graphene FILES_MATCHING PATTERN "*.h" PATTERN "*.inl")
-install (DIRECTORY Library DESTINATION include/graphene FILES_MATCHING PATTERN "*.h" PATTERN "*.inl" PATTERN "*.frag" PATTERN "*.vert" PATTERN "*.geom" PATTERN "*Skeleton.*" PATTERN "SConstruct")
+install (DIRECTORY Library DESTINATION include/graphene FILES_MATCHING PATTERN "*.h" PATTERN "*.inl" PATTERN "*.frag" PATTERN "*.vert" PATTERN "*.geom" PATTERN "*Skeleton.*" PATTERN "SConstruct" PATTERN "*.hdr")
 
 # icons
 file (GLOB icons RELATIVE "${PROJECT_SOURCE_DIR}" "Icons/*.png")
