@@ -21,6 +21,7 @@ typedef Tools::IdxSet    IdxSet;
 #include <Library/Rendered/Cloud.h>
 #include <Library/Rendered/Vectors.h>
 #include <Library/Rendered/Lines.h>
+#include <Library/Rendered/Spheres.h>
 
 namespace FW {
 
@@ -33,6 +34,7 @@ class MultiPointCloud : virtual public Visualizer {
 		typedef Rendered::Cloud                  RC;
 		typedef Rendered::Vectors                RV;
 		typedef Rendered::Lines                  RL;
+		typedef Rendered::Spheres                RS;
 		typedef std::map<std::string, RF::Ptr>   RFPtrs;
 		friend class Computation;
 
@@ -53,6 +55,8 @@ class MultiPointCloud : virtual public Visualizer {
 		RC::Ptr addCloud(std::string name, Cloud::Ptr cloud, std::vector<RGBA>* color, bool visible = true, bool ignoreNormals = false);
 		RV::Ptr addNormals(std::string name, RGBA color, Cloud::Ptr cloud, bool visible = true, float factor = 1.f);
 		RL::Ptr addLines(std::string name, RGBA color, const std::vector<Vector3f>& points, bool visible = true);
+		RS::Ptr addSpheres(std::string name, RGBA color, float radius, const std::vector<Vector3f>& points, bool visible = true);
+		RS::Ptr addSpheres(std::string name, std::vector<RGBA>* color, float radius, const std::vector<Vector3f>& points, bool visible = true);
 		void    removeField(std::string name);
 		void    exportCloud(const fs::path& path);
 		void    resample();

@@ -22,10 +22,12 @@ inline void MultiPointCloud::render(ShaderProgram& program) {
 
 	m_rf["Main Cloud"]->render(program);
 	m_rf["Main Cloud Normals"]->render(program);
+	//glDisable(GL_DEPTH_TEST);
 	for (const auto& cloud : m_rf) {
 		std::string name = cloud.first;
 		if (name != "Main Cloud" && name != "Main Cloud Normals") cloud.second->render(program);
 	}
+	//glEnable(GL_DEPTH_TEST);
 }
 
 inline void MultiPointCloud::addProperties() {
@@ -148,6 +150,38 @@ inline Rendered::Lines::Ptr MultiPointCloud::addLines(std::string name, RGBA col
 	}
 
 	return rl;
+}
+
+inline Rendered::Spheres::Ptr MultiPointCloud::addSpheres(std::string name, RGBA color, float radius, const std::vector<Vector3f>& points, bool visible) {
+	RS::Ptr rs(new RS(color));
+	rs->set(points, radius);
+	rs->setVisible(visible);
+	auto tree = gui()->properties()->get<Tree>(path("visibility"));
+	tree->add(name, {name}, visible);
+	m_rf[name] = std::dynamic_pointer_cast<RF>(rs);
+
+	for (const auto& p : points) {
+		m_bbox.extend(p - Vector3f::Constant(radius));
+		m_bbox.extend(p + Vector3f::Constant(radius));
+	}
+
+	return rs;
+}
+
+inline Rendered::Spheres::Ptr MultiPointCloud::addSpheres(std::string name, std::vector<RGBA>* color, float radius, const std::vector<Vector3f>& points, bool visible) {
+	RS::Ptr rs(new RS(rgbaInvisible()));
+	rs->set(points, radius, color);
+	rs->setVisible(visible);
+	auto tree = gui()->properties()->get<Tree>(path("visibility"));
+	tree->add(name, {name}, visible);
+	m_rf[name] = std::dynamic_pointer_cast<RF>(rs);
+
+	for (const auto& p : points) {
+		m_bbox.extend(p - Vector3f::Constant(radius));
+		m_bbox.extend(p + Vector3f::Constant(radius));
+	}
+
+	return rs;
 }
 
 inline void MultiPointCloud::removeField(std::string name) {

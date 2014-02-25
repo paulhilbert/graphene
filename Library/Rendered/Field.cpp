@@ -132,7 +132,7 @@ void Field::render(ShaderProgram& program) {
 	//m_geometry->bindVertices(program, "position");
 	//m_geometry->bindNormals(program, "normal");
 	//m_geometry->bindColors(program, "color");
-	m_geometry->bind();
+	//m_geometry->bind();
 
 	// store blend mode and enable blending
 	//GLboolean blendEnabled;

@@ -83,9 +83,9 @@ class Field {
 		void setVisible(bool visible);
 		bool getVisible() const;
 
-		void set(const std::vector<Eigen::Vector3f>& points, const std::vector<Eigen::Vector3f>* normals = nullptr, const std::vector<RGBA>* colors = nullptr);
+		virtual void set(const std::vector<Eigen::Vector3f>& points, const std::vector<Eigen::Vector3f>* normals = nullptr, const std::vector<RGBA>* colors = nullptr);
 
-		void render(ShaderProgram& program);
+		virtual void render(ShaderProgram& program);
 
 		Annotation::Ptr operator[](std::string name);
 		Annotation::Ptr annotate(const std::vector<int>& indices, std::string name, bool checkIntersections = false);
@@ -94,7 +94,7 @@ class Field {
 		void removeAnnotation(std::string name);
 		void clearAnnotations();
 
-		void setThickness(int thickness);
+		virtual void setThickness(int thickness);
 
 	protected:
 		Annotation::Colors& getColors();

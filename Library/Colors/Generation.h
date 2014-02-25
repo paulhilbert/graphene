@@ -12,9 +12,10 @@ using Random::RNG;
 
 namespace Colors {
 
-typedef std::pair<float, float> Range;
 
 struct Generation {
+	typedef std::pair<float, float> Range;
+
 	static RGB  randomHueRGB();
 	static RGBA randomHueRGBA();
 	static std::vector<RGB>  randomHuesRGB(unsigned int count);

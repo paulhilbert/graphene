@@ -26,7 +26,7 @@ doc/
 *.dblite
 *.swp
 *moc*.cpp
-Probes*
+#Probes*
 graphene
 graphene.conf
 
