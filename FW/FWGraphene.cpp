@@ -29,7 +29,6 @@ using namespace FW::View;
 
 #include <Library/Buffer/Texture.h>
 #include <Library/Buffer/HdrFile.h>
-#include <Library/Buffer/FBO.h>
 #include <Library/Shader/ShaderProgram.h>
 #include <Library/Buffer/Geometry.h>
 #include <Library/Random/RNG.h>
