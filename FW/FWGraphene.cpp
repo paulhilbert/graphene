@@ -122,6 +122,11 @@ struct  Graphene::Impl {
 
 	std::map<std::string, EnvTex> m_envTextures;
 	std::string m_crtMap;
+
+	// fps computation
+	bool m_showFPS;
+	std::chrono::system_clock::time_point m_lastFPSComp;
+	unsigned int m_frameCount;
 };
 
 
@@ -150,7 +155,8 @@ Factory::Ptr Graphene::getFactory(std::string name) {
 /// GRAPHENE IMPL ///
 
 
-Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects, std::string hdrPath) : m_backend(backend), m_eventHandler(eventHandler), m_singleMode(singleMode), m_noEffects(noEffects) {
+Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects, std::string hdrPath) : m_backend(backend), m_eventHandler(eventHandler), m_singleMode(singleMode), m_noEffects(noEffects), m_showFPS(false), m_frameCount(0) {
+	m_lastFPSComp = std::chrono::system_clock::now();
 	backend->setRenderCallback(std::bind(&Graphene::Impl::render, this));
 	backend->setExitCallback(std::bind(&Graphene::Impl::exit, this));
 	backend->setAddVisCallback(std::bind(&Graphene::Impl::addVisualizer, this, std::placeholders::_1, std::placeholders::_2));
@@ -246,6 +252,9 @@ void Graphene::Impl::initTransforms() {
 	auto  debug = groupRender->add<Group>("Debug", "debug");
 	debug->add<Bool>("Normals", "debugNormals")->setValue(false);;
 	debug->add<Bool>("SSAO", "debugSSAO")->setValue(false);
+	auto fps = debug->add<Bool>("FPS", "fps");
+	fps->setValue(false);
+	fps->setCallback([&] (bool state) { m_showFPS = state; });
 #endif
 
 	if (m_singleMode) groupRender->collapse();
@@ -453,6 +462,18 @@ void Graphene::Impl::removeVisualizer(std::string visName) {
 }
 
 void Graphene::Impl::render() {
+	if (m_showFPS) {
+		++m_frameCount;
+		auto now = std::chrono::system_clock::now();
+		auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(now - m_lastFPSComp).count();
+		if (dur > 500) {
+			float fps = m_frameCount * 1000.f / dur;
+			m_lastFPSComp = now;
+			m_frameCount = 0;
+			auto status = m_backend->getStatus();
+			status->set(lexical_cast<std::string>(fps));
+		}
+	}
 	if (!m_gbuffer.initialized()) return;
 
 	// determine bounding box
