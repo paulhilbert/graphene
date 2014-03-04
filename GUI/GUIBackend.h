@@ -221,6 +221,8 @@ class Backend {
 		 */
 		virtual void setRenderCallback(std::function<void ()> func) = 0;
 
+		virtual void setStylesheet(std::string stylesheet) = 0;
+
 #ifdef ENABLE_SCREENCAST
 		void setScreencastStartCallback(const std::function<void (fs::path)>& func);
 		void setScreencastPauseCallback(const std::function<void (void)>& func);

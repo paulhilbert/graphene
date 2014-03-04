@@ -48,6 +48,7 @@ class Qt5Backend : public QObject, public Backend {
 
 		void setWindowTitle(std::string title);
 		void setWindowSize(int width, int height);
+		void setStylesheet(std::string stylesheet);
 		Eigen::Vector2i getGLSize();
 
 		Eigen::Vector4f getBackgroundColor() const;

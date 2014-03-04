@@ -91,9 +91,10 @@ inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, RGBA col
 	int thickness = gui()->properties()->get<Range>({"groupRendering", "thickness"})->value();
 	RC::Ptr rc(new RC(color, thickness));
 	rc->setFromPCLCloud(cloud->begin(), cloud->end(), nullptr, ignoreNormals);
-	rc->setVisible(visible);
+	bool vis = m_rf.find(name) != m_rf.end() ? m_rf[name]->getVisible() : visible;
+	rc->setVisible(vis);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
-	tree->add(name, {name}, visible);
+	tree->add(name, {name}, vis);
 	m_rf[name] = std::dynamic_pointer_cast<RF>(rc);
 
 	for (const auto& p : *cloud) {
@@ -107,9 +108,10 @@ inline Rendered::Cloud::Ptr MultiPointCloud::addCloud(std::string name, Cloud::P
 	int thickness = gui()->properties()->get<Range>({"groupRendering", "thickness"})->value();
 	RC::Ptr rc(new RC(rgbaInvisible(), thickness));
 	rc->setFromPCLCloud(cloud->begin(), cloud->end(), colors, ignoreNormals);
-	rc->setVisible(visible);
+	bool vis = m_rf.find(name) != m_rf.end() ? m_rf[name]->getVisible() : visible;
+	rc->setVisible(vis);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
-	tree->add(name, {name}, visible);
+	tree->add(name, {name}, vis);
 	m_rf[name] = std::dynamic_pointer_cast<RF>(rc);
 
 	for (const auto& p : *cloud) {
@@ -123,9 +125,10 @@ inline Rendered::Vectors::Ptr MultiPointCloud::addNormals(std::string name, RGBA
 	int thickness = gui()->properties()->get<Range>({"groupRendering", "thickness"})->value();
 	RV::Ptr rv(new RV(color, thickness));
 	rv->setFromPCLCloudNormals(cloud->begin(), cloud->end(), nullptr, factor);
-	rv->setVisible(visible);
+	bool vis = m_rf.find(name) != m_rf.end() ? m_rf[name]->getVisible() : visible;
+	rv->setVisible(vis);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
-	tree->add(name, {name}, visible);
+	tree->add(name, {name}, vis);
 	m_rf[name] = std::dynamic_pointer_cast<RF>(rv);
 
 	for (unsigned int i=0; i<cloud->size(); ++i) {
@@ -140,9 +143,10 @@ inline Rendered::Lines::Ptr MultiPointCloud::addLines(std::string name, RGBA col
 	int thickness = gui()->properties()->get<Range>({"groupRendering", "thickness"})->value();
 	RL::Ptr rl(new RL(color, thickness));
 	rl->set(points);
-	rl->setVisible(visible);
+	bool vis = m_rf.find(name) != m_rf.end() ? m_rf[name]->getVisible() : visible;
+	rl->setVisible(vis);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
-	tree->add(name, {name}, visible);
+	tree->add(name, {name}, vis);
 	m_rf[name] = std::dynamic_pointer_cast<RF>(rl);
 
 	for (const auto& p : points) {
@@ -155,9 +159,10 @@ inline Rendered::Lines::Ptr MultiPointCloud::addLines(std::string name, RGBA col
 inline Rendered::Spheres::Ptr MultiPointCloud::addSpheres(std::string name, RGBA color, float radius, const std::vector<Vector3f>& points, bool visible) {
 	RS::Ptr rs(new RS(color));
 	rs->set(points, radius);
-	rs->setVisible(visible);
+	bool vis = m_rf.find(name) != m_rf.end() ? m_rf[name]->getVisible() : visible;
+	rs->setVisible(vis);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
-	tree->add(name, {name}, visible);
+	tree->add(name, {name}, vis);
 	m_rf[name] = std::dynamic_pointer_cast<RF>(rs);
 
 	for (const auto& p : points) {
@@ -171,9 +176,10 @@ inline Rendered::Spheres::Ptr MultiPointCloud::addSpheres(std::string name, RGBA
 inline Rendered::Spheres::Ptr MultiPointCloud::addSpheres(std::string name, std::vector<RGBA>* color, float radius, const std::vector<Vector3f>& points, bool visible) {
 	RS::Ptr rs(new RS(rgbaInvisible()));
 	rs->set(points, radius, color);
-	rs->setVisible(visible);
+	bool vis = m_rf.find(name) != m_rf.end() ? m_rf[name]->getVisible() : visible;
+	rs->setVisible(vis);
 	auto tree = gui()->properties()->get<Tree>(path("visibility"));
-	tree->add(name, {name}, visible);
+	tree->add(name, {name}, vis);
 	m_rf[name] = std::dynamic_pointer_cast<RF>(rs);
 
 	for (const auto& p : points) {

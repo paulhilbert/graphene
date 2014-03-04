@@ -149,6 +149,13 @@ void Qt5Backend::setWindowSize(int width, int height) {
 	if (m_wnd) m_wnd->resize(width, height);
 }
 
+void Qt5Backend::setStylesheet(std::string stylesheet) {
+	QFile file(QString::fromStdString(stylesheet));
+	file.open(QFile::ReadOnly);
+	QString qss = QLatin1String(file.readAll());
+	qApp->setStyleSheet(qss);
+}
+
 Eigen::Vector2i Qt5Backend::getGLSize() {
 	return m_glWidget->size();
 }

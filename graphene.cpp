@@ -39,6 +39,7 @@ int main( int argc, char *argv[] ) {
 	std::string  hdrPath;
 	std::string  single;
 	std::string  title;
+	std::string  stylesheet;
 	int          fps;
 	int          wndWidth, wndHeight;
 	bool         noEffects;
@@ -62,6 +63,7 @@ int main( int argc, char *argv[] ) {
 		("hdrPath",    po::value<std::string>(&hdrPath)->default_value(""), "Path to HDR environment maps")
 		("single",     po::value<std::string>(&single) ->default_value(""), "Use the given name as single mode visualizer")
 		("title",      po::value<std::string>(&title) ->default_value("graphene"), "Window title")
+		("stylesheet", po::value<std::string>(&stylesheet) ->default_value(""), "Stylesheet for the UI")
 		("width",      po::value<int>(&wndWidth)  ->default_value(1024), "Path to backend library")
 		("height",     po::value<int>(&wndHeight) ->default_value(576), "Path to backend library")
 		("fps",        po::value<int>(&fps) ->default_value(60), "Frames Per Second")
@@ -127,6 +129,7 @@ int main( int argc, char *argv[] ) {
 	backend->init(argc, argv, eventHandler, wndParams, singleMode, verbose);
 	backend->setWindowTitle(title);
 	backend->setWindowSize(wndWidth, wndHeight);
+	if (stylesheet != "") backend->setStylesheet(stylesheet);
 
 	Graphene graphene(backend, eventHandler, singleMode, noEffects, hdrPath);
 
