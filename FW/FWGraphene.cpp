@@ -200,7 +200,7 @@ void Graphene::Impl::initTransforms() {
 	ccChoice->add("fly", "Fly Control");
 	ccChoice->setCallback(std::bind(&Graphene::Impl::setCameraControl, this, std::placeholders::_1));
 	auto  groupRender = main->add<Section>("Rendering", "groupRendering");
-	groupRender->add<Color>("Background: ", "background")->setValue(Eigen::Vector4f(0.f, 0.f, 0.f, 1.f));
+	groupRender->add<Color>("Background: ", "background")->setValue(Eigen::Vector4f(1.f, 1.f, 1.f, 1.f));
 	auto  projection  = groupRender->add<Choice>("Projection:");
 	projection->add("perspective", "Perspective");
 	projection->add("ortho", "Orthographic");
@@ -226,7 +226,7 @@ void Graphene::Impl::initTransforms() {
 	}
 
 	auto  fod = groupRender->add<Group>("Field Of Depth", "groupFOD");
-	fod->add<Bool>("Blur Enabled", "blurEnabled")->setValue(false);
+	fod->add<Bool>("Blur Enabled", "blurEnabled")->setValue(true);
 	fod->add<Bool>("Blooming Enabled", "bloomEnabled")->setValue(false);
 	fod->add<Bool>("Bloom Only Blurred", "fodBloom")->setValue(true);
 	fod->add<Range>("Blur Ratio", "blur")->setDigits(2).setMin(0.f).setMax(1.f).setValue(0.f);
@@ -474,7 +474,13 @@ void Graphene::Impl::render() {
 			status->set(lexical_cast<std::string>(fps));
 		}
 	}
-	if (!m_gbuffer.initialized()) return;
+	if (!m_gbuffer.initialized()) {
+		auto      main    = m_backend->getMainSettings();
+		Vector4f  bg      = m_backend->getBackgroundColor();
+		glClearColor(bg[0], bg[1], bg[2], 1.f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		return;
+	}
 
 	// determine bounding box
 	BoundingBox  bbox;
