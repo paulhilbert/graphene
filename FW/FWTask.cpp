@@ -43,7 +43,9 @@ void Task::run(bool ignorePersist, bool ignorePersistDepends) {
 	}
 
 	if (m_pre) m_pre();
+	m_profiling.profile("execution");
 	m_comp();
+	m_profiling.profile("execution");
 	if (m_post) m_post();
 	if (m_persistent) m_ofunc(m_file);
 	m_done = true;
@@ -74,6 +76,11 @@ bool Task::computed() const {
 	return m_done;
 }
 
+template <typename Duration>
+unsigned long Task::duration() const {
+	return static_cast<unsigned long>(m_profiling.duration<Duration>("execution"));
+}
+
 Task::Id Task::id() const {
 	return m_id;
 }
@@ -89,8 +96,9 @@ void Task::poll() {
 			m_future = std::async(std::launch::async,
 				                               [&] () {
 				                                  if (!m_ignorePersist && m_persistent && fs::exists(m_file) && m_ifunc(m_file)) return;
-															 std::cout << "calling compute on " << m_id << "\n";
+															 m_profiling.profile("execution");
 															 m_comp();
+															 m_profiling.profile("execution");
 														 });
 		}
 	}
@@ -103,5 +111,13 @@ void Task::poll() {
 		}
 	}
 }
+
+
+template unsigned long Task::duration<std::chrono::hours>() const;
+template unsigned long Task::duration<std::chrono::minutes>() const;
+template unsigned long Task::duration<std::chrono::seconds>() const;
+template unsigned long Task::duration<std::chrono::milliseconds>() const;
+template unsigned long Task::duration<std::chrono::microseconds>() const;
+template unsigned long Task::duration<std::chrono::nanoseconds>() const;
 
 } // FW

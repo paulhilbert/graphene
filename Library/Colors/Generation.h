@@ -100,13 +100,15 @@ inline std::vector<RGBA> Generation::uniformColorsRGBA(unsigned int count, const
 			}
 		}
 	}
+	if (result.size() < count) {
+		std::cout << "Generation::uniformColorsRGBA(): Not enough colors generated." << "\n";
+	}
 	result.resize(count);
 	return result;
 }
 
 inline std::vector<RGBA> Generation::shuffledColorsRGBA(unsigned int count, const Range& hueRange, const Range& satRange, const Range& lightRange, float alpha) {
 	std::vector<RGBA> result = uniformColorsRGBA(count, hueRange, satRange, lightRange, alpha);
-	std::random_shuffle(result.begin(), result.end());
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::shuffle(result.begin(), result.end(), std::default_random_engine(seed));
 	return result;

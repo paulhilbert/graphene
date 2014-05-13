@@ -5,11 +5,16 @@
 #include <functional>
 #include <string>
 #include <future>
+#include <chrono>
 #include <boost/variant.hpp>
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
 
 #include <GUI/GUIProgressBarPool.h>
+#ifndef PROFILING
+#define PROFILING
+#endif
+#include <Library/Testing/Profiling.h>
 
 namespace FW {
 
@@ -47,6 +52,8 @@ class Task {
 		void runInThread(bool ignorePersist = false, bool ignorePersistDepends = false);
 
 		bool computed() const;
+		template <typename Duration>
+		unsigned long duration() const;
 
 		Id id() const;
 
@@ -70,6 +77,7 @@ class Task {
 		OFunc                   m_ofunc;
 		IFunc                   m_ifunc;
 		bool                    m_ignorePersist;
+		Testing::Profiling      m_profiling;
 };
 
 
