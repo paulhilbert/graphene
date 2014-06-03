@@ -44,7 +44,8 @@ void main (void) {
 	vec3 bitangent = cross(nrm, tangent);
 	mat3 local = mat3(tangent, bitangent, nrm);
 
-	light = vec4(ssao(local, pos, radius));
+	float lightFactor = ssao(local, pos, radius);
+	light = vec4(lightFactor, lightFactor, lightFactor, 1.0);
 }
 
 float linearize(in float depth) {

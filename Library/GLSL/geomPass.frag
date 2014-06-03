@@ -56,7 +56,7 @@ void main(void) {
 
 	float alpha = fsCol.a;
 	outCol = (ambient + diff) * fsCol + specularity * ds * spec;
-	outCol.a = 1.f;
+	outCol.a = 1.0; //alpha;
 }
 
 vec2 dirToUV(in vec3 dir) {

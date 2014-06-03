@@ -183,10 +183,18 @@ void GBuffer::clearBuffers(const Eigen::Vector4f& clearColor) {
 	m_clearProg.use();
 	m_clearProg.setUniformVec4("clearColor", clearColor.data());
 
+	// store blend mode and disable blending
+	GLboolean blendEnabled;
+	glGetBooleanv(GL_BLEND, &blendEnabled);
+	glDisable(GL_BLEND);
+
 	glViewport(0, 0, m_width, m_height);
 	m_geomQuad.bind();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (char *)NULL);
 	m_geomQuad.release();
+
+	// restore blend mode
+	if (blendEnabled) glEnable(GL_BLEND);
 }
 
 void GBuffer::blitTo(GLuint attachment, GLsizei x, GLsizei y, GLsizei w, GLsizei h) {

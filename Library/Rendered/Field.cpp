@@ -135,10 +135,10 @@ void Field::render(ShaderProgram& program) {
 	//m_geometry->bind();
 
 	// store blend mode and enable blending
-	//GLboolean blendEnabled;
-	//glGetBooleanv(GL_BLEND, &blendEnabled);
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	GLboolean blendEnabled;
+	glGetBooleanv(GL_BLEND, &blendEnabled);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// render
 	m_geometry->bind();
@@ -146,7 +146,7 @@ void Field::render(ShaderProgram& program) {
 	m_geometry->release();
 
 	// restore blend mode
-	//if (!blendEnabled) glDisable(GL_BLEND);
+	if (!blendEnabled) glDisable(GL_BLEND);
 }
 
 Annotation::Ptr Field::operator[](std::string name) {
