@@ -569,8 +569,9 @@ void Graphene::Impl::renderGeometryPass() {
 	glDepthMask(GL_TRUE);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_BLEND);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	if (m_singleMode) {
 		for (const auto& vis : m_visualizer) {
@@ -685,8 +686,8 @@ void Graphene::Impl::renderFullQuad(int width, int height) {
 	glDisable(GL_DEPTH_TEST);
 
 	// store blend mode and disable blending
-	GLboolean blendEnabled;
-	glGetBooleanv(GL_BLEND, &blendEnabled);
+	//GLboolean blendEnabled;
+	//glGetBooleanv(GL_BLEND, &blendEnabled);
 	glDisable(GL_BLEND);
 
 	glViewport(0, 0, width, height);
@@ -695,7 +696,7 @@ void Graphene::Impl::renderFullQuad(int width, int height) {
 	m_geomQuad.release();
 
 	// restore blend mode
-	if (blendEnabled) glEnable(GL_BLEND);
+	//if (blendEnabled) glEnable(GL_BLEND);
 
 	glEnable(GL_DEPTH_TEST);
 }

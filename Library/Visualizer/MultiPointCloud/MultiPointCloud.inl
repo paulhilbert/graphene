@@ -18,10 +18,12 @@ inline void MultiPointCloud::init() {
 }
 
 inline void MultiPointCloud::render(ShaderProgram& program) {
-	if (!m_cloud || !m_cloud->size()) return;
+	//if (!m_cloud || !m_cloud->size()) return;
 
-	m_rf["Main Cloud"]->render(program);
-	m_rf["Main Cloud Normals"]->render(program);
+    if (m_rf.find("Main Cloud") != m_rf.end()) {
+        m_rf["Main Cloud"]->render(program);
+        m_rf["Main Cloud Normals"]->render(program);
+    }
 	//glDisable(GL_DEPTH_TEST);
 	for (const auto& cloud : m_rf) {
 		std::string name = cloud.first;

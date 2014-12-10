@@ -16,7 +16,7 @@ using namespace Colors;
 
 #include <Geometry/PCLTools.h>
 using Geometry::PCLTools;
-typedef pcl::PointNormal Point;
+typedef pcl::PointXYZRGBNormal Point;
 typedef PCLTools<Point>  Tools;
 typedef Tools::CloudType Cloud;
 typedef Tools::Idx       Idx;
@@ -50,7 +50,7 @@ class SinglePointCloud : virtual public Visualizer {
 		GUI::Property::Paths     m_paths;
 		Cloud::Ptr               m_cloud;
 		Rendered::Cloud::Ptr     m_rendered;
-//		std::vector<RGBA>        m_colors;
+		std::vector<RGBA>        m_colors;
 		std::string              m_upAxis;
 		float                    m_scale;
 		bool                     m_recenter;

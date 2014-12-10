@@ -58,6 +58,9 @@ class Mesh {
 		 */
 		void setSmoothNormals(bool smoothNormals);
 
+        void setUniformColor(const Eigen::Vector4f& color);
+        void setUniformColor(const Eigen::Vector4f& color, const std::vector<int>& vertexSubset);
+
 	protected:
 		void  init();
 		void  upload();

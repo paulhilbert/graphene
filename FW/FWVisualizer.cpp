@@ -33,6 +33,10 @@ bool Visualizer::isHDR() const {
 	return false;
 }
 
+boost::optional<Eigen::Matrix4f> Visualizer::modelMatrix() const {
+    return boost::none;
+}
+
 Task::Ptr Visualizer::task(Task::Id id) {
 	if (m_tasks.find(id) == m_tasks.end()) return nullptr;
 	return m_tasks[id];

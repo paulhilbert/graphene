@@ -36,6 +36,34 @@ void Mesh<MeshType>::setSmoothNormals(bool smoothNormals) {
 }
 
 template <class MeshType>
+inline void Mesh<MeshType>::setUniformColor(const Eigen::Vector4f& color) {
+    if (m_smooth || m_allowSwitching) {
+        std::fill(m_smoothColors.begin(), m_smoothColors.end(), color);
+    }
+
+	if (!m_smooth || m_allowSwitching) {
+        std::fill(m_flatColors.begin(), m_flatColors.end(), color);
+    }
+    upload();
+}
+
+template <class MeshType>
+inline void Mesh<MeshType>::setUniformColor(const Eigen::Vector4f& color, const std::vector<int>& vertexSubset) {
+    if (m_smooth || m_allowSwitching) {
+        for (const auto& idx : vertexSubset) {
+            m_smoothColors[idx] = color;
+        }
+    }
+
+	if (!m_smooth || m_allowSwitching) {
+        for (const auto& idx : vertexSubset) {
+            m_flatColors[idx] = color;
+        }
+    }
+    upload();
+}
+
+template <class MeshType>
 void Mesh<MeshType>::init() {
 	auto faces = Traits::faces(*m_mesh);
 

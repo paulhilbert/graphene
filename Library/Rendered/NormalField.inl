@@ -49,10 +49,10 @@ inline void NormalField::render(ShaderProgram& program, Func&& renderCall) {
 	m_geometry->bindColors(program, "color");
 
 	// store blend mode and enable blending
-	GLboolean blendEnabled;
-	glGetBooleanv(GL_BLEND, &blendEnabled);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//GLboolean blendEnabled;
+	//glGetBooleanv(GL_BLEND, &blendEnabled);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// render
 	m_geometry->bind();
@@ -60,5 +60,5 @@ inline void NormalField::render(ShaderProgram& program, Func&& renderCall) {
 	m_geometry->release();
 
 	// restore blend mode
-	if (!blendEnabled) glDisable(GL_BLEND);
+	//if (!blendEnabled) glDisable(GL_BLEND);
 }

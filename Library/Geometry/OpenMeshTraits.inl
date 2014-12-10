@@ -73,6 +73,70 @@ inline bool OpenMeshTraits<OpenMeshType>::saveToFile(const MeshType& mesh, const
 }
 
 template <class OpenMeshType>
+inline void OpenMeshTraits<OpenMeshType>::adjust(MeshType& mesh, const Eigen::Matrix3f& transform, float scale, bool recenter) {
+	/*
+	if (!transform.isIdentity()) {
+		for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) {
+			pos = transform*pos;
+			mesh.point(it.handle()) = pos.data();
+		}
+	}
+	*/
+
+	Eigen::Affine3f finalTransform = Eigen::Affine3f::Identity();
+	finalTransform.linear() = transform;
+
+	if (scale != 1.f || recenter) { // compute center
+		Eigen::Vector3f center = Eigen::Vector3f::Zero();
+		int i=0;
+		for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) {
+			auto pos = PositionType(mesh.point(it.handle()).data());
+			center *= static_cast<float>(i++);
+			center += pos;
+			center /= static_cast<float>(i);
+		}
+
+		center = finalTransform * center;
+
+		finalTransform = Eigen::Translation<float,3>(-center) * finalTransform;
+		finalTransform = Eigen::Scaling(scale) * finalTransform;
+		if (!recenter) finalTransform = Eigen::Translation<float,3>(center) * finalTransform;
+	}
+
+	OpenMeshTraits<OpenMeshType>::transform(mesh, finalTransform);
+}
+
+template <class OpenMeshType>
+inline void OpenMeshTraits<OpenMeshType>::adjust(MeshType& mesh, const Eigen::Vector3f& up, const Eigen::Vector3f& front, float scale, bool recenter) {
+	if (std::abs(up.dot(front)) >= 1.f - Eigen::NumTraits<float>::dummy_precision()) throw std::runtime_error("(Nearly) colinear up and front vectors.");
+	if (up == Eigen::Vector3f::UnitZ() && front == Eigen::Vector3f::UnitY()) adjust(mesh, Eigen::Matrix3f::Identity(), scale, recenter);
+	Eigen::Vector3f right = front.cross(up);
+	Eigen::Matrix3f transform;
+	transform << right, front, up;
+	adjust(mesh, transform, scale, recenter);
+}
+
+template <class OpenMeshType>
+inline void OpenMeshTraits<OpenMeshType>::adjust(MeshType& mesh, const std::string& up, const std::string& front, float scale, bool recenter) {
+	Eigen::Vector3f upVec, frontVec;
+	if      (up ==  "X") upVec = Eigen::Vector3f( 1.f,  0.f,  0.f );
+	else if (up == "-X") upVec = Eigen::Vector3f(-1.f,  0.f,  0.f );
+	else if (up ==  "Y") upVec = Eigen::Vector3f( 0.f,  1.f,  0.f );
+	else if (up == "-Y") upVec = Eigen::Vector3f( 0.f, -1.f,  0.f );
+	else if (up ==  "Z") upVec = Eigen::Vector3f( 0.f,  0.f,  1.f );
+	else if (up == "-Z") upVec = Eigen::Vector3f( 0.f,  0.f, -1.f );
+	else                 upVec = Eigen::Vector3f( 0.f,  0.f,  1.f );
+	if      (front ==  "X") frontVec = Eigen::Vector3f( 1.f,  0.f,  0.f );
+	else if (front == "-X") frontVec = Eigen::Vector3f(-1.f,  0.f,  0.f );
+	else if (front ==  "Y") frontVec = Eigen::Vector3f( 0.f,  1.f,  0.f );
+	else if (front == "-Y") frontVec = Eigen::Vector3f( 0.f, -1.f,  0.f );
+	else if (front ==  "Z") frontVec = Eigen::Vector3f( 0.f,  0.f,  1.f );
+	else if (front == "-Z") frontVec = Eigen::Vector3f( 0.f,  0.f, -1.f );
+	else                    frontVec = Eigen::Vector3f( 0.f,  1.f,  0.f );
+	adjust(mesh, upVec, frontVec, scale, recenter);
+}
+
+template <class OpenMeshType>
 inline typename OpenMeshTraits<OpenMeshType>::Size OpenMeshTraits<OpenMeshType>::numVertices(const MeshType& mesh) {
 	return mesh.n_vertices();
 }
@@ -177,4 +241,23 @@ inline typename OpenMeshTraits<OpenMeshType>::ScalarType OpenMeshTraits<OpenMesh
 template <class OpenMeshType>
 inline typename OpenMeshTraits<OpenMeshType>::PositionType OpenMeshTraits<OpenMeshType>::crossP(const PositionType& p0, const PositionType& p1) {
 	return p0.cross(p1);
+}
+
+template <class OpenMeshType>
+inline void OpenMeshTraits<OpenMeshType>::transform(MeshType& mesh, const Eigen::Affine3f& transformation) {
+	typedef typename MeshType::Point OpenMeshPoint;
+	typedef typename MeshType::Normal OpenMeshNormal;
+
+	if (transformation.matrix().isIdentity()) return;
+
+	auto normalTransform = transformation.linear().inverse().transpose();
+	for (auto it = mesh.vertices_begin(); it != mesh.vertices_end(); ++it) {
+		auto pos = PositionType(mesh.point(it.handle()).data());
+		auto nrm = PositionType(mesh.normal(it.handle()).data());
+		pos = transformation*pos;
+		nrm = normalTransform*nrm;
+		nrm.normalize();
+		mesh.set_point (it.handle(), OpenMeshPoint(pos.data()));
+		mesh.set_normal(it.handle(), OpenMeshNormal(nrm.data()));
+	}
 }

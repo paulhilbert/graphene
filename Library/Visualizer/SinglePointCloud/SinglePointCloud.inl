@@ -14,7 +14,7 @@ inline SinglePointCloud::~SinglePointCloud() {
 inline void SinglePointCloud::init() {
 	addProperties();
 	registerEvents();
-	m_rendered = Rendered::Cloud::Ptr(new Rendered::Cloud(Eigen::Vector4f(0.4f, 0.4f, 0.4f, 1.f), 1.f));
+	m_rendered = Rendered::Cloud::Ptr(new Rendered::Cloud(Eigen::Vector4f(0.4f, 0.4f, 0.4f, 1.f), 2.f));
 	addClouds(m_paths);
 }
 
@@ -64,11 +64,13 @@ inline void SinglePointCloud::addClouds(const GUI::Property::Paths& paths) {
 			continue;
 		}
 		try {
-//			std::vector<Vector4f> colors;
-			Cloud::Ptr singleCloud = Tools::loadPointCloud(p);
+			std::vector<Vector4f> colors;
+			Cloud::Ptr singleCloud = Tools::loadPointCloud(p, colors);
 			gui()->log()->verbose("Loaded point cloud with "+lexical_cast<std::string>(singleCloud->size())+" points.");
 			m_cloud->insert(m_cloud->end(), singleCloud->begin(), singleCloud->end());
-//			if (colors.size()) m_colors.insert(m_colors.end(), colors.begin(), colors.end());
+			if (colors.size()) {
+                m_colors.insert(m_colors.end(), colors.begin(), colors.end());
+            }
 		} catch (std::runtime_error& e) {
 			gui()->log()->error(e.what());
 			continue;
@@ -89,7 +91,9 @@ inline void SinglePointCloud::exportCloud(const fs::path& path) {
 
 inline void SinglePointCloud::uploadCloud() {
 	m_rendered->setFromPCLCloud(m_cloud->begin(), m_cloud->end());
-//	if (m_colors.size()) m_rendered->annotateAll()->colorize(m_colors);
+	if (m_colors.size()) {
+        m_rendered->annotateAll()->colorize(m_colors);
+    }
 }
 
 inline void SinglePointCloud::resample() {

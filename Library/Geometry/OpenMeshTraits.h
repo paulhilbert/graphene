@@ -33,6 +33,10 @@ struct OpenMeshTraits {
 	static bool loadFromFile(MeshType& mesh, const std::string& path);
 	static bool saveToFile(const MeshType& mesh, const std::string& path);
 
+	static void adjust(MeshType& mesh, const Eigen::Matrix3f& transform, float scale = 1.f, bool recenter = false);
+	static void adjust(MeshType& mesh, const Eigen::Vector3f& up, const Eigen::Vector3f& front, float scale = 1.f, bool recenter = false);
+	static void adjust(MeshType& mesh, const std::string& up = "Z", const std::string& front = "Y", float scale = 1.f, bool recenter = false);
+
 	// mesh properties
 	static Size numVertices(const MeshType& mesh);
 	static Size numFaces(const MeshType& mesh);
@@ -62,6 +66,9 @@ struct OpenMeshTraits {
 	// operators
 	static ScalarType norm(const PositionType& p);
 	static PositionType crossP(const PositionType& p0, const PositionType& p1);
+
+	// transformation
+	static void transform(MeshType& mesh, const Eigen::Affine3f& transformation);
 };
 
 

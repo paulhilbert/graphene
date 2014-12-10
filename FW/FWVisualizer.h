@@ -115,6 +115,13 @@ class Visualizer {
 		virtual BoundingBox boundingBox() const = 0;
 
 		/**
+		 *  Virtual method returning an optional model matrix.
+		 *
+		 *  @return (optional) 4x4 model matrix.
+		 */
+        virtual boost::optional<Eigen::Matrix4f> modelMatrix() const;
+
+		/**
 		 *  Returns task with given id.
 		 *
 		 *  @Returns Task with given id or nullptr if not existent.
