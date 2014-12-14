@@ -16,9 +16,6 @@
 
 #include <include/common.h>
 
-#include <Library/Geometry/Ray.h>
-#include <Library/Buffer/Texture.h>
-#include <FW/View/ViewTransforms.h>
 #include <FW/Events/EventsHandle.h>
 #include <FW/Events/EventsModifier.h>
 #include <FW/Events/EventsKeys.h>
@@ -27,11 +24,6 @@ using FW::Events::Keys;
 namespace FW {
 
 class Graphene;
-
-struct EnvTex {
-	Buffer::Texture::Ptr diffuse;
-	Buffer::Texture::Ptr specular;
-};
 
 
 /**
@@ -51,20 +43,13 @@ class VisualizerHandle {
 		friend class Graphene;
 
 	protected:
-		VisualizerHandle(std::string id, View::Transforms::WPtr transforms, Events::EventHandler::Ptr eventHandler, Geometry::Ray::Ptr pickRay);
+		VisualizerHandle(std::string id, Events::EventHandler::Ptr eventHandler);
 
 	public:
 		/**
 		 *  Destructor
 		 */
 		virtual ~VisualizerHandle();
-
-		/**
-		 *  Returns access class to OpenGL transform parameters.
-		 *
-		 *  @see View::Transforms
-		 */
-		View::Transforms::Ptr  transforms();
 
 		/**
 		 *  Returns access class to event management system.
@@ -80,17 +65,10 @@ class VisualizerHandle {
 		 */
 		Events::Modifier::Ptr  modifier();
 
-		/**
-		 *  Returns access class to current pick ray.
-		 */
-		Geometry::Ray::Ptr pickRay();
-
 	protected:
 		std::string                     m_id;
-		View::Transforms::WPtr          m_transforms;
 		Events::Handle::Ptr             m_events;
 		Events::Modifier::Ptr           m_modifier;
-		Geometry::Ray::Ptr              m_pickRay;
 };
 
 } // FW

@@ -3,7 +3,6 @@
 
 #include <FW/FWVisualizer.h>
 
-#include <Library/Geometry/OpenMeshTraits.h>
 #include <Library/Rendered/Mesh.h>
 
 namespace FW {
@@ -13,15 +12,17 @@ class SingleMesh : virtual public Visualizer {
 		typedef std::shared_ptr<SingleMesh> Ptr;
 		typedef std::weak_ptr<SingleMesh>   WPtr;
 
-		typedef Geometry::TriMesh Mesh;
-		typedef Geometry::OpenMeshTraits<Mesh> Traits;
+        typedef OpenMesh::Vec4f           ColorT;
+		typedef harmont::tri_mesh<ColorT> MeshT;
+        typedef Rendered::Mesh<ColorT>    RenderedMeshT;
 
 	public:
 		SingleMesh(std::string id, fs::path meshFile);
 		virtual ~SingleMesh();
 
 		void init();
-		void render(ShaderProgram& program);
+		void initGeometry(harmont::shader_program::ptr program, harmont::pass_type_t type);
+		void render(harmont::shader_program::ptr program, harmont::pass_type_t type);
 		void addProperties();
 		void addModes();
 		void registerEvents();
@@ -30,8 +31,8 @@ class SingleMesh : virtual public Visualizer {
 
 	protected:
 		fs::path                  m_meshFile;
-		std::shared_ptr<Mesh>     m_mesh;
-		Rendered::Mesh<Mesh>::Ptr m_rm;
+		std::shared_ptr<MeshT>    m_mesh;
+		RenderedMeshT::Ptr        m_rm;
 		BoundingBox               m_bbox;
 
 		float                     m_clippingHeight = 0.f;

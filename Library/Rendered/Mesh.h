@@ -1,20 +1,16 @@
 #ifndef RENDEREDMESH_H_
 #define RENDEREDMESH_H_
 
-#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
-#include <Library/Geometry/OpenMeshTraits.h>
+#include <OpenMesh/Core/IO/MeshIO.hh>
 
 #include <include/common.h>
-#include <include/ogl.h>
 
-#include <Library/Buffer/Geometry.h>
-#include <Library/Shader/ShaderProgram.h>
-using namespace Geometry;
-using Shader::ShaderProgram;
+#include <harmont/harmont.hpp>
+#include <harmont/openmesh_traits.hpp>
 
 namespace Rendered {
 
-template <class MeshType>
+template <class ColorT = OpenMesh::Vec4f>
 class Mesh {
 	public:
 		/** Shared pointer to this class */
@@ -26,67 +22,28 @@ class Mesh {
 		/** Const weak pointer to this class */
 		typedef std::weak_ptr<const Mesh> ConstWPtr;
 
-		/** Shared pointer to MeshType */
-		typedef std::shared_ptr<MeshType> MeshPtr;
-		/** Traits class for MeshType */
-		typedef OpenMeshTraits<MeshType> Traits;
+        typedef harmont::tri_mesh<ColorT>  MeshT;
+        typedef std::shared_ptr<MeshT>     MeshPtrT;
 
 	public:
-		/**
-		 *  Constructor.
-		 *
-		 *  @param filePath Path to mesh file.
-		 *  @param smoothNormals Smoothly interpolate normals per fragment
-		 *  @param If true keeps both representations in order to allow switching later
-		 */
-		Mesh(MeshPtr mesh, bool smoothNormals, bool allowSwitching = true);
-
-		/** @internal ~Mesh()
-		 *
-		 *  @brief Destructor.
-		 */
+		Mesh(MeshPtrT mesh, bool smoothNormals);
 		virtual ~Mesh();
 
-		/** Renders mesh */
-		void render(ShaderProgram& program);
-
-		/**
-		 *  Changes normal interpolation mode.
-		 *
-		 *  @warning This method throws a runtime error when this class's allowSwitching constructor parameter is false
-		 *  @param smoothNormals Smoothly interpolate normals per fragment
-		 */
-		void setSmoothNormals(bool smoothNormals);
-
-        void setUniformColor(const Eigen::Vector4f& color);
-        void setUniformColor(const Eigen::Vector4f& color, const std::vector<int>& vertexSubset);
+		void init(harmont::shader_program::ptr program, harmont::pass_type_t type);
+		void render(harmont::shader_program::ptr program, harmont::pass_type_t type);
 
 	protected:
-		void  init();
 		void  upload();
 
-
 	protected:
-		typedef std::vector<Vector3f>  Vertices;
-		typedef std::vector<Vector3f>  Normals;
-		typedef std::vector<Vector4f>  Colors;
-		typedef std::vector<GLuint>    Indices;
-		typedef std::shared_ptr<Buffer::Geometry> GeometryPtr;
-
-	protected:
-		MeshPtr             m_mesh;
-		bool                m_smooth;
-		bool                m_allowSwitching;
-		GeometryPtr         m_geometry;
-
-		Vertices            m_smoothVertices;
-		Vertices            m_flatVertices;
-		Normals             m_smoothNormals;
-		Normals             m_flatNormals;
-		Colors              m_smoothColors;
-		Colors              m_flatColors;
-		Indices             m_smoothIndices;
-		Indices             m_flatIndices;
+		MeshPtrT                              m_mesh;
+        harmont::vertex_array::ptr            m_vaoShadow;
+        harmont::vertex_array::ptr            m_vaoDisplay;
+        harmont::vertex_buffer<float>::ptr    m_vboShadow;
+        harmont::vertex_buffer<float>::ptr    m_vboDisplay;
+        harmont::index_buffer<uint32_t>::ptr  m_ibo;
+        uint32_t                              m_numElements;
+        bool                                  m_smooth;
 };
 
 #include "Mesh.inl"

@@ -40,7 +40,6 @@ using boost::none;
 // eigen
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
-#include <Library/Eigen/OpenGL.h>
 using Eigen::Matrix;
 using Eigen::Dynamic;
 using Eigen::Vector2f;

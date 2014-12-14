@@ -16,7 +16,8 @@
  */
 
 #include <include/common.h>
-#include <include/ogl.h>
+#include <harmont/harmont.hpp>
+#include <harmont/deferred_renderer.hpp>
 
 #include <FW/Events/EventsEventHandler.h>
 #include <FW/FWFactory.h>

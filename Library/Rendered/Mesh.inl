@@ -1,117 +1,51 @@
-template <class MeshType>
-Mesh<MeshType>::Mesh(MeshPtr mesh, bool smoothNormals, bool allowSwitching) : m_mesh(mesh), m_smooth(smoothNormals), m_allowSwitching(allowSwitching) {
-	m_geometry = GeometryPtr(new Buffer::Geometry());
-	m_geometry->init();
-	init();
-	upload();
-	m_geometry->upload();
-	m_geometry->enableVertices();
-	m_geometry->enableNormals();
-	m_geometry->enableColors();
-	m_geometry->enableIndices();
+template <class ColorType>
+Mesh<ColorType>::Mesh(MeshPtrT mesh, bool smoothNormals) : m_mesh(mesh), m_smooth(smoothNormals) {
+    m_vaoShadow = std::make_shared<harmont::vertex_array>();
+    m_vaoDisplay = std::make_shared<harmont::vertex_array>();
+
+    Eigen::MatrixXf vboData, posData;
+    Eigen::Matrix<uint32_t, Eigen::Dynamic, 1> iboData;
+    harmont::mesh_traits<MeshT>::buffer_data(*m_mesh, {harmont::POSITION, harmont::COLOR, harmont::NORMAL}, vboData, iboData, m_smooth);
+    posData = vboData.block(0, 0, vboData.rows(), 3);
+    m_numElements = iboData.rows();
+
+    m_vboShadow = harmont::vertex_buffer<float>::from_data(posData);
+    m_vboDisplay = harmont::vertex_buffer<float>::from_data(vboData);
+    m_ibo = harmont::index_buffer<uint32_t>::from_data(iboData);
 }
 
-template <class MeshType>
-Mesh<MeshType>::~Mesh() {
+template <class ColorType>
+Mesh<ColorType>::~Mesh() {
 }
 
-template <class MeshType>
-void Mesh<MeshType>::render(ShaderProgram& program) {
-	m_geometry->bindVertices(program, "position");
-	m_geometry->bindNormals(program, "normal");
-	m_geometry->bindColors(program, "color");
-	m_geometry->bind();
-	glDrawElements(GL_TRIANGLES, 3*Traits::numFaces(*m_mesh), GL_UNSIGNED_INT, nullptr);
-	m_geometry->release();
-}
-
-template <class MeshType>
-void Mesh<MeshType>::setSmoothNormals(bool smoothNormals) {
-	if (smoothNormals == m_smooth) return;
-	if (!m_allowSwitching) {
-		throw std::runtime_error("Rendered::Mesh : Switch normal smoothing disabled. Instantiate with AllowSwitching=true to enable.");
-	}
-	m_smooth = smoothNormals;
-	upload();
-}
-
-template <class MeshType>
-inline void Mesh<MeshType>::setUniformColor(const Eigen::Vector4f& color) {
-    if (m_smooth || m_allowSwitching) {
-        std::fill(m_smoothColors.begin(), m_smoothColors.end(), color);
+template <class ColorType>
+void Mesh<ColorType>::init(harmont::shader_program::ptr program, harmont::pass_type_t type) {
+    harmont::vertex_buffer<float>::layout_t vboLayout;
+    if (type == harmont::SHADOW_GEOMETRY) {
+        m_vaoShadow->bind();
+        vboLayout = {{"position", 3}};
+        m_vboShadow->bind_to_array(vboLayout, program);
+        m_vaoShadow->release();
+    } else {
+        m_vaoDisplay->bind();
+        vboLayout = {{"position", 3}, {"color", 1}, {"normal", 3}};
+        m_vboDisplay->bind_to_array(vboLayout, program);
+        m_vaoDisplay->release();
     }
-
-	if (!m_smooth || m_allowSwitching) {
-        std::fill(m_flatColors.begin(), m_flatColors.end(), color);
-    }
-    upload();
 }
 
-template <class MeshType>
-inline void Mesh<MeshType>::setUniformColor(const Eigen::Vector4f& color, const std::vector<int>& vertexSubset) {
-    if (m_smooth || m_allowSwitching) {
-        for (const auto& idx : vertexSubset) {
-            m_smoothColors[idx] = color;
-        }
+template <class ColorType>
+void Mesh<ColorType>::render(harmont::shader_program::ptr program, harmont::pass_type_t type) {
+    if (type == harmont::SHADOW_GEOMETRY) {
+        m_vaoShadow->bind();
+    } else {
+        m_vaoDisplay->bind();
     }
-
-	if (!m_smooth || m_allowSwitching) {
-        for (const auto& idx : vertexSubset) {
-            m_flatColors[idx] = color;
-        }
+    m_ibo->bind();
+    glDrawElements(GL_TRIANGLES, m_numElements, GL_UNSIGNED_INT, nullptr);
+    if (type == harmont::SHADOW_GEOMETRY) {
+        m_vaoShadow->release();
+    } else {
+        m_vaoDisplay->release();
     }
-    upload();
-}
-
-template <class MeshType>
-void Mesh<MeshType>::init() {
-	auto faces = Traits::faces(*m_mesh);
-
-	if (m_smooth || m_allowSwitching) { // init smooth vertices
-		auto points = Traits::vertices(*m_mesh);
-		m_smoothVertices.resize(points.size());
-		m_smoothNormals.resize(points.size());
-		m_smoothColors.resize(points.size());
-		int i = 0;
-		for (const auto& idx : points) {
-			m_smoothVertices[i] = Traits::vertexPosition(*m_mesh, idx);
-			m_smoothNormals[i] = Traits::vertexNormal(*m_mesh, idx);
-			m_smoothColors[i] = Traits::vertexColor(*m_mesh, idx);
-			++i;
-		}
-		m_smoothIndices.resize(faces.size()*3);
-		i = 0;
-		for (const auto& face : faces) {
-			for (const auto& vertex : Traits::faceVertices(*m_mesh, face)) {
-				m_smoothIndices[i++] = vertex;
-			}
-		}
-	}
-
-	if (!m_smooth || m_allowSwitching) { // init flat vertices
-		m_flatVertices.resize(faces.size()*3);
-		m_flatNormals.resize(faces.size()*3);
-		m_flatColors.resize(faces.size()*3);
-		int i = 0;
-		for (const auto& face : faces) {
-			Vector3f normal = Traits::faceNormal(*m_mesh, face);
-			for (const auto& idx : Traits::faceVertices(*m_mesh, face)) {
-				m_flatVertices[i] = Traits::vertexPosition(*m_mesh, idx);
-				m_flatNormals[i] = normal;
-				m_flatColors[i] = Traits::vertexColor(*m_mesh, idx);
-				++i;
-			}
-		}
-		m_flatIndices.resize(faces.size()*3);
-		std::iota(m_flatIndices.begin(), m_flatIndices.end(), 0);
-	}
-}
-
-template <class MeshType>
-void Mesh<MeshType>::upload() {
-	m_geometry->setVertices(m_smooth ? m_smoothVertices : m_flatVertices);
-	m_geometry->setNormals(m_smooth ? m_smoothNormals : m_flatNormals);
-	m_geometry->setColors(m_smooth ? m_smoothColors : m_flatColors);
-	m_geometry->setIndices(m_smooth ? m_smoothIndices : m_flatIndices);
-	m_geometry->upload();
 }

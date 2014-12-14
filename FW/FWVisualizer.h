@@ -26,8 +26,7 @@
 
 #include <GUI/GUIProgressBarPool.h>
 
-#include <Library/Shader/ShaderProgram.h>
-using Shader::ShaderProgram;
+#include <harmont/harmont.hpp>
 
 
 namespace FW {
@@ -94,11 +93,20 @@ class Visualizer {
 		virtual void init() = 0;
 
 		/**
+		 *  Pure virtual method initializing geometry of inherited visualizers.
+		 *
+		 *  @param program Reference to shader program
+		 *  @param type    Type of render pass to initialize geometry for.
+		 */
+		virtual void initGeometry(harmont::shader_program::ptr program, harmont::pass_type_t type) = 0;
+
+		/**
 		 *  Pure virtual method rendering content of inherited visualizers.
 		 *
 		 *  @param program Reference to shader program
+		 *  @param type    Type of render pass to supply geometry to.
 		 */
-		virtual void render(ShaderProgram& program) = 0;
+		virtual void render(harmont::shader_program::ptr program, harmont::pass_type_t type) = 0;
 
 		/**
 		 *  Virtual method checking whether this visualizer renders HDR.
