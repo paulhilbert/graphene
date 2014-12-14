@@ -45,6 +45,8 @@ int main( int argc, char *argv[] ) {
 	bool         noEffects;
 	bool         verbose;
 	bool         singleMode;
+    Graphene::RenderParameters rParams;
+    Graphene::ShadowParameters sParams;
 
 	GUI::Backend::WindowParams wndParams;
 
@@ -64,6 +66,10 @@ int main( int argc, char *argv[] ) {
 		("single",     po::value<std::string>(&single) ->default_value(""), "Use the given name as single mode visualizer")
 		("title",      po::value<std::string>(&title) ->default_value("graphene"), "Window title")
 		("stylesheet", po::value<std::string>(&stylesheet) ->default_value(""), "Stylesheet for the UI")
+		("exposure", po::value<float>(&rParams.exposure)->default_value(0.8), "Initial exposure")
+		("shadow_bias", po::value<float>(&rParams.shadowBias)->default_value(0.003), "Initial shadow bias")
+		("shadow_res", po::value<uint32_t>(&sParams.resolution)->default_value(2048), "Shadow map resolution")
+		("shadow_samples", po::value<uint32_t>(&sParams.sampleCount)->default_value(32), "Number of shadow samples")
 		("width",      po::value<int>(&wndWidth)  ->default_value(1024), "Path to backend library")
 		("height",     po::value<int>(&wndHeight) ->default_value(576), "Path to backend library")
 		("fps",        po::value<int>(&fps) ->default_value(60), "Frames Per Second")
@@ -75,8 +81,8 @@ int main( int argc, char *argv[] ) {
 		("propY",      po::value<int>(&wndParams.propY)->default_value(-1), "Property window position y")
 		("propWidth",  po::value<int>(&wndParams.propWidth)->default_value(-1), "Property window width")
 		("propHeight", po::value<int>(&wndParams.propHeight)->default_value(-1), "Property window height")
-		("no-effects", "Use simple rendering techniques (e.g. no depth-of-field)")
 		("maximized", "Show main window maximized")
+		("single_sided", "Do not render two sided primitives.")
 		("verbose", "Output additional debug messages")
 	;
 
@@ -114,7 +120,6 @@ int main( int argc, char *argv[] ) {
 		return 0;
 	}
 	wndParams.maximized = vm.count("maximized") > 0;
-	noEffects = vm.count("no-effects") > 0;
 	verbose = vm.count("verbose") > 0;
 	singleMode = single != "";
 
@@ -131,7 +136,8 @@ int main( int argc, char *argv[] ) {
 	backend->setWindowSize(wndWidth, wndHeight);
 	if (stylesheet != "") backend->setStylesheet(stylesheet);
 
-	Graphene graphene(backend, eventHandler, singleMode, noEffects, hdrPath);
+    rParams.twoSided = !vm.count("single_sided");
+	Graphene graphene(backend, eventHandler, singleMode, rParams, sParams, hdrPath);
 
 	if (singleMode) {
 		fs::path p(visPath);

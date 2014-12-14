@@ -37,6 +37,16 @@ class Graphene {
 		typedef std::shared_ptr<Graphene> Ptr;
 		struct Impl;
 		friend class ::GUI::Backend;
+		struct RenderParameters {
+			float exposure;
+			float shadowBias;
+            bool  twoSided;
+		};
+
+		struct ShadowParameters {
+			uint32_t resolution;
+			uint32_t sampleCount;
+		};
 
 	public:
 		/** 
@@ -47,7 +57,7 @@ class Graphene {
 		 *  @param singleMode Start in single visualizer mode.
 		 *  @param noEffects If true, disables render effects.
 		 */
-		Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects, std::string hdrPath);
+		Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, const RenderParameters& renderParams, const ShadowParameters& shadowParams, std::string hdrPath);
 
 		/**
 		 *  Destructor.

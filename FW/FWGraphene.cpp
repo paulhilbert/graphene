@@ -26,7 +26,7 @@ namespace FW {
 struct  Graphene::Impl {
     typedef harmont::camera::vec3_t vec3_t;
 
-	Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects, std::string hdrPath);
+	Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, const RenderParameters& renderParams, const ShadowParameters& shadowParams, std::string hdrPath);
 	virtual ~Impl();
 
 	//void initTransforms();
@@ -62,10 +62,11 @@ struct  Graphene::Impl {
     harmont::camera::ptr m_camera;
     harmont::deferred_renderer::ptr_t m_renderer;
     Eigen::Vector3f m_lightDir;
+    RenderParameters m_rParams;
+    ShadowParameters m_sParams;
 
     // special modii
 	bool m_singleMode;
-	bool m_noEffects;
 
 	// fps computation
 	int m_fps;
@@ -86,8 +87,8 @@ struct  Graphene::Impl {
 /// GRAPHENE ///
 
 
-Graphene::Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects, std::string hdrPath) {
-	m_impl = std::shared_ptr<Impl>(new Impl(backend, eventHandler, singleMode, noEffects, hdrPath));
+Graphene::Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, const RenderParameters& renderParams, const ShadowParameters& shadowParams, std::string hdrPath) {
+	m_impl = std::shared_ptr<Impl>(new Impl(backend, eventHandler, singleMode, renderParams, shadowParams, hdrPath));
 }
 
 Graphene::~Graphene() {
@@ -108,7 +109,7 @@ Factory::Ptr Graphene::getFactory(std::string name) {
 /// GRAPHENE IMPL ///
 
 
-Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, bool noEffects, std::string hdrPath) : m_backend(backend), m_eventHandler(eventHandler), m_singleMode(singleMode), m_noEffects(noEffects), m_showFPS(false), m_frameCount(0), m_hdrPath(hdrPath) {
+Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, const RenderParameters& renderParams, const ShadowParameters& shadowParams, std::string hdrPath) : m_backend(backend), m_eventHandler(eventHandler), m_singleMode(singleMode), m_rParams(renderParams), m_sParams(shadowParams), m_showFPS(false), m_frameCount(0), m_hdrPath(hdrPath) {
 	m_lastFPSComp = std::chrono::system_clock::now();
 	backend->setRenderCallback(std::bind(&Graphene::Impl::render, this));
 	backend->setExitCallback(std::bind(&Graphene::Impl::exit, this));
@@ -131,14 +132,14 @@ void Graphene::Impl::initRenderer() {
     m_lightDir = Eigen::Vector3f(1.f, 1.f, 1.f).normalized();
     harmont::deferred_renderer::render_parameters_t rParams {
         m_lightDir,
-        0.8f,
-        0.003f,
-        true,
+        m_rParams.exposure,
+        m_rParams.shadowBias,
+        m_rParams.twoSided,
         m_hdrPath
     };
     harmont::deferred_renderer::shadow_parameters_t sParams {
-        2048,
-        32
+        m_sParams.resolution,
+        m_sParams.sampleCount
     };
     Eigen::AlignedBox<float, 3> bbInit;
     m_renderer = std::make_shared<harmont::deferred_renderer>(rParams, sParams, bbInit, glSize[0], glSize[1]);
