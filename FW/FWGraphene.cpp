@@ -31,6 +31,7 @@ struct  Graphene::Impl {
 
 	//void initTransforms();
     void initRenderer();
+    void initRenderProperties();
 
 	int run(int fps);
 	void exit();
@@ -64,6 +65,7 @@ struct  Graphene::Impl {
     Eigen::Vector3f m_lightDir;
     RenderParameters m_rParams;
     ShadowParameters m_sParams;
+    BoundingBox m_bbox;
 
     // special modii
 	bool m_singleMode;
@@ -179,6 +181,36 @@ void Graphene::Impl::initRenderer() {
 			}
 		)
 	);
+
+    initRenderProperties();
+}
+
+void Graphene::Impl::initRenderProperties() {
+	auto main = m_backend->getMainSettings();
+
+    auto groupRendering = main->add<Section>("Rendering", "groupRendering");
+
+    groupRendering->add<Button>("View Direction -> Light Direction", "setLightDir")->setCallback([&] () {
+        m_lightDir = m_camera->forward().normalized();
+    });
+	auto exposure = groupRendering->add<Range>("Exposure", "exposure");
+    exposure->setDigits(3).setMin(0.f).setMax(1.f).setValue(m_renderer->exposure());
+    exposure->setCallback([&] (float e) { m_renderer->set_exposure(e); });
+
+	auto bias = groupRendering->add<Range>("Shadow Bias", "bias");
+    bias->setDigits(3).setMin(0.f).setMax(0.01f).setValue(m_renderer->shadow_bias());
+    bias->setCallback([&] (float b) { m_renderer->set_shadow_bias(b); });
+
+	auto groupSSDO = groupRendering->add<Section>("SSDO", "groupSSDO");
+	auto ssdoRadius = groupSSDO->add<Range>("Radius", "radius");
+    ssdoRadius->setDigits(2).setMin(0.f).setMax(3.f).setValue(m_renderer->ssdo_radius());
+    ssdoRadius->setCallback([&] (float r) { m_renderer->set_ssdo_radius(r); });
+	auto ssdoExponent = groupSSDO->add<Range>("Exponent", "exponent");
+    ssdoExponent->setDigits(2).setMin(0.f).setMax(5.f).setValue(m_renderer->ssdo_exponent());
+    ssdoExponent->setCallback([&] (float e) { m_renderer->set_ssdo_exponent(e); });
+	auto ssdoReflAlbedo = groupSSDO->add<Range>("Reflective Albedo", "reflective_albedo");
+    ssdoReflAlbedo->setDigits(2).setMin(0.f).setMax(1.f).setValue(m_renderer->ssdo_reflective_albedo());
+    ssdoReflAlbedo->setCallback([&] (float a) { m_renderer->set_ssdo_reflective_albedo(a); });
 }
 
 /*
@@ -343,19 +375,20 @@ void Graphene::Impl::render() {
 	}
 
 	// determine bounding box
-	BoundingBox  bbox;
+	m_bbox = BoundingBox();
 	if (m_singleMode) {
 		for (const auto& vis : m_visualizer) {
-			bbox.extend(vis.second->boundingBox());
+			m_bbox.extend(vis.second->boundingBox());
 		}
 	} else {
 		auto  names = m_backend->getActiveVisualizerNames();
 		for (const auto& name : names) {
-			bbox.extend(m_visualizer[name]->boundingBox());
+			m_bbox.extend(m_visualizer[name]->boundingBox());
 		}
 	}
 
-    m_renderer->render([&] (harmont::shader_program::ptr program, harmont::pass_type_t type) { renderGeometry(program, type); }, m_camera, bbox);
+    m_renderer->set_light_dir(m_lightDir, m_bbox);
+    m_renderer->render([&] (harmont::shader_program::ptr program, harmont::pass_type_t type) { renderGeometry(program, type); }, m_camera, m_bbox);
 }
 
 void Graphene::Impl::renderGeometry(harmont::shader_program::ptr program, harmont::pass_type_t type) {
