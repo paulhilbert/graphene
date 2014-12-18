@@ -5,7 +5,7 @@
  * the COPYING file for more details */
 
 
-inline SinglePointCloud::SinglePointCloud(std::string id, const GUI::Property::Paths& paths, std::string upAxis, float scale, bool recenter) : Visualizer(id), m_paths(paths), m_cloud(new Cloud()), m_upAxis(upAxis), m_scale(scale), m_recenter(recenter) {
+inline SinglePointCloud::SinglePointCloud(std::string id, const GUI::Property::Paths& paths, std::string upAxis, float scale, bool recenter) : Visualizer(id), m_paths(paths), m_cloud(nullptr), m_upAxis(upAxis), m_scale(scale), m_recenter(recenter) {
 }
 
 inline SinglePointCloud::~SinglePointCloud() {
@@ -13,13 +13,9 @@ inline SinglePointCloud::~SinglePointCloud() {
 
 inline void SinglePointCloud::init() {
 	addProperties();
+    addModes();
 	registerEvents();
-	m_rendered = Rendered::Cloud::Ptr(new Rendered::Cloud(Eigen::Vector4f(0.4f, 0.4f, 0.4f, 1.f), 2.f));
 	addClouds(m_paths);
-}
-
-inline void SinglePointCloud::render(ShaderProgram& program) {
-	m_rendered->render(program);
 }
 
 inline void SinglePointCloud::addProperties() {
@@ -31,33 +27,26 @@ inline void SinglePointCloud::addProperties() {
 	exportFile->setMode(File::SAVE);
 	exportFile->setCallback([&] (const fs::path& path) { exportCloud(path); });
 	groupCloud->collapse();
+}
 
-	auto groupRendering = gui()->properties()->add<Section>("Rendering", "groupRendering");
-	auto pointSize = groupRendering->add<Range>("Point Size", "pointSize");
-	pointSize->setDigits(0);
-	pointSize->setMin(1);
-	pointSize->setMax(20);
-	pointSize->setValue(2);
-	pointSize->setCallback([&] (float value) { m_rendered->setThickness(static_cast<int>(value)); });
+inline void SinglePointCloud::addModes() {
+	auto showGroup = gui()->modes()->addGroup("showGroup");
+	showGroup->addOption("showClip", "Enable Clipping", std::string(ICON_PREFIX)+"clipping.png");
+	auto editGroup = gui()->modes()->addGroup("editGroup");
+	editGroup->addOption("editClip", "Modify Clipping Plane", std::string(ICON_PREFIX)+"clipplane.png");
 
-	auto groupEdit = gui()->properties()->add<Section>("Edit Cloud", "groupEdit");
-	auto diamFactor = groupEdit->add<Number>("Diameter Factor", "diamFactor");
-	diamFactor->setMin(0.0001);
-	diamFactor->setMax(1.0000);
-	diamFactor->setValue(0.0016);
-	diamFactor->setDigits(4);
-	groupEdit->add<Button>("Resample")->setCallback([&] () { resample(); });
-	groupEdit->collapse();
+    showGroup->setCallback([&] (std::string option, bool state) { if (option == "showClip") m_cloud->set_clipping(state); });
 }
 
 inline void SinglePointCloud::registerEvents() {
-}
-
-inline BoundingBox SinglePointCloud::boundingBox() const {
-	return m_bbox;
+    fw()->events()->connect<void (int, int, int, int)>("LEFT_DRAG", [&] (int, int dy, int, int) {
+        if (!gui()->modes()->group("editGroup")->option("editClip")->active()) return;
+        m_cloud->delta_clipping_height(-dy * 0.01f);
+    });
 }
 
 inline void SinglePointCloud::addClouds(const GUI::Property::Paths& paths) {
+    std::shared_ptr<CloudT> cloud = m_cloud ? m_cloud->cloud() : std::make_shared<CloudT>();
 	for (const auto& p : paths) {
 		if (!fs::exists(p)) {
 			gui()->log()->error("File \""+p.string()+"\" does not exist. Skipping this file.");
@@ -67,46 +56,24 @@ inline void SinglePointCloud::addClouds(const GUI::Property::Paths& paths) {
 			std::vector<Vector4f> colors;
 			Cloud::Ptr singleCloud = Tools::loadPointCloud(p, colors);
 			gui()->log()->verbose("Loaded point cloud with "+lexical_cast<std::string>(singleCloud->size())+" points.");
-			m_cloud->insert(m_cloud->end(), singleCloud->begin(), singleCloud->end());
-			if (colors.size()) {
-                m_colors.insert(m_colors.end(), colors.begin(), colors.end());
-            }
+			cloud->insert(cloud->end(), singleCloud->begin(), singleCloud->end());
 		} catch (std::runtime_error& e) {
 			gui()->log()->error(e.what());
 			continue;
 		}
 	}
-	Tools::adjust(m_cloud, m_upAxis, m_scale, m_recenter);
-	uploadCloud();
+	//Tools::adjust(m_cloud, m_upAxis, m_scale, m_recenter);
 
-	for (const auto& p : *m_cloud) {
-		m_bbox.extend(p.getVector3fMap());
-	}
+    try {
+        removeObject("main cloud");
+    } catch(...) {
+    }
+    m_cloud = std::make_shared<RenderedCloudT>(cloud);
+    m_cloud->init();
+    addObject("main cloud", m_cloud);
 }
 
 inline void SinglePointCloud::exportCloud(const fs::path& path) {
-	pcl::io::savePCDFileBinary(path.string(), *m_cloud);
+	pcl::io::savePCDFileBinary(path.string(), *(m_cloud->cloud()));
 	gui()->log()->info("Saved pointcloud to: \""+path.string()+"\"");
-}
-
-inline void SinglePointCloud::uploadCloud() {
-	m_rendered->setFromPCLCloud(m_cloud->begin(), m_cloud->end());
-	if (m_colors.size()) {
-        m_rendered->annotateAll()->colorize(m_colors);
-    }
-}
-
-inline void SinglePointCloud::resample() {
-	auto diamFactor = gui()->properties()->get<Number>({"groupEdit", "diamFactor"})->value();
-	pcl::UniformSampling<Point> us;
-	us.setInputCloud(m_cloud);
-	us.setRadiusSearch(diamFactor * Tools::diameter(m_cloud));
-	pcl::PointCloud<int> subsampled_indices;
-	us.compute(subsampled_indices);
-	std::sort(subsampled_indices.points.begin (), subsampled_indices.points.end ());
-	Cloud::Ptr result(new Cloud());
-	pcl::copyPointCloud(*m_cloud, subsampled_indices.points, *result);
-	m_cloud = result;
-	uploadCloud();
-	gui()->log()->verbose("Resampled with diameter "+lexical_cast<std::string>(diamFactor)+".");
 }

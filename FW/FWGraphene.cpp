@@ -44,7 +44,6 @@ struct  Graphene::Impl {
 	void         removeVisualizer(std::string visName);
 
 	void         render();
-	void         renderGeometry(harmont::shader_program::ptr program, harmont::pass_type_t type);
 
 	void         modifier(Keys::Modifier mod, bool down);
 
@@ -119,6 +118,12 @@ Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr ev
 	backend->setDelVisCallback(std::bind(&Graphene::Impl::removeVisualizer, this, std::placeholders::_1));
 	m_eventHandler->registerReceiver<void (Keys::Modifier)>("MODIFIER_PRESS",   "mainapp", std::bind(&Graphene::Impl::modifier, this, std::placeholders::_1, true));
 	m_eventHandler->registerReceiver<void (Keys::Modifier)>("MODIFIER_RELEASE", "mainapp", std::bind(&Graphene::Impl::modifier, this, std::placeholders::_1, false));
+
+	auto main = m_backend->getMainSettings();
+    auto groupRendering = main->add<Section>("Rendering", "groupRendering");
+	auto bg = groupRendering->add<Color>("Background: ", "background");
+    bg->setValue(Eigen::Vector4f(1.f, 1.f, 1.f, 1.f));
+    initRenderer();
 }
 
 Graphene::Impl::~Impl() {
@@ -132,8 +137,11 @@ void Graphene::Impl::initRenderer() {
 
     // init renderer
     m_lightDir = Eigen::Vector3f(1.f, 1.f, 1.f).normalized();
+    auto main    = m_backend->getMainSettings();
+    Vector4f bg = main->get<Color>({"groupRendering", "background"})->value();
     harmont::deferred_renderer::render_parameters_t rParams {
         m_lightDir,
+        bg.head(3),
         m_rParams.exposure,
         m_rParams.shadowBias,
         m_rParams.twoSided,
@@ -143,8 +151,7 @@ void Graphene::Impl::initRenderer() {
         m_sParams.resolution,
         m_sParams.sampleCount
     };
-    Eigen::AlignedBox<float, 3> bbInit;
-    m_renderer = std::make_shared<harmont::deferred_renderer>(rParams, sParams, bbInit, glSize[0], glSize[1]);
+    m_renderer = std::make_shared<harmont::deferred_renderer>(rParams, sParams, glSize[0], glSize[1]);
 
     // register relevant callbacks
 	m_eventHandler->registerReceiver<void (int, int)>(
@@ -188,7 +195,10 @@ void Graphene::Impl::initRenderer() {
 void Graphene::Impl::initRenderProperties() {
 	auto main = m_backend->getMainSettings();
 
-    auto groupRendering = main->add<Section>("Rendering", "groupRendering");
+    auto groupRendering = main->get<Section>({"groupRendering"});
+
+	auto bg = groupRendering->get<Color>({"background"});
+    bg->setCallback([&] (Eigen::Vector4f color) { m_renderer->set_background_color(color.head(3)); });
 
     groupRendering->add<Button>("View Direction -> Light Direction", "setLightDir")->setCallback([&] () {
         m_lightDir = m_camera->forward().normalized();
@@ -211,6 +221,11 @@ void Graphene::Impl::initRenderProperties() {
 	auto ssdoReflAlbedo = groupSSDO->add<Range>("Reflective Albedo", "reflective_albedo");
     ssdoReflAlbedo->setDigits(2).setMin(0.f).setMax(1.f).setValue(m_renderer->ssdo_reflective_albedo());
     ssdoReflAlbedo->setCallback([&] (float a) { m_renderer->set_ssdo_reflective_albedo(a); });
+
+	auto groupSplats = groupRendering->add<Section>("Splat Rendering", "groupSplats");
+	auto pointSize = groupSplats->add<Range>("Splat Size", "splat_size");
+    pointSize->setDigits(2).setMin(0.f).setMax(5.f).setValue(m_renderer->point_size());
+    pointSize->setCallback([&] (float s) { m_renderer->set_point_size(s); });
 }
 
 /*
@@ -320,7 +335,6 @@ bool Graphene::Impl::hasFactory(std::string name) {
 }
 
 void Graphene::Impl::addVisualizer(std::string factoryName, std::string visName) {
-    if (!m_renderer) initRenderer();
 	if (hasVisualizer(visName)) {
 		m_backend->getLog()->error("Visualizer already exists");
 		return;
@@ -335,9 +349,9 @@ void Graphene::Impl::addVisualizer(std::string factoryName, std::string visName)
 	auto guiHandle = m_backend->addVisualizer(visName);
 	if (!guiHandle) return;
 	vis->setHandles(fwHandle, guiHandle);
+    vis->setRenderer(m_renderer);
 	vis->setProgressBarPool(m_backend->getProgressBarPool());
 	vis->init();
-    m_renderer->init([&] (harmont::shader_program::ptr program, harmont::pass_type_t type) { vis->initGeometry(program, type); });
 	m_visualizer[visName] = vis;
 }
 
@@ -366,44 +380,21 @@ void Graphene::Impl::render() {
 			status->set(lexical_cast<std::string>(fps));
 		}
 	}
-	if (!m_renderer) {
-		auto      main    = m_backend->getMainSettings();
-		Vector4f  bg(0.f, 0.f, 0.f, 1.f);//      = m_backend->getBackgroundColor();
-		glClearColor(bg[0], bg[1], bg[2], 1.f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		return;
-	}
 
-	// determine bounding box
-	m_bbox = BoundingBox();
-	if (m_singleMode) {
-		for (const auto& vis : m_visualizer) {
-			m_bbox.extend(vis.second->boundingBox());
-		}
-	} else {
-		auto  names = m_backend->getActiveVisualizerNames();
-		for (const auto& name : names) {
-			m_bbox.extend(m_visualizer[name]->boundingBox());
-		}
-	}
-
-    m_renderer->set_light_dir(m_lightDir, m_bbox);
-    m_renderer->render([&] (harmont::shader_program::ptr program, harmont::pass_type_t type) { renderGeometry(program, type); }, m_camera, m_bbox);
-}
-
-void Graphene::Impl::renderGeometry(harmont::shader_program::ptr program, harmont::pass_type_t type) {
+    // wait for pending tasks
 	if (m_singleMode) {
 		for (const auto& vis : m_visualizer) {
 			vis.second->waitForTasks();
-			vis.second->render(program, type);
 		}
 	} else {
 		auto  names = m_backend->getActiveVisualizerNames();
 		for (const auto& name : names) {
 			m_visualizer[name]->waitForTasks();
-			m_visualizer[name]->render(program, type);
 		}
 	}
+
+    m_renderer->set_light_dir(m_lightDir);
+    m_renderer->render(m_camera);
 }
 
 void Graphene::Impl::modifier(Keys::Modifier mod, bool down) {

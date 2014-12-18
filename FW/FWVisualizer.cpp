@@ -9,10 +9,13 @@
 
 namespace FW {
 
-Visualizer::Visualizer(std::string id) : m_id(id) {
+Visualizer::Visualizer(std::string id) : m_id(id), m_renderer(nullptr) {
 }
 
 Visualizer::~Visualizer() {
+    for (const auto& obj_name : m_objects) {
+        removeObject(obj_name);
+    }
 }
 
 std::string Visualizer::id() const {
@@ -29,12 +32,39 @@ GUI::VisualizerHandle::Ptr Visualizer::gui() {
 	return m_gui;
 }
 
-bool Visualizer::isHDR() const {
-	return false;
+harmont::renderable::ptr_t Visualizer::object(std::string identifier) {
+    if (!m_renderer) throw std::runtime_error("Visualizer::object(): No renderer object set for this visualizer."+SPOT);
+    return m_renderer->object(identifier);
 }
 
-boost::optional<Eigen::Matrix4f> Visualizer::modelMatrix() const {
-    return boost::none;
+harmont::renderable::const_ptr_t Visualizer::object(std::string identifier) const {
+    if (!m_renderer) throw std::runtime_error("Visualizer::object(): No renderer object set for this visualizer."+SPOT);
+    return m_renderer->object(identifier);
+}
+
+harmont::deferred_renderer::object_map_t Visualizer::objects() const {
+    if (!m_renderer) throw std::runtime_error("Visualizer::objects(): No renderer object set for this visualizer."+SPOT);
+
+    harmont::deferred_renderer::object_map_t objs;
+    auto graphene_objs = m_renderer->objects();
+    for (const auto& obj_name : m_objects) {
+        objs[obj_name] = graphene_objs[obj_name];
+    }
+    return objs;
+}
+
+void Visualizer::addObject(std::string identifier, harmont::renderable::ptr_t object) {
+    if (!m_renderer) throw std::runtime_error("Visualizer::addObject(): No renderer object set for this visualizer."+SPOT);
+    m_renderer->add_object(identifier, object);
+    m_objects.insert(identifier);
+}
+
+void Visualizer::removeObject(std::string identifier) {
+    if (!m_renderer) throw std::runtime_error("Visualizer::addObject(): No renderer object set for this visualizer."+SPOT);
+    auto find_it = m_objects.find(identifier);
+    if (find_it == m_objects.end()) throw std::runtime_error("Visualizer::addObject(): Object \""+identifier+"\" does not exist"+SPOT);
+    m_renderer->remove_object(identifier);
+    m_objects.erase(find_it);
 }
 
 Task::Ptr Visualizer::task(Task::Id id) {
@@ -64,24 +94,6 @@ Task::Ptr Visualizer::addTask(Task::Id id, Task::IOComputation computation) {
 	//m_tasks.push_back(std::make_tuple(std::async(std::launch::async, task, [&] (int done, int todo) { bar->poll(done, todo); }), finally, bar));
 //}
 
-std::vector<std::string> Visualizer::path(std::string&& s0) {
-	std::vector<std::string> p(1, s0);
-	return p;
-}
-
-std::vector<std::string> Visualizer::path(std::string&& s0, std::string&& s1) {
-	std::vector<std::string> p(1, s0);
-	p.push_back(s1);
-	return p;
-}
-
-std::vector<std::string> Visualizer::path(std::string&& s0, std::string&& s1, std::string&& s2) {
-	std::vector<std::string> p(1, s0);
-	p.push_back(s1);
-	p.push_back(s2);
-	return p;
-}
-
 //void Visualizer::execute(JobWithPool task, Job finally) {
 //	task(m_pool);
 //	if (finally) finally();
@@ -91,6 +103,10 @@ std::vector<std::string> Visualizer::path(std::string&& s0, std::string&& s1, st
 void Visualizer::setHandles(FW::VisualizerHandle::Ptr fw, GUI::VisualizerHandle::Ptr gui) {
 	m_fw = fw;
 	m_gui = gui;
+}
+
+void Visualizer::setRenderer(harmont::deferred_renderer::ptr_t renderer) {
+    m_renderer = renderer;
 }
 
 void Visualizer::setProgressBarPool(GUI::ProgressBarPool::Ptr pool) {

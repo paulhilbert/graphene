@@ -11,50 +11,46 @@
 
 #include <pcl/keypoints/uniform_sampling.h>
 
-#include <Library/Colors/Colors.h>
-using namespace Colors;
-
-#include <Geometry/PCLTools.h>
+#include <Library/Geometry/PCLTools.h>
 using Geometry::PCLTools;
-typedef pcl::PointXYZRGBNormal Point;
-typedef PCLTools<Point>  Tools;
-typedef Tools::CloudType Cloud;
-typedef Tools::Idx       Idx;
-typedef Tools::IdxSet    IdxSet;
+typedef pcl::PointXYZRGBNormal  Point;
+typedef PCLTools<Point>         Tools;
+typedef Tools::CloudType        Cloud;
+typedef Tools::Idx              Idx;
+typedef Tools::IdxSet           IdxSet;
 
 #include <FW/FWVisualizer.h>
-#include <Library/Rendered/Cloud.h>
+
+#include <harmont/pcl_traits.hpp>
 
 namespace FW {
 
 
-class SinglePointCloud : virtual public Visualizer {
+class SinglePointCloud : virtual public  Visualizer {
+	public:
+		typedef pcl::PointXYZRGBNormal              PointT;
+		typedef harmont::cloud<PointT>              CloudT;
+		typedef harmont::pointcloud_object<CloudT>  RenderedCloudT;
+
 	public:
 		SinglePointCloud(std::string id, const GUI::Property::Paths& paths, std::string upAxis, float scale, bool recenter);
 		virtual ~SinglePointCloud();
 
 		void init();
-		void render(ShaderProgram& program);
 		void addProperties();
+        void addModes();
 		void registerEvents();
-
-		virtual BoundingBox boundingBox() const;
 
 	protected:
 		void addClouds(const GUI::Property::Paths& paths);
 		void exportCloud(const fs::path& path);
-		void uploadCloud();
-		void resample();
 
 	protected:
-		GUI::Property::Paths     m_paths;
-		Cloud::Ptr               m_cloud;
-		Rendered::Cloud::Ptr     m_rendered;
-		std::vector<RGBA>        m_colors;
-		std::string              m_upAxis;
-		float                    m_scale;
-		bool                     m_recenter;
-		BoundingBox              m_bbox;
+		GUI::Property::Paths         m_paths;
+        RenderedCloudT::ptr_t        m_cloud;
+		std::string                  m_upAxis;
+		float                        m_scale;
+		bool                         m_recenter;
 };
 
 #include "SinglePointCloud.inl"

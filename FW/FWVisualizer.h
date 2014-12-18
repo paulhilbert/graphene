@@ -27,6 +27,7 @@
 #include <GUI/GUIProgressBarPool.h>
 
 #include <harmont/harmont.hpp>
+#include <harmont/deferred_renderer.hpp>
 
 
 namespace FW {
@@ -82,7 +83,7 @@ class Visualizer {
 		/**
 		 *  Returns access handle to GUI functionality
 		 *
-		 *  @return Access handel to GUI
+		 *  @return Access handle to GUI
 		 *  @see GUI::VisualizerHandle
 		 */
 		GUI::VisualizerHandle::Ptr gui();
@@ -93,41 +94,37 @@ class Visualizer {
 		virtual void init() = 0;
 
 		/**
-		 *  Pure virtual method initializing geometry of inherited visualizers.
+		 *  Returns renderable object given identifier.
 		 *
-		 *  @param program Reference to shader program
-		 *  @param type    Type of render pass to initialize geometry for.
+         *  @param identifier Name used when adding this renderable object.
+		 *  @return Shared pointer to specified renderable object.
 		 */
-		virtual void initGeometry(harmont::shader_program::ptr program, harmont::pass_type_t type) = 0;
+        harmont::renderable::ptr_t object(std::string identifier);
 
 		/**
-		 *  Pure virtual method rendering content of inherited visualizers.
+		 *  Returns renderable object given identifier.
 		 *
-		 *  @param program Reference to shader program
-		 *  @param type    Type of render pass to supply geometry to.
+         *  @param identifier Name used when adding this renderable object.
+		 *  @return Shared pointer to specified renderable const object.
 		 */
-		virtual void render(harmont::shader_program::ptr program, harmont::pass_type_t type) = 0;
+        harmont::renderable::const_ptr_t object(std::string identifier) const;
 
-		/**
-		 *  Virtual method checking whether this visualizer renders HDR.
-		 *
-		 *  @return True iff this visualizer renders HDR and therefore needs tonemapping
-		 */
-		virtual bool isHDR() const;
+        harmont::deferred_renderer::object_map_t objects() const;
 
-		/**
-		 *  Pure virtual method returning bounding box.
-		 *
-		 *  @return Bounding box of rendered geometry in world coordinates.
-		 */
-		virtual BoundingBox boundingBox() const = 0;
+        /**
+         * Adds renderable object to list of objects.
+         *
+         * @param identifier Name of object used for later access.
+         * @param object Renderable object.
+         */
+        void addObject(std::string identifier, harmont::renderable::ptr_t object);
 
-		/**
-		 *  Virtual method returning an optional model matrix.
-		 *
-		 *  @return (optional) 4x4 model matrix.
-		 */
-        virtual boost::optional<Eigen::Matrix4f> modelMatrix() const;
+        /**
+         * Remove previously added renderable object.
+         *
+         * @param identifier Name of object to remove.
+         */
+        void removeObject(std::string identifier);
 
 		/**
 		 *  Returns task with given id.
@@ -154,44 +151,10 @@ class Visualizer {
 		 */
 		Task::Ptr addTask(Task::Id id, Task::IOComputation computation);
 
-		/**
-		 *  Assemble string vector (used in graphene as a path) out of given parameter.
-		 *
-		 *  Convenience function for those who don't have initializer list support.
-		 *  Keep in mind that parameter is given as r-value references and std::move'd inside the function.
-		 *  If necessary supply copies.
-		 *
-		 *  @param s0 String to include
-		 */
-		static std::vector<std::string> path(std::string&& s0);
-
-		/**
-		 *  Assemble string vector (used in graphene as a path) out of given parameters.
-		 *
-		 *  Convenience function for those who don't have initializer list support.
-		 *  Keep in mind that parameters are given as r-value references and std::move'd inside the function.
-		 *  If necessary supply copies.
-		 *
-		 *  @param s0 String to include
-		 *  @param s1 String to include
-		 */
-		static std::vector<std::string> path(std::string&& s0, std::string&& s1);
-
-		/**
-		 *  Assemble string vector (used in graphene as a path) out of given parameters.
-		 *
-		 *  Convenience function for those who don't have initializer list support.
-		 *  Keep in mind that parameters are given as r-value references and std::move'd inside the function.
-		 *  If necessary supply copies.
-		 *
-		 *  @param s0 String to include
-		 *  @param s1 String to include
-		 *  @param s2 String to include
-		 */
-		static std::vector<std::string> path(std::string&& s0, std::string&& s1, std::string&& s2);
 
 	protected:
 		void setHandles(FW::VisualizerHandle::Ptr fw, GUI::VisualizerHandle::Ptr gui);
+		void setRenderer(harmont::deferred_renderer::ptr_t renderer);
 		void setProgressBarPool(GUI::ProgressBarPool::Ptr m_pool);
 		void waitForTasks();
 
@@ -199,12 +162,14 @@ class Visualizer {
 		//typedef std::tuple<std::future<void>, Job, GUI::ProgressBar::Ptr> Task;
 
 	protected:
-		std::string                       m_id;
-		FW::VisualizerHandle::Ptr         m_fw;
-		GUI::VisualizerHandle::Ptr        m_gui;
-		//std::vector<Task>                 m_tasks;
-		GUI::ProgressBarPool::Ptr         m_pool;
-		std::map<Task::Id, Task::Ptr>     m_tasks;
+		std::string                        m_id;
+		FW::VisualizerHandle::Ptr          m_fw;
+		GUI::VisualizerHandle::Ptr         m_gui;
+        harmont::deferred_renderer::ptr_t  m_renderer;
+		//std::vector<Task>                  m_tasks;
+		GUI::ProgressBarPool::Ptr          m_pool;
+		std::map<Task::Id, Task::Ptr>      m_tasks;
+        std::set<std::string>              m_objects;
 };
 
 

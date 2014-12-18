@@ -33,9 +33,6 @@ class Mesh {
 		void render(harmont::shader_program::ptr program, harmont::pass_type_t type);
 
 	protected:
-		void  upload();
-
-	protected:
 		MeshPtrT                              m_mesh;
         harmont::vertex_array::ptr            m_vaoShadow;
         harmont::vertex_array::ptr            m_vaoDisplay;
