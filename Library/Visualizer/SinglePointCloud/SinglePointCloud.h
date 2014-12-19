@@ -30,7 +30,7 @@ class SinglePointCloud : virtual public  Visualizer {
 	public:
 		typedef pcl::PointXYZRGBNormal              PointT;
 		typedef harmont::cloud<PointT>              CloudT;
-		typedef harmont::pointcloud_object<CloudT>  RenderedCloudT;
+		typedef harmont::pointcloud_object<CloudT, boost::shared_ptr>  RenderedCloudT;
 
 	public:
 		SinglePointCloud(std::string id, const GUI::Property::Paths& paths, std::string upAxis, float scale, bool recenter);

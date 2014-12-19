@@ -17,6 +17,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 if(CMAKE_COMPILER_IS_GNUCXX)
 	add_definitions(-fPIC)
 	add_definitions(-std=c++1y)
+	add_definitions(-O3)
 	add_definitions(-g)
 endif()
 

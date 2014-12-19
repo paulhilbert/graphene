@@ -46,7 +46,7 @@ inline void SinglePointCloud::registerEvents() {
 }
 
 inline void SinglePointCloud::addClouds(const GUI::Property::Paths& paths) {
-    std::shared_ptr<CloudT> cloud = m_cloud ? m_cloud->cloud() : std::make_shared<CloudT>();
+    boost::shared_ptr<CloudT> cloud = m_cloud ? m_cloud->cloud() : boost::make_shared<CloudT>();
 	for (const auto& p : paths) {
 		if (!fs::exists(p)) {
 			gui()->log()->error("File \""+p.string()+"\" does not exist. Skipping this file.");
