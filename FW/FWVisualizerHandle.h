@@ -21,6 +21,8 @@
 #include <FW/Events/EventsKeys.h>
 using FW::Events::Keys;
 
+#include <harmont/camera.hpp>
+
 namespace FW {
 
 class Graphene;
@@ -43,7 +45,7 @@ class VisualizerHandle {
 		friend class Graphene;
 
 	protected:
-		VisualizerHandle(std::string id, Events::EventHandler::Ptr eventHandler);
+		VisualizerHandle(std::string id, Events::EventHandler::Ptr eventHandler, harmont::camera::const_ptr camera);
 
 	public:
 		/**
@@ -65,10 +67,18 @@ class VisualizerHandle {
 		 */
 		Events::Modifier::Ptr  modifier();
 
+        /**
+         * @brief Read access to current camera.
+         *
+         * @return Const shared pointer to current camera object.
+         */
+        harmont::camera::const_ptr camera() const;
+
 	protected:
 		std::string                     m_id;
 		Events::Handle::Ptr             m_events;
 		Events::Modifier::Ptr           m_modifier;
+        harmont::camera::const_ptr      m_camera;
 };
 
 } // FW

@@ -66,7 +66,7 @@ int main( int argc, char *argv[] ) {
 		("single",     po::value<std::string>(&single) ->default_value(""), "Use the given name as single mode visualizer")
 		("title",      po::value<std::string>(&title) ->default_value("graphene"), "Window title")
 		("stylesheet", po::value<std::string>(&stylesheet) ->default_value(""), "Stylesheet for the UI")
-		("exposure", po::value<float>(&rParams.exposure)->default_value(0.8), "Initial exposure")
+		("exposure", po::value<float>(&rParams.exposure)->default_value(0.7), "Initial exposure")
 		("shadow_bias", po::value<float>(&rParams.shadowBias)->default_value(0.003), "Initial shadow bias")
 		("shadow_res", po::value<uint32_t>(&sParams.resolution)->default_value(2048), "Shadow map resolution")
 		("shadow_samples", po::value<uint32_t>(&sParams.sampleCount)->default_value(32), "Number of shadow samples")

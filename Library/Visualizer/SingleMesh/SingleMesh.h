@@ -3,7 +3,7 @@
 
 #include <FW/FWVisualizer.h>
 
-#include <harmont/openmesh_traits.hpp>
+#include <cartan/openmesh_traits.hpp>
 
 namespace FW {
 
@@ -13,7 +13,7 @@ class SingleMesh : virtual public Visualizer {
 		typedef std::weak_ptr<SingleMesh>   WPtr;
 
         typedef OpenMesh::Vec4f             ColorT;
-		typedef harmont::tri_mesh<ColorT>   MeshT;
+		typedef cartan::openmesh_t<ColorT>  MeshT;
         typedef harmont::mesh_object<MeshT> RenderedMeshT;
 
 	public:

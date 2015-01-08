@@ -109,6 +109,11 @@ class Visualizer {
 		 */
         harmont::renderable::const_ptr_t object(std::string identifier) const;
 
+		/**
+		 *  Returns map of renderable objects.
+		 *
+		 *  @return Map of identifier to renderable objects..
+		 */
         harmont::deferred_renderer::object_map_t objects() const;
 
         /**

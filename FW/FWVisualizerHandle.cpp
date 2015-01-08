@@ -11,7 +11,7 @@
 
 namespace FW {
 
-VisualizerHandle::VisualizerHandle(std::string id, Events::EventHandler::Ptr eventHandler) : m_id(id)  {
+VisualizerHandle::VisualizerHandle(std::string id, Events::EventHandler::Ptr eventHandler, harmont::camera::const_ptr camera) : m_id(id), m_camera(camera)  {
 	m_events = Events::Handle::Ptr(new Events::Handle(id, eventHandler));
 	m_modifier = eventHandler->modifier();
 }
@@ -26,5 +26,9 @@ Events::Handle::Ptr VisualizerHandle::events() {
 Events::Modifier::Ptr VisualizerHandle::modifier() {
 	return m_modifier;
 }
+
+ harmont::camera::const_ptr VisualizerHandle::camera() const {
+     return m_camera;
+ }
 
 } // FW

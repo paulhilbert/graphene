@@ -219,7 +219,7 @@ void Graphene::Impl::initRenderProperties() {
     ssdoExponent->setDigits(2).setMin(0.f).setMax(5.f).setValue(m_renderer->ssdo_exponent());
     ssdoExponent->setCallback([&] (float e) { m_renderer->set_ssdo_exponent(e); });
 	auto ssdoReflAlbedo = groupSSDO->add<Range>("Reflective Albedo", "reflective_albedo");
-    ssdoReflAlbedo->setDigits(2).setMin(0.f).setMax(1.f).setValue(m_renderer->ssdo_reflective_albedo());
+    ssdoReflAlbedo->setDigits(2).setMin(0.f).setMax(5.f).setValue(m_renderer->ssdo_reflective_albedo());
     ssdoReflAlbedo->setCallback([&] (float a) { m_renderer->set_ssdo_reflective_albedo(a); });
 
 	auto groupSplats = groupRendering->add<Section>("Splat Rendering", "groupSplats");
@@ -345,7 +345,7 @@ void Graphene::Impl::addVisualizer(std::string factoryName, std::string visName)
 	}
 	auto vis = getFactory(factoryName)->addVisualizer();
 	if (!vis) return;
-	VisualizerHandle::Ptr   fwHandle(new VisualizerHandle(visName, m_eventHandler));
+	VisualizerHandle::Ptr   fwHandle(new VisualizerHandle(visName, m_eventHandler, m_camera));
 	auto guiHandle = m_backend->addVisualizer(visName);
 	if (!guiHandle) return;
 	vis->setHandles(fwHandle, guiHandle);
