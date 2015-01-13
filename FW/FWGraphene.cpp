@@ -197,6 +197,13 @@ void Graphene::Impl::initRenderProperties() {
 
     auto groupRendering = main->get<Section>({"groupRendering"});
 
+	auto  projection  = groupRendering->add<Choice>("Projection:");
+	projection->add("perspective", "Perspective");
+	projection->add("ortho", "Orthographic");
+	projection->setCallback([&] (std::string mode) {
+        m_camera->set_ortho(mode == "ortho");
+    });
+
 	auto bg = groupRendering->get<Color>({"background"});
     bg->setCallback([&] (Eigen::Vector4f color) { m_renderer->set_background_color(color.head(3)); });
 

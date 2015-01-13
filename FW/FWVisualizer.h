@@ -125,11 +125,26 @@ class Visualizer {
         void addObject(std::string identifier, harmont::renderable::ptr_t object);
 
         /**
+         * Adds renderable object group to list of objects.
+         *
+         * @param prefix Prefix of object name. Final name will be prefix+index.
+         * @param group Renderable group.
+         */
+        void addObjectGroup(std::string prefix, harmont::renderable_group::ptr_t group);
+
+        /**
          * Remove previously added renderable object.
          *
          * @param identifier Name of object to remove.
          */
         void removeObject(std::string identifier);
+
+        /**
+         * Remove previously added renderable object group.
+         *
+         * @param identifier Name of object to remove.
+         */
+        void removeObjectGroup(std::string prefix);
 
 		/**
 		 *  Returns task with given id.

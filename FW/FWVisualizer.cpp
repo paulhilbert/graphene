@@ -59,12 +59,27 @@ void Visualizer::addObject(std::string identifier, harmont::renderable::ptr_t ob
     m_objects.insert(identifier);
 }
 
-void Visualizer::removeObject(std::string identifier) {
+void Visualizer::addObjectGroup(std::string prefix, harmont::renderable_group::ptr_t group) {
     if (!m_renderer) throw std::runtime_error("Visualizer::addObject(): No renderer object set for this visualizer."+SPOT);
+    uint32_t idx = 0;
+    for (auto& obj : group->objects()) {
+        addObject(prefix + std::to_string(idx++), obj);
+    }
+}
+
+void Visualizer::removeObject(std::string identifier) {
+    if (!m_renderer) throw std::runtime_error("Visualizer::removeObject(): No renderer object set for this visualizer."+SPOT);
     auto find_it = m_objects.find(identifier);
-    if (find_it == m_objects.end()) throw std::runtime_error("Visualizer::addObject(): Object \""+identifier+"\" does not exist"+SPOT);
+    if (find_it == m_objects.end()) throw std::runtime_error("Visualizer::removeObject(): Object \""+identifier+"\" does not exist"+SPOT);
     m_renderer->remove_object(identifier);
     m_objects.erase(find_it);
+}
+
+void Visualizer::removeObjectGroup(std::string prefix) {
+    uint32_t idx = 0;
+    while (m_objects.find(prefix + std::to_string(idx)) != m_objects.end()) {
+        removeObject(prefix + std::to_string(idx++));
+    }
 }
 
 Task::Ptr Visualizer::task(Task::Id id) {
