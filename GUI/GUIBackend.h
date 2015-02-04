@@ -130,7 +130,7 @@ class Backend {
 		 *
 		 *  @return Shared pointer to property Container class.
 		 */
-		virtual Container::Ptr getMainSettings() = 0;
+		virtual GUI::Property::Container::Ptr getMainSettings() = 0;
 
 		/**
 		 *  Pure virtual method setting window title.

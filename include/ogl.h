@@ -26,4 +26,11 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#ifdef far
+#undef far
+#endif
+#ifdef near
+#undef near
+#endif
+
 #endif /* INC_OGL_H_ */

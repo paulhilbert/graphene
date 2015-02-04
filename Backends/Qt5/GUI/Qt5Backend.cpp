@@ -94,6 +94,7 @@ void Qt5Backend::init(int argc, char* argv[], FW::Events::EventHandler::Ptr even
 	m_wnd->setCentralWidget(m_glWidget);
     QCoreApplication::instance()->installEventFilter(m_glWidget);
 	if (params.maximized) m_wnd->showMaximized();
+    else m_wnd->show();
 }
 
 int Qt5Backend::run(int fps) {

@@ -29,6 +29,6 @@
 #include <GUI/Property/PropSeparator.h>
 #include <GUI/Property/PropToggleButton.h>
 #include <GUI/Property/PropTree.h>
-using namespace GUI::Property;
+//using namespace GUI::Property;
 
 #endif /* INC_VISUALIZER_H_ */

@@ -18,6 +18,7 @@
 
 #include <FW/FWVisualizer.h>
 
+using namespace GUI::Property;
 
 
 namespace FW {
@@ -58,6 +59,9 @@ struct  Graphene::Impl {
 	std::map<std::string, Factory::Ptr> m_factories;
 	std::map<std::string, Visualizer::Ptr> m_visualizer;
 
+    // special modii
+	bool m_singleMode;
+
     // rendering
     harmont::camera::ptr m_camera;
     harmont::deferred_renderer::ptr_t m_renderer;
@@ -66,8 +70,8 @@ struct  Graphene::Impl {
     ShadowParameters m_sParams;
     BoundingBox m_bbox;
 
-    // special modii
-	bool m_singleMode;
+    // hdr map
+    std::string m_hdrPath;
 
 	// fps computation
 	int m_fps;
@@ -75,8 +79,6 @@ struct  Graphene::Impl {
 	std::chrono::system_clock::time_point m_lastFPSComp;
 	unsigned int m_frameCount;
 
-    // hdr map
-    std::string m_hdrPath;
 
 	//std::map<std::string, CameraControl::Ptr> m_camControls;
 
@@ -110,7 +112,7 @@ Factory::Ptr Graphene::getFactory(std::string name) {
 /// GRAPHENE IMPL ///
 
 
-Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, const RenderParameters& renderParams, const ShadowParameters& shadowParams, std::string hdrPath) : m_backend(backend), m_eventHandler(eventHandler), m_singleMode(singleMode), m_rParams(renderParams), m_sParams(shadowParams), m_showFPS(false), m_frameCount(0), m_hdrPath(hdrPath) {
+Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, const RenderParameters& renderParams, const ShadowParameters& shadowParams, std::string hdrPath) : m_backend(backend), m_eventHandler(eventHandler), m_singleMode(singleMode), m_rParams(renderParams), m_sParams(shadowParams), m_hdrPath(hdrPath), m_showFPS(false), m_frameCount(0) {
 	m_lastFPSComp = std::chrono::system_clock::now();
 	backend->setRenderCallback(std::bind(&Graphene::Impl::render, this));
 	backend->setExitCallback(std::bind(&Graphene::Impl::exit, this));
@@ -124,6 +126,7 @@ Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr ev
 	auto bg = groupRendering->add<Color>("Background: ", "background");
     bg->setValue(Eigen::Vector4f(1.f, 1.f, 1.f, 1.f));
     initRenderer();
+
 }
 
 Graphene::Impl::~Impl() {
@@ -167,8 +170,7 @@ void Graphene::Impl::initRenderer() {
 		"Camera",
 		std::function<void (int,int,int,int)>(
 			[&](int dx, int dy, int x, int y) {
-				int m = 0;
-				if (m_eventHandler->modifier()->alt() || m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift()) return;
+				if (m_eventHandler->modifier()->alt() || (m_eventHandler->modifier()->ctrl() && m_eventHandler->modifier()->shift())) return;
 				if (m_eventHandler->modifier()->ctrl() )  {
                     m_camera->update(0.01f * vec3_t(-dx, -dy, 0.0), vec3_t::Zero());
                 } else if (m_eventHandler->modifier()->shift()  )  {
@@ -233,6 +235,8 @@ void Graphene::Impl::initRenderProperties() {
 	auto pointSize = groupSplats->add<Range>("Splat Size", "splat_size");
     pointSize->setDigits(2).setMin(0.f).setMax(5.f).setValue(m_renderer->point_size());
     pointSize->setCallback([&] (float s) { m_renderer->set_point_size(s); });
+
+    groupRendering->setCollapsed(m_singleMode);
 }
 
 /*

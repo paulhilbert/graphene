@@ -8,6 +8,8 @@
 #include "GUIVisualizerHandle.h"
 #include "GUIBackend.h"
 
+using namespace GUI::Property;
+
 namespace GUI {
 
 VisualizerHandle::VisualizerHandle(Property::Container::Ptr properties, Mode::Handle::Ptr modes, Log::Ptr log, Status::Ptr status, bool alwaysActive) : m_properties(properties), m_modes(modes), m_log(log), m_status(status) {
