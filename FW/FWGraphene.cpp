@@ -130,6 +130,9 @@ Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr ev
 
 #ifdef USE_SPACENAV
 	m_spaceNav = std::make_shared<FW::Events::SpaceNav>();
+    m_spaceNav->setCallbackPressRight([&] () {
+        m_lightDir = m_camera->forward().normalized();
+    });
 #endif
 
 	auto main = m_backend->getMainSettings();
