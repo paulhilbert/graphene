@@ -18,6 +18,9 @@
 
 #include <FW/FWVisualizer.h>
 
+#ifdef USE_SPACENAV
+#include <FW/Events/EventsSpaceNav.h>
+#endif
 
 
 namespace FW {
@@ -82,6 +85,10 @@ struct  Graphene::Impl {
 
 	//std::map<std::string, EnvTex> m_envTextures;
 	//std::string m_crtMap;
+	
+#ifdef USE_SPACENAV
+	FW::Events::SpaceNav::Ptr m_spaceNav;
+#endif
 };
 
 
@@ -118,6 +125,10 @@ Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr ev
 	backend->setDelVisCallback(std::bind(&Graphene::Impl::removeVisualizer, this, std::placeholders::_1));
 	m_eventHandler->registerReceiver<void (Keys::Modifier)>("MODIFIER_PRESS",   "mainapp", std::bind(&Graphene::Impl::modifier, this, std::placeholders::_1, true));
 	m_eventHandler->registerReceiver<void (Keys::Modifier)>("MODIFIER_RELEASE", "mainapp", std::bind(&Graphene::Impl::modifier, this, std::placeholders::_1, false));
+
+#ifdef USE_SPACENAV
+	m_spaceNav = std::make_shared<FW::Events::SpaceNav>();
+#endif
 
 	auto main = m_backend->getMainSettings();
     auto groupRendering = main->add<Section>("Rendering", "groupRendering");
@@ -375,6 +386,11 @@ void Graphene::Impl::removeVisualizer(std::string visName) {
 }
 
 void Graphene::Impl::render() {
+#ifdef USE_SPACENAV
+	auto motion = m_spaceNav->motion();
+	m_camera->update(vec3_t(-motion[0], motion[2], -motion[1]), 0.1f * vec3_t(motion[5], motion[3], 0.f));
+#endif
+	
 	if (m_showFPS) {
 		++m_frameCount;
 		auto now = std::chrono::system_clock::now();
