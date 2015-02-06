@@ -42,7 +42,7 @@ int main( int argc, char *argv[] ) {
 	std::string  stylesheet;
 	int          fps;
 	int          wndWidth, wndHeight;
-	bool         noEffects;
+	//bool         noEffects;
 	bool         verbose;
 	bool         singleMode;
     Graphene::RenderParameters rParams;
@@ -57,7 +57,7 @@ int main( int argc, char *argv[] ) {
 		("visPath", po::value<std::string>(&visPath) ->required(), "Path to visualizer shared libraries")
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
 		("visExt",  po::value<std::string>(&visExt)  ->default_value(".dll"), "File extension of visualizer shared libraries")
-		("backend", po::value<std::string>(&backendPath) ->default_value("GrapheneQt5.dll"), "Path to backend library")
+		("backend", po::value<std::string>(&backendPath) ->default_value("libGrapheneQt5.dll"), "Path to backend library")
 #else
 		("visExt",  po::value<std::string>(&visExt)  ->default_value(".so"), "File extension of visualizer shared libraries")
 		("backend", po::value<std::string>(&backendPath) ->default_value(PREFIX"/lib/libGrapheneQt5.so"), "Path to backend library")
@@ -124,8 +124,10 @@ int main( int argc, char *argv[] ) {
 	singleMode = single != "";
 
 	// sanitize paths
+#if !(defined(WIN32) || defined(_WIN32) || defined(__WIN32))
 	substituteHome(visPath);
 	substituteHome(backendPath);
+#endif
 
 	FW::Events::EventHandler::Ptr eventHandler(new FW::Events::EventHandler());
 

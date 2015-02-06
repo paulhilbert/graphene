@@ -15,10 +15,16 @@ include_directories("/usr/include/eigen3")
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-	add_definitions(-fPIC)
 	add_definitions(-std=c++1y)
 	add_definitions(-O3)
 	add_definitions(-g)
+	add_definitions(-Wno-unused-local-typedefs)
+    if (WIN32)
+        add_definitions(-DWIN32_LEAN_AND_MEAN)
+        add_definitions(-DNOGDI)
+    else()
+        add_definitions(-fPIC)
+    endif()
 endif()
 
 # boost

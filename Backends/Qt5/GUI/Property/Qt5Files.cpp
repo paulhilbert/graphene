@@ -78,9 +78,9 @@ QWidget* Qt5Files::widget() {
 
 void Qt5Files::buttonClicked() {
 	QString filter;
-	if (!m_extensions.size()) {
-		filter = tr("All Files (*.*)");
-	} else {
+    filter = tr("All Files (*.*)");
+#if !(defined(WIN32) || defined(_WIN32) || defined(__WIN32))
+	if (m_extensions.size()) {
 		filter = tr("Valid Files (");
 		for (unsigned int i=0; i<m_extensions.size(); ++i) {
 			if (i) filter += " ";
@@ -88,12 +88,15 @@ void Qt5Files::buttonClicked() {
 		}
 		filter += tr(")");
 	}
+#else
+    filter = QDir::Files|QDir::Readable|QDir:: Writable;
+#endif
 	QStringList files = QFileDialog::getOpenFileNames(nullptr, "Open Files...", filter, tr("All Files (*.*)"), nullptr, 0);
 	QStringList::Iterator it = files.begin();
 	m_value.clear();
 	QString text;
 	while (it != files.end()) {
-		m_value.push_back(fs::path(it->toStdString()));
+		m_value.push_back(fs::path(QDir::toNativeSeparators(*it).toStdString()));
 		if (it != files.begin()) text += ", ";
 		text += *it;
 		++it;

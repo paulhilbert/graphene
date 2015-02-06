@@ -78,9 +78,9 @@ QWidget* Qt5File::widget() {
 
 void Qt5File::buttonClicked() {
 	QString filter;
-	if (!m_extensions.size()) {
-		filter = tr("All Files (*.*)");
-	} else {
+    filter = tr("All Files (*.*)");
+#if !(defined(WIN32) || defined(_WIN32) || defined(__WIN32))
+	if (m_extensions.size()) {
 		filter = tr("Valid Files (");
 		for (unsigned int i=0; i<m_extensions.size(); ++i) {
 			if (i) filter += " ";
@@ -88,13 +88,17 @@ void Qt5File::buttonClicked() {
 		}
 		filter += tr(")");
 	}
+#else
+    filter = QDir::Files|QDir::Readable|QDir:: Writable;
+#endif
 	QString file;
 	if (m_mode == OPEN) {
-		file = QFileDialog::getOpenFileName(nullptr, "Open...", QString(), filter, nullptr, 0);
+		file = QDir::toNativeSeparators(QFileDialog::getOpenFileName(nullptr, "Open...", QString(), filter, nullptr, 0));
 	} else {
-		file = QFileDialog::getSaveFileName(nullptr, "Save...", QString(), filter, nullptr, 0);
+		file = QDir::toNativeSeparators(QFileDialog::getSaveFileName(nullptr, "Save...", QString(), filter, nullptr, 0));
 	}
 	if (file == "") return;
+    std::cout << file.toStdString() << "\n";
 	fs::path path(file.toStdString());
 	if ((m_mode == OPEN && fs::exists(path)) || m_mode == SAVE) {
 		m_lineEdit->setText(file);
