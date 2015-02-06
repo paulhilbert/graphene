@@ -37,6 +37,7 @@ find_package(Boost COMPONENTS regex filesystem program_options system)
 find_package(OpenGL)
 find_package(GLEW)
 find_package(Harmont)
+find_package(SpaceNav)
 
 
 file (GLOB_RECURSE obj RELATIVE "${PROJECT_SOURCE_DIR}" "FW/*.cpp" "GUI/*.cpp")
@@ -50,6 +51,10 @@ if(Boost_FOUND AND OPENGL_FOUND AND GLEW_FOUND AND HARMONT_FOUND)
 	#add_library(Graphene SHARED ${obj} ${lib})
 	add_library(Graphene SHARED ${obj})
 	target_link_libraries(Graphene ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${HARMONT_LIBRARIES} "dl")
+	if(SPACENAV_FOUND)
+		add_definitions(-DUSE_SPACENAV)
+		target_link_libraries(Graphene ${SPACENAV_LIBRARIES})
+	endif()
 	add_executable(graphene "graphene.cpp")
 	target_link_libraries(graphene Graphene)
 

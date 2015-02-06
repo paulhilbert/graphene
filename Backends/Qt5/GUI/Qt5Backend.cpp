@@ -92,9 +92,9 @@ void Qt5Backend::init(int argc, char* argv[], FW::Events::EventHandler::Ptr even
 	// init opengl
 	m_glWidget = new Qt5GLWidget(eventHandler, 1);
 	m_wnd->setCentralWidget(m_glWidget);
-    QCoreApplication::instance()->installEventFilter(m_glWidget);
+	m_wnd->installEventFilter(m_glWidget);
 	if (params.maximized) m_wnd->showMaximized();
-    else m_wnd->show();
+	else m_wnd->show();
 }
 
 int Qt5Backend::run(int fps) {
@@ -103,10 +103,10 @@ int Qt5Backend::run(int fps) {
 	int timeout = 1000 / fps;
 	if (!timeout) timeout = 1;
 	timer->start(timeout);
-	m_wnd->show();
 	if (m_singleMode) {
 		if (!initSingleVisualizer()) return 0;
 	}
+	m_wnd->show();
 	return m_app->exec();
 }
 
@@ -235,6 +235,9 @@ void Qt5Backend::update() {
 }
 
 bool Qt5Backend::onAddVis() {
+	m_addVisDialog->show();
+	m_addVisDialog->raise();
+	m_addVisDialog->activateWindow();
 	if (m_addVisDialog->exec() == QDialog::Accepted) {
 		if (m_onAddVis) m_onAddVis(m_addVisDialog->getActiveFactory(), m_addVisDialog->getActiveVisName());
 	} else {
