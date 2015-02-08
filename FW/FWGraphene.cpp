@@ -30,7 +30,7 @@ namespace FW {
 struct  Graphene::Impl {
     typedef harmont::camera::vec3_t vec3_t;
 
-	Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, const RenderParameters& renderParams, const ShadowParameters& shadowParams, std::string hdrPath);
+	Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, const RenderParameters& renderParams, const ShadowParameters& shadowParams, std::string hdrPath, std::string cameraModel);
 	virtual ~Impl();
 
 	//void initTransforms();
@@ -51,7 +51,7 @@ struct  Graphene::Impl {
 
 	void         modifier(Keys::Modifier mod, bool down);
 
-	//void         setCameraControl(std::string control);
+	void         setCameraControl(std::string control);
 	//void         setOrtho(bool ortho);
 
 
@@ -83,11 +83,12 @@ struct  Graphene::Impl {
 	unsigned int m_frameCount;
 
 
-	//std::map<std::string, CameraControl::Ptr> m_camControls;
+	std::map<std::string, harmont::camera_model::ptr> m_camControls;
+    std::string m_crtCamControl;
 
 	//std::map<std::string, EnvTex> m_envTextures;
 	//std::string m_crtMap;
-	
+
 #ifdef USE_SPACENAV
 	FW::Events::SpaceNav::Ptr m_spaceNav;
 #endif
@@ -97,8 +98,8 @@ struct  Graphene::Impl {
 /// GRAPHENE ///
 
 
-Graphene::Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, const RenderParameters& renderParams, const ShadowParameters& shadowParams, std::string hdrPath) {
-	m_impl = std::shared_ptr<Impl>(new Impl(backend, eventHandler, singleMode, renderParams, shadowParams, hdrPath));
+Graphene::Graphene(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, const RenderParameters& renderParams, const ShadowParameters& shadowParams, std::string hdrPath, std::string cameraModel) {
+	m_impl = std::shared_ptr<Impl>(new Impl(backend, eventHandler, singleMode, renderParams, shadowParams, hdrPath, cameraModel));
 }
 
 Graphene::~Graphene() {
@@ -119,7 +120,7 @@ Factory::Ptr Graphene::getFactory(std::string name) {
 /// GRAPHENE IMPL ///
 
 
-Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, const RenderParameters& renderParams, const ShadowParameters& shadowParams, std::string hdrPath) : m_backend(backend), m_eventHandler(eventHandler), m_singleMode(singleMode), m_rParams(renderParams), m_sParams(shadowParams), m_hdrPath(hdrPath), m_showFPS(false), m_frameCount(0) {
+Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, const RenderParameters& renderParams, const ShadowParameters& shadowParams, std::string hdrPath, std::string cameraModel) : m_backend(backend), m_eventHandler(eventHandler), m_singleMode(singleMode), m_rParams(renderParams), m_sParams(shadowParams), m_hdrPath(hdrPath), m_showFPS(false), m_frameCount(0), m_crtCamControl(cameraModel) {
 	m_lastFPSComp = std::chrono::system_clock::now();
 	backend->setRenderCallback(std::bind(&Graphene::Impl::render, this));
 	backend->setExitCallback(std::bind(&Graphene::Impl::exit, this));
@@ -148,8 +149,9 @@ Graphene::Impl::~Impl() {
 void Graphene::Impl::initRenderer() {
     // init camera
 	auto glSize = m_backend->getGLSize();
-    auto model = harmont::camera_model::looking_at<harmont::orbit_camera_model>(vec3_t(0.0, -20.0, 0.0));
-    m_camera = std::make_shared<harmont::camera>(model, glSize[0], glSize[1], 40.f, 0.01f, 200.f);
+	m_camControls["orbit"] = harmont::camera_model::looking_at<harmont::orbit_camera_model>(vec3_t(0.0, -20.0, 0.0));
+	m_camControls["fly"] = harmont::camera_model::looking_at<harmont::fly_camera_model>(vec3_t(0.0, -20.0, 0.0));
+    m_camera = std::make_shared<harmont::camera>(m_camControls[m_crtCamControl], glSize[0], glSize[1], 40.f, 0.01f, 200.f);
 
     // init renderer
     m_lightDir = Eigen::Vector3f(1.f, 1.f, 1.f).normalized();
@@ -210,6 +212,14 @@ void Graphene::Impl::initRenderer() {
 void Graphene::Impl::initRenderProperties() {
 	auto main = m_backend->getMainSettings();
 
+	// init settings
+	auto  groupNav = main->add<Section>("Navigation", "groupNavigation");
+	auto  ccChoice = groupNav->add<Choice>("Camera Control:", "camControl");
+	ccChoice->add("orbit", "Orbit Control");
+	ccChoice->add("fly", "Fly Control");
+    ccChoice->setValue(m_crtCamControl);
+	ccChoice->setCallback(std::bind(&Graphene::Impl::setCameraControl, this, std::placeholders::_1));
+
     auto groupRendering = main->get<Section>({"groupRendering"});
 
 	auto  projection  = groupRendering->add<Choice>("Projection:");
@@ -249,82 +259,9 @@ void Graphene::Impl::initRenderProperties() {
     pointSize->setDigits(2).setMin(0.f).setMax(5.f).setValue(m_renderer->point_size());
     pointSize->setCallback([&] (float s) { m_renderer->set_point_size(s); });
 
+    groupNav->setCollapsed(m_singleMode);
     groupRendering->setCollapsed(m_singleMode);
 }
-
-/*
-void Graphene::Impl::initTransforms() {
-	m_camControls["orbit"] = OrbitCameraControl::Ptr(new OrbitCameraControl());
-	m_camControls["fly"]   = FlyCameraControl::Ptr(new FlyCameraControl());
-	m_camera = Camera::Ptr(new Camera(m_camControls["orbit"], m_eventHandler, Transforms::WPtr(m_transforms)));
-	// init settings
-	auto  main     = m_backend->getMainSettings();
-	auto  groupNav = main->add<Section>("Navigation", "groupNavigation");
-	auto  ccChoice = groupNav->add<Choice>("Camera Control:", "camControl");
-	ccChoice->add("orbit", "Orbit Control");
-	ccChoice->add("fly", "Fly Control");
-	ccChoice->setCallback(std::bind(&Graphene::Impl::setCameraControl, this, std::placeholders::_1));
-	auto  groupRender = main->add<Section>("Rendering", "groupRendering");
-	groupRender->add<Color>("Background: ", "background")->setValue(Eigen::Vector4f(1.f, 1.f, 1.f, 1.f));
-	auto  projection  = groupRender->add<Choice>("Projection:");
-	projection->add("perspective", "Perspective");
-	projection->add("ortho", "Orthographic");
-	projection->setCallback([&] (std::string mode) {
-	                           setOrtho(mode == "ortho");
-									});
-	if (m_singleMode) {
-		groupNav->collapse();
-		groupRender->collapse();
-	}
-
-	auto  groupHDR = groupRender->add<Section>("Image Based Lighting", "groupHDR");
-	groupHDR->add<Range>("Exposure", "exposure")->setDigits(2).setMin(0.0).setMax(2.0).setValue(0.6);
-	if (m_envTextures.size()) {
-		auto  choiceHDR = groupHDR->add<Choice>("Environment Map", "envMap");
-		for (const auto& m : m_envTextures) {
-			choiceHDR->add(m.first, m.first);
-		}
-		m_crtMap = choiceHDR->value();
-		choiceHDR->setCallback([&] (const std::string& m) {
-		                          m_crtMap = m;
-									  });
-	}
-
-	auto  fod = groupRender->add<Group>("Field Of Depth", "groupFOD");
-	fod->add<Bool>("Blur Enabled", "blurEnabled")->setValue(true);
-	fod->add<Bool>("Blooming Enabled", "bloomEnabled")->setValue(false);
-	fod->add<Bool>("Bloom Only Blurred", "fodBloom")->setValue(true);
-	fod->add<Range>("Blur Ratio", "blur")->setDigits(2).setMin(0.f).setMax(1.f).setValue(0.f);
-	fod->add<Range>("Blooming", "bloom")->setDigits(2).setMin(0.f).setMax(5.f).setValue(0.f);
-	fod->add<Range>("Bloom Threshold", "bloomCut")->setDigits(2).setMin(0.f).setMax(2.f).setValue(1.f);
-	fod->add<Range>("Focal Point", "focalPoint")->setDigits(2).setMin(0.f).setMax(1.f).setValue(0.0f);
-	fod->add<Range>("Focal Area", "focalArea")->setDigits(2).setMin(0.f).setMax(1.f).setValue(0.5f);
-
-	auto  ssao = groupRender->add<Group>("Screen-Space Ambient Occlusion", "groupSSAO");
-	ssao->add<Bool>("Enabled", "ssaoActive")->setValue(false);
-	ssao->add<Range>("Factor", "ssaoFactor")->setDigits(2).setMin(0.01f).setMax(1.f).setValue(1.f);
-	ssao->add<Range>("Radius", "radius")->setDigits(2).setMin(0.01f).setMax(5.f).setValue(0.5f);
-	ssao->add<Range>("Exponent", "exponent")->setDigits(2).setMin(1).setMax(5).setValue(2);
-	auto  ssaoSamples = ssao->add<Range>("Samples", "samples");
-	ssaoSamples->setDigits(0).setMin(1).setMax(128);
-	ssaoSamples->setValue(50);
-	ssaoSamples->setCallback([&] (float) {
-	                            auto wndSize = m_transforms->viewport().tail(2);
-	                            updateEffects(wndSize[0], wndSize[1]);
-									 });
-
-#ifdef DEBUG_SHADER
-	auto  debug = groupRender->add<Group>("Debug", "debug");
-	debug->add<Bool>("Normals", "debugNormals")->setValue(false);;
-	debug->add<Bool>("SSAO", "debugSSAO")->setValue(false);
-	auto fps = debug->add<Bool>("FPS", "fps");
-	fps->setValue(false);
-	fps->setCallback([&] (bool state) { m_showFPS = state; });
-#endif
-
-	if (m_singleMode) groupRender->collapse();
-}
-*/
 
 int Graphene::Impl::run(int fps) {
 	m_fps = fps;
@@ -394,9 +331,14 @@ void Graphene::Impl::removeVisualizer(std::string visName) {
 void Graphene::Impl::render() {
 #ifdef USE_SPACENAV
 	auto motion = m_spaceNav->motion();
-	m_camera->update(vec3_t(-motion[0], motion[2], -motion[1]), 0.1f * vec3_t(motion[5], motion[3], 0.f));
+    if (m_crtCamControl == "orbit") {
+        m_camera->update(vec3_t(-motion[0], motion[2], -motion[1]), 0.1f * vec3_t(motion[5], motion[3], 0.f));
+    }
+    if (m_crtCamControl == "fly") {
+        m_camera->update(1.2f * vec3_t(-1.2f*motion[0], motion[2], 0.7f*motion[1]), 0.06f * vec3_t(-motion[5], -0.5f*motion[3], 0.f));
+    }
 #endif
-	
+
 	if (m_showFPS) {
 		++m_frameCount;
 		auto now = std::chrono::system_clock::now();
@@ -435,9 +377,9 @@ void Graphene::Impl::modifier(Keys::Modifier mod, bool down) {
 	}
 }
 
-//void Graphene::Impl::setCameraControl(std::string control) {
-	//m_camera->setControl(m_camControls[control]);
-//}
+void Graphene::Impl::setCameraControl(std::string control) {
+    m_camera->set_model(m_camControls[control]);
+}
 
 //void Graphene::Impl::setOrtho(bool ortho) {
 	//m_camera->setOrtho(ortho);

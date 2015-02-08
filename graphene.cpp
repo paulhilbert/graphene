@@ -37,6 +37,7 @@ int main( int argc, char *argv[] ) {
 	std::string  visExt;
 	std::string  backendPath;
 	std::string  hdrPath;
+    std::string  cameraModel;
 	std::string  single;
 	std::string  title;
 	std::string  stylesheet;
@@ -63,6 +64,7 @@ int main( int argc, char *argv[] ) {
 		("backend", po::value<std::string>(&backendPath) ->default_value(PREFIX"/lib/libGrapheneQt5.so"), "Path to backend library")
 #endif
 		("hdrPath",    po::value<std::string>(&hdrPath)->default_value(""), "Path to HDR environment maps")
+		("camera",     po::value<std::string>(&cameraModel)->default_value("orbit"), "Model for camera control (either \"orbit\" (default) or \"fly\")")
 		("single",     po::value<std::string>(&single) ->default_value(""), "Use the given name as single mode visualizer")
 		("title",      po::value<std::string>(&title) ->default_value("graphene"), "Window title")
 		("stylesheet", po::value<std::string>(&stylesheet) ->default_value(""), "Stylesheet for the UI")
@@ -129,6 +131,11 @@ int main( int argc, char *argv[] ) {
 	substituteHome(backendPath);
 #endif
 
+    if (cameraModel != "orbit" && cameraModel != "fly") {
+        std::cout << "Camera model is invalid. Set to \"orbit\"." << "\n";
+        cameraModel = "orbit";
+    }
+
 	FW::Events::EventHandler::Ptr eventHandler(new FW::Events::EventHandler());
 
 	GUI::Backend::Ptr backend = getBackend(backendPath);
@@ -139,7 +146,7 @@ int main( int argc, char *argv[] ) {
 	if (stylesheet != "") backend->setStylesheet(stylesheet);
 
     rParams.twoSided = !vm.count("single_sided");
-	Graphene graphene(backend, eventHandler, singleMode, rParams, sParams, hdrPath);
+	Graphene graphene(backend, eventHandler, singleMode, rParams, sParams, hdrPath, cameraModel);
 
 	if (singleMode) {
 		fs::path p(visPath);
