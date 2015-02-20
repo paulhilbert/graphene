@@ -90,7 +90,7 @@ Eigen::Matrix<float, 6, 1> SpaceNav::motion() {
                 float before = posData[i];
                 posData[i] = std::copysign(std::pow(posData[i], m_exponent), posData[i]);
             }
-				posData *= timeDelta / 16000.f;
+            posData *= timeDelta / 16000.f;
             spnav_remove_events(SPNAV_EVENT_MOTION);
         } else {
             bool leftDown = ev.button.bnum == 0 && ev.button.press;
