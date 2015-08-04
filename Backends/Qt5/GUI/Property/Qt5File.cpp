@@ -98,7 +98,6 @@ void Qt5File::buttonClicked() {
 		file = QDir::toNativeSeparators(QFileDialog::getSaveFileName(nullptr, "Save...", QString(), filter, nullptr, 0));
 	}
 	if (file == "") return;
-    std::cout << file.toStdString() << "\n";
 	fs::path path(file.toStdString());
 	if ((m_mode == OPEN && fs::exists(path)) || m_mode == SAVE) {
 		m_lineEdit->setText(file);

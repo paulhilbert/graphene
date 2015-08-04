@@ -3,7 +3,7 @@
 
 #define VERSION_MAJOR @graphene_VERSION_MAJOR@
 #define VERSION_MINOR @graphene_VERSION_MINOR@
-#define PREFIX "@CMAKE_INSTALL_PREFIX@"
+#define OS_PREFIX "@CMAKE_INSTALL_PREFIX@"
 #cmakedefine USE_BOOST_SERIALIZATION
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32)

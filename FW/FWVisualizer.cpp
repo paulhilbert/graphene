@@ -75,6 +75,14 @@ void Visualizer::removeObject(std::string identifier) {
     m_objects.erase(find_it);
 }
 
+void Visualizer::tryRemoveObject(std::string identifier) {
+    if (!m_renderer) throw std::runtime_error("Visualizer::removeObject(): No renderer object set for this visualizer."+SPOT);
+    auto find_it = m_objects.find(identifier);
+    if (find_it == m_objects.end()) return;
+    m_renderer->remove_object(identifier);
+    m_objects.erase(find_it);
+}
+
 void Visualizer::removeObjectGroup(std::string prefix) {
     uint32_t idx = 0;
     while (m_objects.find(prefix + std::to_string(idx)) != m_objects.end()) {

@@ -61,7 +61,7 @@ int main( int argc, char *argv[] ) {
 		("backend", po::value<std::string>(&backendPath) ->default_value("libGrapheneQt5.dll"), "Path to backend library")
 #else
 		("visExt",  po::value<std::string>(&visExt)  ->default_value(".so"), "File extension of visualizer shared libraries")
-		("backend", po::value<std::string>(&backendPath) ->default_value(PREFIX"/lib/libGrapheneQt5.so"), "Path to backend library")
+		("backend", po::value<std::string>(&backendPath) ->default_value(OS_PREFIX"/lib/libGrapheneQt5.so"), "Path to backend library")
 #endif
 		("hdrPath",    po::value<std::string>(&hdrPath)->default_value(""), "Path to HDR environment maps")
 		("camera",     po::value<std::string>(&cameraModel)->default_value("orbit"), "Model for camera control (either \"orbit\" (default) or \"fly\")")
