@@ -356,16 +356,29 @@ void Graphene::Impl::render() {
 	if (m_singleMode) {
 		for (const auto& vis : m_visualizer) {
 			vis.second->waitForTasks();
+			vis.second->preRender();
 		}
 	} else {
 		auto  names = m_backend->getActiveVisualizerNames();
 		for (const auto& name : names) {
 			m_visualizer[name]->waitForTasks();
+			m_visualizer[name]->preRender();
 		}
 	}
 
     m_renderer->set_light_dir(m_lightDir);
     m_renderer->render(m_camera);
+
+	if (m_singleMode) {
+		for (const auto& vis : m_visualizer) {
+			vis.second->postRender();
+		}
+	} else {
+		auto  names = m_backend->getActiveVisualizerNames();
+		for (const auto& name : names) {
+			m_visualizer[name]->postRender();
+		}
+	}
 }
 
 void Graphene::Impl::modifier(Keys::Modifier mod, bool down) {
