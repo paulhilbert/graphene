@@ -335,7 +335,7 @@ void Graphene::Impl::render() {
         m_camera->update(vec3_t(-motion[0], motion[2], -motion[1]), 0.1f * vec3_t(motion[5], motion[3], 0.f));
     }
     if (m_crtCamControl == "fly") {
-        m_camera->update(1.2f * vec3_t(-1.2f*motion[0], motion[2], 0.7f*motion[1]), 0.06f * vec3_t(-motion[5], -0.5f*motion[3], 0.f));
+        m_camera->update(1.5f * vec3_t(-motion[0], motion[2], motion[1]), 0.1f * vec3_t(-motion[5], -motion[3], 0.f));
     }
 #endif
 

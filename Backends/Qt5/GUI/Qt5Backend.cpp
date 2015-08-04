@@ -92,7 +92,8 @@ void Qt5Backend::init(int argc, char* argv[], FW::Events::EventHandler::Ptr even
 	// init opengl
 	m_glWidget = new Qt5GLWidget(eventHandler, 1);
 	m_wnd->setCentralWidget(m_glWidget);
-	m_wnd->installEventFilter(m_glWidget);
+    QCoreApplication::instance()->installEventFilter(m_glWidget);
+	//m_wnd->installEventFilter(m_glWidget);
 	if (params.maximized) m_wnd->showMaximized();
 	else m_wnd->show();
 }

@@ -140,6 +140,15 @@ class Visualizer {
         void removeObject(std::string identifier);
 
         /**
+         * Remove previously added renderable object.
+         *
+         * Does nothing if object does not exist.
+         *
+         * @param identifier Name of object to remove.
+         */
+        void tryRemoveObject(std::string identifier);
+
+        /**
          * Remove previously added renderable object group.
          *
          * @param identifier Name of object to remove.
