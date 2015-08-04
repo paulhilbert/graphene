@@ -179,6 +179,9 @@ class Visualizer {
 		 *  @returns Shared pointer to created task.
 		 */
 		Task::Ptr addTask(Task::Id id, Task::IOComputation computation);
+		
+		virtual void preRender() {}
+		virtual void postRender() {}
 
 
 	protected:
