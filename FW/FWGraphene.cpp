@@ -228,6 +228,10 @@ void Graphene::Impl::initRenderProperties() {
 	projection->setCallback([&] (std::string mode) {
         m_camera->set_ortho(mode == "ortho");
     });
+    
+    auto fov = groupRendering->add<Range>("FOV", "fov");
+    fov->setDigits(3).setMin(10.f).setMax(160.f).setValue(m_camera->fov());
+    fov->setCallback([&] (float fov) { m_camera->set_fov(fov); });
 
 	auto bg = groupRendering->get<Color>({"background"});
     bg->setCallback([&] (Eigen::Vector4f color) { m_renderer->set_background_color(color.head(3)); });
