@@ -146,7 +146,9 @@ class Visualizer {
          *
          * @param identifier Name of object to remove.
          */
-        void tryRemoveObject(std::string identifier);
+        bool tryRemoveObject(std::string identifier);
+
+        bool hasObject(std::string identifier);
 
         /**
          * Remove previously added renderable object group.

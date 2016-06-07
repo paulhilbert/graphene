@@ -8,13 +8,13 @@
 # HARMONT_LIBRARIES - Harmont library files.
 
 find_path(HARMONT_INCLUDE_DIR harmont
-    HINTS "/usr/include" "/usr/local/include" "/usr/x86_64-w64-mingw32/include" "$ENV{PROGRAMFILES}")
+    PATHS "/usr/include" "/usr/local/include" "/usr/x86_64-w64-mingw32/include" "$ENV{PROGRAMFILES}" NO_DEFAULT_PATH)
 
-find_library(HARMONT_LIBRARY_PATH harmont HINTS "/usr/lib" "/usr/local/lib" "/usr/x86_64-w64-mingw32/lib/")
+find_library(HARMONT_LIBRARY_PATH harmont PATHS "/usr/lib" "/usr/local/lib" "/usr/x86_64-w64-mingw32/lib/" NO_DEFAULT_PATH)
 
 if(EXISTS ${HARMONT_LIBRARY_PATH})
 get_filename_component(HARMONT_LIBRARY ${HARMONT_LIBRARY_PATH} NAME)
-find_path(HARMONT_LIBRARY_DIR ${HARMONT_LIBRARY} HINTS "/usr/lib" "/usr/local/lib" "/usr/x86_64-w64-mingw32/lib/")
+find_path(HARMONT_LIBRARY_DIR ${HARMONT_LIBRARY} PATHS "/usr/lib" "/usr/local/lib" "/usr/x86_64-w64-mingw32/lib/" NO_DEFAULT_PATH)
 endif()
 
 set(HARMONT_INCLUDE_DIRS ${HARMONT_INCLUDE_DIR})

@@ -139,7 +139,7 @@ Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr ev
 	auto main = m_backend->getMainSettings();
     auto groupRendering = main->add<Section>("Rendering", "groupRendering");
 	auto bg = groupRendering->add<Color>("Background: ", "background");
-    bg->setValue(Eigen::Vector4f(1.f, 1.f, 1.f, 1.f));
+    bg->setValue(Eigen::Vector4f(0.3f, 0.3f, 0.3f, 1.f));
     initRenderer();
 }
 
@@ -151,7 +151,7 @@ void Graphene::Impl::initRenderer() {
 	auto glSize = m_backend->getGLSize();
 	m_camControls["orbit"] = harmont::camera_model::looking_at<harmont::orbit_camera_model>(vec3_t(0.0, -20.0, 0.0));
 	m_camControls["fly"] = harmont::camera_model::looking_at<harmont::fly_camera_model>(vec3_t(0.0, -20.0, 0.0));
-    m_camera = std::make_shared<harmont::camera>(m_camControls[m_crtCamControl], glSize[0], glSize[1], 40.f, 0.01f, 200.f);
+    m_camera = std::make_shared<harmont::camera>(m_camControls[m_crtCamControl], glSize[0], glSize[1], 60.f, 0.01f, 200.f);
 
     // init renderer
     m_lightDir = Eigen::Vector3f(1.f, 1.f, 1.f).normalized();
@@ -228,7 +228,7 @@ void Graphene::Impl::initRenderProperties() {
 	projection->setCallback([&] (std::string mode) {
         m_camera->set_ortho(mode == "ortho");
     });
-    
+
     auto fov = groupRendering->add<Range>("FOV", "fov");
     fov->setDigits(3).setMin(10.f).setMax(160.f).setValue(m_camera->fov());
     fov->setCallback([&] (float fov) { m_camera->set_fov(fov); });
@@ -244,7 +244,7 @@ void Graphene::Impl::initRenderProperties() {
     exposure->setCallback([&] (float e) { m_renderer->set_exposure(e); });
 
 	auto bias = groupRendering->add<Range>("Shadow Bias", "bias");
-    bias->setDigits(3).setMin(0.f).setMax(0.01f).setValue(m_renderer->shadow_bias());
+    bias->setDigits(4).setMin(0.f).setMax(0.01f).setValue(m_renderer->shadow_bias());
     bias->setCallback([&] (float b) { m_renderer->set_shadow_bias(b); });
 
 	auto groupSSDO = groupRendering->add<Section>("SSDO", "groupSSDO");

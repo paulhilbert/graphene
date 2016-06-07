@@ -27,8 +27,8 @@ Events::Modifier::Ptr VisualizerHandle::modifier() {
 	return m_modifier;
 }
 
- harmont::camera::const_ptr VisualizerHandle::camera() const {
-     return m_camera;
- }
+harmont::camera::const_ptr VisualizerHandle::camera() const {
+    return m_camera;
+}
 
 } // FW
