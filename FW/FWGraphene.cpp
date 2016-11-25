@@ -22,6 +22,9 @@
 #include <FW/Events/EventsSpaceNav.h>
 #endif
 
+// DEBUG FRUSTUM
+#include <harmont/box_object.hpp>
+
 using namespace GUI::Property;
 
 namespace FW {
@@ -246,6 +249,24 @@ void Graphene::Impl::initRenderProperties() {
 	auto bias = groupRendering->add<Range>("Shadow Bias", "bias");
     bias->setDigits(4).setMin(0.f).setMax(0.01f).setValue(m_renderer->shadow_bias());
     bias->setCallback([&] (float b) { m_renderer->set_shadow_bias(b); });
+
+    // DEBUG (SHADOW) FRUSTUM
+    auto freeze_btn = groupRendering->add<Button>("Freeze Frustum", "add_frustum");
+    auto remove_btn = groupRendering->add<Button>("Remove Frustum", "rem_frustum");
+    remove_btn->disable();
+    freeze_btn->setCallback([&, freeze_btn, remove_btn] () {
+        //auto corners = m_camera->frustum_corners();
+        //auto fr = std::make_shared<harmont::box_object>(corners, Eigen::Vector4f(1.f, 0.f, 0.f, 1.f), true, 2.f);
+        //fr->init();
+        m_renderer->light_debug_add();
+        freeze_btn->disable();
+        remove_btn->enable();
+    });
+    remove_btn->setCallback([&, freeze_btn, remove_btn] () {
+        m_renderer->light_debug_rem();
+        remove_btn->disable();
+        freeze_btn->enable();
+    });
 
 	auto groupSSDO = groupRendering->add<Section>("SSDO", "groupSSDO");
 	auto ssdoRadius = groupSSDO->add<Range>("Radius", "radius");

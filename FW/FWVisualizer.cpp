@@ -14,7 +14,7 @@ Visualizer::Visualizer(std::string id) : m_id(id), m_renderer(nullptr) {
 
 Visualizer::~Visualizer() {
     for (const auto& obj_name : m_objects) {
-        removeObject(obj_name);
+        removeObject(unprefixObj(obj_name));
     }
 }
 
@@ -34,12 +34,12 @@ GUI::VisualizerHandle::Ptr Visualizer::gui() {
 
 harmont::renderable::ptr_t Visualizer::object(std::string identifier) {
     if (!m_renderer) throw std::runtime_error("Visualizer::object(): No renderer object set for this visualizer."+SPOT);
-    return m_renderer->object(identifier);
+    return m_renderer->object(prefixObj(identifier));
 }
 
 harmont::renderable::const_ptr_t Visualizer::object(std::string identifier) const {
     if (!m_renderer) throw std::runtime_error("Visualizer::object(): No renderer object set for this visualizer."+SPOT);
-    return m_renderer->object(identifier);
+    return m_renderer->object(prefixObj(identifier));
 }
 
 harmont::deferred_renderer::object_map_t Visualizer::objects() const {
@@ -48,15 +48,16 @@ harmont::deferred_renderer::object_map_t Visualizer::objects() const {
     harmont::deferred_renderer::object_map_t objs;
     auto graphene_objs = m_renderer->objects();
     for (const auto& obj_name : m_objects) {
-        objs[obj_name] = graphene_objs[obj_name];
+        objs[unprefixObj(obj_name)] = graphene_objs[obj_name];
     }
     return objs;
 }
 
 void Visualizer::addObject(std::string identifier, harmont::renderable::ptr_t object) {
     if (!m_renderer) throw std::runtime_error("Visualizer::addObject(): No renderer object set for this visualizer."+SPOT);
-    m_renderer->add_object(identifier, object);
-    m_objects.insert(identifier);
+    std::string pid = prefixObj(identifier);
+    m_renderer->add_object(pid, object);
+    m_objects.insert(pid);
 }
 
 void Visualizer::addObjectGroup(std::string prefix, harmont::renderable_group::ptr_t group) {
@@ -69,23 +70,25 @@ void Visualizer::addObjectGroup(std::string prefix, harmont::renderable_group::p
 
 void Visualizer::removeObject(std::string identifier) {
     if (!m_renderer) throw std::runtime_error("Visualizer::removeObject(): No renderer object set for this visualizer."+SPOT);
-    auto find_it = m_objects.find(identifier);
+    std::string pid = prefixObj(identifier);
+    auto find_it = m_objects.find(pid);
     if (find_it == m_objects.end()) throw std::runtime_error("Visualizer::removeObject(): Object \""+identifier+"\" does not exist"+SPOT);
-    m_renderer->remove_object(identifier);
+    m_renderer->remove_object(pid);
     m_objects.erase(find_it);
 }
 
 bool Visualizer::tryRemoveObject(std::string identifier) {
     if (!m_renderer) throw std::runtime_error("Visualizer::removeObject(): No renderer object set for this visualizer."+SPOT);
-    auto find_it = m_objects.find(identifier);
+    std::string pid = prefixObj(identifier);
+    auto find_it = m_objects.find(pid);
     if (find_it == m_objects.end()) return false;
-    m_renderer->remove_object(identifier);
+    m_renderer->remove_object(pid);
     m_objects.erase(find_it);
     return true;
 }
 
 bool Visualizer::hasObject(std::string identifier) {
-    return m_objects.find(identifier) != m_objects.end();
+    return m_objects.find(prefixObj(identifier)) != m_objects.end();
 }
 
 void Visualizer::removeObjectGroup(std::string prefix) {
@@ -150,6 +153,16 @@ void Visualizer::waitForTasks() {
 		//if (std::get<1>(task)) std::get<1>(task)();
 		//return true;
 	//});
+}
+
+std::string Visualizer::prefixObj(const std::string& obj) const {
+    return m_id + "__" + obj;
+}
+
+std::string Visualizer::unprefixObj(const std::string& pid) const {
+    std::string obj = pid;
+    obj.erase(0, m_id.length() + 2);
+    return obj;
 }
 
 } // FW

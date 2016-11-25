@@ -15,7 +15,7 @@ include_directories("/usr/include/eigen3")
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-	add_definitions(-std=c++1y)
+	add_definitions(-std=c++14)
 	add_definitions(-O3)
 	add_definitions(-g)
 	add_definitions(-Wno-unused-local-typedefs)

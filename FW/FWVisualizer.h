@@ -191,6 +191,8 @@ class Visualizer {
 		void setRenderer(harmont::deferred_renderer::ptr_t renderer);
 		void setProgressBarPool(GUI::ProgressBarPool::Ptr m_pool);
 		void waitForTasks();
+        std::string prefixObj(const std::string& obj) const;
+        std::string unprefixObj(const std::string& obj) const;
 
 	//protected:
 		//typedef std::tuple<std::future<void>, Job, GUI::ProgressBar::Ptr> Task;
