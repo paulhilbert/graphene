@@ -77,8 +77,10 @@ bool Task::computed() const {
 }
 
 template <typename Duration>
-unsigned long Task::duration() const {
-	return static_cast<unsigned long>(m_profiling.duration<Duration>("execution"));
+unsigned long Task::duration() {
+    unsigned long dur = static_cast<unsigned long>(m_profiling.duration<Duration>("execution"));
+    m_profiling.reset("execution");
+	return dur;
 }
 
 Task::Id Task::id() const {
@@ -113,11 +115,11 @@ void Task::poll() {
 }
 
 
-template unsigned long Task::duration<std::chrono::hours>() const;
-template unsigned long Task::duration<std::chrono::minutes>() const;
-template unsigned long Task::duration<std::chrono::seconds>() const;
-template unsigned long Task::duration<std::chrono::milliseconds>() const;
-template unsigned long Task::duration<std::chrono::microseconds>() const;
-template unsigned long Task::duration<std::chrono::nanoseconds>() const;
+template unsigned long Task::duration<std::chrono::hours>();
+template unsigned long Task::duration<std::chrono::minutes>();
+template unsigned long Task::duration<std::chrono::seconds>();
+template unsigned long Task::duration<std::chrono::milliseconds>();
+template unsigned long Task::duration<std::chrono::microseconds>();
+template unsigned long Task::duration<std::chrono::nanoseconds>();
 
 } // FW

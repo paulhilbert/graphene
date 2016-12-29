@@ -63,6 +63,24 @@ class Profiling {
 		void end(std::string name);
 
 		/**
+		 *  Resets duration to 0.
+		 *
+		 *  When called, this member function sets the accumulative duration to 0.
+         *  Use this function if you don't want consecutive calls to start/end or profile to accumulate duration.
+         *  For example:
+         *
+         *  Profiling p;
+         *  p.profile("example");
+         *  do_sth();
+         *  p.profile("example")
+         *  std::cout << p.duration() << std::endl;
+         *  p.reset("example");
+		 *
+		 *  @param name Unique name of the profile to be reset.
+		 */
+		void reset(std::string name);
+
+		/**
 		 *  Starts/stops profiles depending on their current status.
 		 *
 		 *  This function is a convenience wrapper. On first call it starts

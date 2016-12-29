@@ -53,7 +53,7 @@ class Task {
 
 		bool computed() const;
 		template <typename Duration>
-		unsigned long duration() const;
+		unsigned long duration();
 
 		Id id() const;
 

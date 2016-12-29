@@ -22,6 +22,12 @@ inline void Profiling::end(std::string name) {
 	m_profiles[name].finished = true;
 }
 
+inline void Profiling::reset(std::string name) {
+	if (m_profiles.find(name) != m_profiles.end()) {
+		m_profiles[name].passed = Duration(0);
+	}
+}
+
 inline void Profiling::profile(std::string name) {
 	if (m_profiles.count(name) && !m_profiles[name].finished) {
 		end(name);
@@ -74,6 +80,9 @@ inline void Profiling::start(std::string) {
 }
 
 inline void Profiling::end(std::string) {
+}
+
+inline void Profiling::reset(std::string) {
 }
 
 inline void Profiling::profile(std::string) {
