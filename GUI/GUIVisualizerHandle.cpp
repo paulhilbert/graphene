@@ -14,7 +14,7 @@ namespace GUI {
 
 VisualizerHandle::VisualizerHandle(Property::Container::Ptr properties, Mode::Handle::Ptr modes, Log::Ptr log, Status::Ptr status, bool alwaysActive) : m_properties(properties), m_modes(modes), m_log(log), m_status(status) {
 	if (!alwaysActive) {
-		m_properties->get<Bool>(std::vector<std::string>(1, "__active__"))->setCallback([&] (bool active) {
+		m_properties->get<Boolean>(std::vector<std::string>(1, "__active__"))->setCallback([&] (bool active) {
 			if (active) m_modes->enable(); else m_modes->disable();
 		});
 	}

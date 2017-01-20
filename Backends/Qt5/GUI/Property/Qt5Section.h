@@ -45,7 +45,7 @@ class Qt5Section : public QObject, public Section {
 		void toggled(bool state);
 
 	protected:
-		std::shared_ptr<Bool>          createBool(std::string label);
+		std::shared_ptr<Boolean>       createBool(std::string label);
 		std::shared_ptr<Button>        createButton(std::string label);
 		std::shared_ptr<Choice>        createChoice(std::string label);
 		std::shared_ptr<Color>         createColor(std::string label);

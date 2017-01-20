@@ -67,7 +67,7 @@ void Qt5Section::toggled(bool state) {
 	//m_container.widget()->setVisible(state);
 }
 
-Bool::Ptr Qt5Section::createBool(std::string label) {
+Boolean::Ptr Qt5Section::createBool(std::string label) {
 	return m_container.createBool(label);
 }
 

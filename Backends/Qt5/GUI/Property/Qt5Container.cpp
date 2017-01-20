@@ -88,12 +88,12 @@ QWidget* Qt5Container::widget() {
 	return m_scrollable ? m_outerArea : m_area;
 }
 
-Bool::Ptr Qt5Container::createBool(std::string label) {
+Boolean::Ptr Qt5Container::createBool(std::string label) {
 	QLabel* labelWidget = new QLabel(QString::fromStdString(label));
 	Qt5Bool::Ptr result(new Qt5Bool(label, labelWidget));
 	m_layout->addWidget(labelWidget,      m_widgetCount,   0, 1, 1, Qt::AlignLeft);
 	m_layout->addWidget(result->widget(), m_widgetCount++, 1, 1, 1, Qt::AlignLeft);
-	return std::dynamic_pointer_cast<Bool>(result);
+	return std::dynamic_pointer_cast<Boolean>(result);
 }
 
 Button::Ptr Qt5Container::createButton(std::string label) {

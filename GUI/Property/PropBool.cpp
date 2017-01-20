@@ -10,10 +10,10 @@
 namespace GUI {
 namespace Property {
 
-Bool::Bool(std::string label) : Base(), Value<bool>(), Notify<void (bool)>(), Labeled(label) {
+Boolean::Boolean(std::string label) : Base(), Value<bool>(), Notify<void (bool)>(), Labeled(label) {
 }
 
-Bool::~Bool() {
+Boolean::~Boolean() {
 }
 
 } // Property

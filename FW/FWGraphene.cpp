@@ -25,6 +25,7 @@
 // DEBUG FRUSTUM
 #include <harmont/box_object.hpp>
 
+#include <GUI/Property/PropBool.h>
 using namespace GUI::Property;
 
 namespace FW {
@@ -85,6 +86,8 @@ struct  Graphene::Impl {
 	std::chrono::system_clock::time_point m_lastFPSComp;
 	unsigned int m_frameCount;
 
+    bool m_showCamPos;
+
 
 	std::map<std::string, harmont::camera_model::ptr> m_camControls;
     std::string m_crtCamControl;
@@ -123,7 +126,7 @@ Factory::Ptr Graphene::getFactory(std::string name) {
 /// GRAPHENE IMPL ///
 
 
-Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, const RenderParameters& renderParams, const ShadowParameters& shadowParams, std::string hdrPath, std::string cameraModel) : m_backend(backend), m_eventHandler(eventHandler), m_singleMode(singleMode), m_rParams(renderParams), m_sParams(shadowParams), m_hdrPath(hdrPath), m_showFPS(false), m_frameCount(0), m_crtCamControl(cameraModel) {
+Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr eventHandler, bool singleMode, const RenderParameters& renderParams, const ShadowParameters& shadowParams, std::string hdrPath, std::string cameraModel) : m_backend(backend), m_eventHandler(eventHandler), m_singleMode(singleMode), m_rParams(renderParams), m_sParams(shadowParams), m_hdrPath(hdrPath), m_showFPS(false), m_showCamPos(false), m_frameCount(0), m_crtCamControl(cameraModel) {
 	m_lastFPSComp = std::chrono::system_clock::now();
 	backend->setRenderCallback(std::bind(&Graphene::Impl::render, this));
 	backend->setExitCallback(std::bind(&Graphene::Impl::exit, this));
@@ -222,6 +225,9 @@ void Graphene::Impl::initRenderProperties() {
 	ccChoice->add("fly", "Fly Control");
     ccChoice->setValue(m_crtCamControl);
 	ccChoice->setCallback(std::bind(&Graphene::Impl::setCameraControl, this, std::placeholders::_1));
+    auto camPos = groupNav->add<Boolean>("Show Camera Coordinates", "camPos");
+    camPos->setValue(false);
+    camPos->setCallback([&] (bool state) { m_showCamPos = state; });
 
     auto groupRendering = main->get<Section>({"groupRendering"});
 
@@ -375,7 +381,11 @@ void Graphene::Impl::render() {
 			auto status = m_backend->getStatus();
 			status->set(lexical_cast<std::string>(fps));
 		}
-	}
+	} else if (m_showCamPos) {
+		auto status = m_backend->getStatus();
+        auto pos = m_camera->position();
+        status->set(lexical_cast<std::string>(pos[0]) + ", " + lexical_cast<std::string>(pos[1]) + ", " + lexical_cast<std::string>(pos[2]));
+    }
 
     // wait for pending tasks
 	if (m_singleMode) {

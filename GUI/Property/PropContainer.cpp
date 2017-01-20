@@ -20,8 +20,8 @@ Container::~Container() {
 }
 
 template <>
-typename Bool::Ptr Container::add<Bool>(std::string label, std::string id) {
-		Bool::Ptr child = createBool(label);
+typename Boolean::Ptr Container::add<Boolean>(std::string label, std::string id) {
+		Boolean::Ptr child = createBool(label);
 		add(child, id);
 		return child;
 }
@@ -154,7 +154,7 @@ void Container::add(Base::Ptr child, std::string id) {
 }
 
 // instantiations
-template Bool::Ptr           Container::get<Bool>(const std::vector<std::string>& path);
+template Boolean::Ptr        Container::get<Boolean>(const std::vector<std::string>& path);
 template Button::Ptr         Container::get<Button>(const std::vector<std::string>& path);
 template Choice::Ptr         Container::get<Choice>(const std::vector<std::string>& path);
 template Color::Ptr          Container::get<Color>(const std::vector<std::string>& path);

@@ -8,7 +8,7 @@
 #include "Qt5Settings.h"
 
 #include <GUI/Property/PropBool.h>
-using GUI::Property::Bool;
+using GUI::Property::Boolean;
 
 namespace GUI {
 
@@ -28,7 +28,7 @@ Container::Ptr Qt5Settings::add(std::string name, bool hasActiveCheckBox) {
 	}
 	Qt5VisSettings::Ptr tab(new Qt5VisSettings());
 	if (hasActiveCheckBox) {
-		tab->add<Bool>("Active: ", "__active__")->setValue(true);
+		tab->add<Boolean>("Active: ", "__active__")->setValue(true);
 		tab->addSeparator();
 	}
 	m_indexMap.push_back(name);
@@ -51,7 +51,7 @@ Container::Ptr Qt5Settings::get(std::string name) {
 std::vector<std::string> Qt5Settings::getActiveTabs() const {
 	std::vector<std::string> result;
 	for (unsigned int idx = 1; idx < m_tabs.size(); ++idx) {
-		auto propActive = m_tabs[idx]->get<Bool>(std::vector<std::string>(1, "__active__"));
+		auto propActive = m_tabs[idx]->get<Boolean>(std::vector<std::string>(1, "__active__"));
 		if (!propActive->value()) continue;
 		result.push_back(m_indexMap[idx]);
 	}

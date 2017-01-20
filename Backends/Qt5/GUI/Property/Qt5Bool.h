@@ -15,7 +15,7 @@
 namespace GUI {
 namespace Property {
 
-class Qt5Bool : public QObject, public Bool {
+class Qt5Bool : public QObject, public Boolean {
 	Q_OBJECT
 
 	public:

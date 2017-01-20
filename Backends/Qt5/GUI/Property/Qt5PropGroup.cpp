@@ -51,7 +51,7 @@ QWidget* Qt5Group::widget() {
 	return m_container.widget();
 }
 
-Bool::Ptr Qt5Group::createBool(std::string label) {
+Boolean::Ptr Qt5Group::createBool(std::string label) {
 	return m_container.createBool(label);
 }
 

@@ -39,7 +39,7 @@ class Qt5Container : public Container {
 
 		QWidget* widget();
 
-		std::shared_ptr<Bool>          createBool(std::string label);
+		std::shared_ptr<Boolean>       createBool(std::string label);
 		std::shared_ptr<Button>        createButton(std::string label);
 		std::shared_ptr<Choice>        createChoice(std::string label);
 		std::shared_ptr<Color>         createColor(std::string label);

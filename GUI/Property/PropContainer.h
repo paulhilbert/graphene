@@ -21,7 +21,7 @@
 namespace GUI {
 namespace Property {
 
-class Bool;
+class Boolean;
 class Button;
 class Choice;
 class Color;
@@ -124,7 +124,7 @@ class Container : public Base {
 
 	protected:
 		void add(Base::Ptr child, std::string id);
-		virtual std::shared_ptr<Bool>          createBool(std::string label) = 0;
+		virtual std::shared_ptr<Boolean>          createBool(std::string label) = 0;
 		virtual std::shared_ptr<Button>        createButton(std::string label) = 0;
 		virtual std::shared_ptr<Choice>        createChoice(std::string label) = 0;
 		virtual std::shared_ptr<Color>         createColor(std::string label) = 0;

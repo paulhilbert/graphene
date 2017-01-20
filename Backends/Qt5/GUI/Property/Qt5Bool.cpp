@@ -12,7 +12,7 @@
 namespace GUI {
 namespace Property {
 
-Qt5Bool::Qt5Bool(std::string label, QLabel* labelWidget) : Bool(label), m_labelWidget(labelWidget), m_checkBox(new QCheckBox()) {
+Qt5Bool::Qt5Bool(std::string label, QLabel* labelWidget) : Boolean(label), m_labelWidget(labelWidget), m_checkBox(new QCheckBox()) {
 	//m_checkBox->setText(QString::fromStdString(label));
 	m_checkBox->setChecked(false);
 	QObject::connect(m_checkBox, SIGNAL(stateChanged(int)), this, SLOT(checkboxClicked(int)));

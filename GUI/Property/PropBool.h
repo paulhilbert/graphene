@@ -29,33 +29,33 @@ namespace Property {
  *
  *  @see ToggleButton for another way to input a boolean state.
  */
-class Bool : public Base, public Value<bool>, public Notify<void (bool)>, public Labeled {
+class Boolean : public Base, public Value<bool>, public Notify<void (bool)>, public Labeled {
 	public:
 		/** Shared pointer to this */
-		typedef std::shared_ptr<Bool> Ptr;
+		typedef std::shared_ptr<Boolean> Ptr;
 
 		/** Weak pointer to this */
-		typedef std::weak_ptr<Bool>   WPtr;
+		typedef std::weak_ptr<Boolean>   WPtr;
 
 		/** Specific callback type for this property */
 		using Notify<void (bool)>::Callback;
 
 	public:
 		/**
-		 *  @internal Bool(std::string label)
+		 *  @internal Boolean(std::string label)
 		 *
 		 *  @brief Constructor
 		 *
 		 *  @param label Label for this property.
 		 */
-		Bool(std::string label);
+		Boolean(std::string label);
 
 		/**
-		 *  @internal ~Bool()
+		 *  @internal ~Boolean()
 		 *
 		 *  @brief Destructor.
 		 */
-		virtual ~Bool();
+		virtual ~Boolean();
 };
 
 } // Property
