@@ -14,8 +14,8 @@
  *  Defines folder choice property type.
  */
 
-#include <boost/filesystem.hpp>
-namespace fs = boost::filesystem;
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
 
 #include "PropBase.h"
 #include "PropNotify.h"

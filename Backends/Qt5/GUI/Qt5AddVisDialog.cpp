@@ -18,7 +18,7 @@ namespace GUI {
 
 Qt5AddVisDialog::Qt5AddVisDialog(std::string title, bool singleMode) : m_singleMode(singleMode) {
 	setWindowTitle(singleMode ? tr("Initial Settings") : QString::fromStdString(title));
-	setMinimumSize(720, 420);
+	setMinimumSize(720, 720);
 
 	//im_visSelection->setMovement(QListView::Static);
 	//im_visSelection->setMaximumWidth(128);

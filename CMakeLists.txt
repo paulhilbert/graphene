@@ -3,11 +3,14 @@ project(graphene)
 
 set (graphene_VERSION_MAJOR 1)
 set (graphene_VERSION_MINOR 0)
+cmake_policy(SET CMP0043 NEW)
 
 configure_file (
   "${PROJECT_SOURCE_DIR}/config.h.in"
   "${PROJECT_SOURCE_DIR}/include/config.h"
 )
+
+set(OpenGL_GL_PREFERENCE GLVND)
 
 include_directories("${PROJECT_SOURCE_DIR}")
 include_directories("${PROJECT_BINARY_DIR}")
@@ -31,16 +34,17 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 # boost
-set(Boost_USE_STATIC_LIBS OFF) 
-set(Boost_USE_MULTITHREADED ON)  
-set(Boost_USE_STATIC_RUNTIME OFF) 
-find_package(Boost COMPONENTS regex filesystem program_options system) 
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost COMPONENTS regex filesystem program_options system)
 
 # opengl
 find_package(OpenGL)
 find_package(GLEW)
 find_package(Harmont)
 find_package(SpaceNav)
+find_package(Qt5 COMPONENTS Core Widgets OpenGL)
 
 
 file (GLOB_RECURSE obj RELATIVE "${PROJECT_SOURCE_DIR}" "FW/*.cpp" "GUI/*.cpp")
@@ -53,7 +57,7 @@ if(Boost_FOUND AND OPENGL_FOUND AND GLEW_FOUND AND HARMONT_FOUND)
 	include_directories(${HARMONT_INCLUDE_DIRS})
 	#add_library(Graphene SHARED ${obj} ${lib})
 	add_library(Graphene SHARED ${obj})
-	target_link_libraries(Graphene ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${HARMONT_LIBRARIES} "dl")
+	target_link_libraries(Graphene ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${HARMONT_LIBRARIES} "dl" "stdc++fs")
 	if(SPACENAV_FOUND)
 		add_definitions(-DUSE_SPACENAV)
 		target_link_libraries(Graphene ${SPACENAV_LIBRARIES})
@@ -68,8 +72,8 @@ if(Boost_FOUND AND OPENGL_FOUND AND GLEW_FOUND AND HARMONT_FOUND)
 
 	include_directories("${PROJECT_SOURCE_DIR}Backends/Qt5")
 	add_library(GrapheneQt5 SHARED ${qt5})
-	target_link_libraries(GrapheneQt5 Graphene)
-	qt5_use_modules(GrapheneQt5 Widgets OpenGL)
+	target_link_libraries(GrapheneQt5 Graphene Qt5::Core Qt5::Widgets Qt5::OpenGL)
+#qt5_use_modules(GrapheneQt5 Widgets OpenGL)
 endif()
 
 # binary

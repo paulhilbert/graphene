@@ -6,9 +6,8 @@
 #include <string>
 #include <future>
 #include <chrono>
-#include <boost/variant.hpp>
-#include <boost/filesystem.hpp>
-namespace fs = boost::filesystem;
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
 
 #include <GUI/GUIProgressBarPool.h>
 #ifndef PROFILING

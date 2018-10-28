@@ -4,23 +4,28 @@
  * To Public License, Version 2, as published by Sam Hocevar. See
  * the COPYING file for more details */
 
+#include <regex>
+using std::regex;
+using std::smatch;
+using std::regex_match;
 
 #include <include/config.h>
 #include <include/common.h>
 #include <include/ogl.h>
 
+#include <include/CLI11.hpp>
 // boost
 #include <boost/program_options.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/regex.hpp>
-#include <boost/extension/factory.hpp>
-#include <boost/extension/shared_library.hpp>
 namespace po = boost::program_options;
-namespace fs = boost::filesystem;
-namespace ext = boost::extensions;
-using boost::regex;
-using boost::smatch;
-using boost::regex_match;
+//#include <boost/regex.hpp>
+//#include <boost/extension/factory.hpp>
+//#include <boost/extension/shared_library.hpp>
+//
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+
+#include <dlfcn.h>
+//namespace ext = boost::extensions;
 
 // graphene
 #include <FW/FWGraphene.h>
@@ -31,6 +36,46 @@ using FW::Graphene;
 
 GUI::Backend::Ptr getBackend(std::string path);
 void substituteHome(std::string& path);
+
+class Plugin {
+public:
+    Plugin(const std::string& location, bool autoClose = false) : m_location(location), m_autoClose(autoClose), m_handle(0) {
+    }
+
+    ~Plugin() {
+        if (m_handle && m_autoClose) {
+          close();
+        }
+    }
+
+    bool is_open() const {
+        return m_handle != 0;
+    }
+
+    bool open() {
+        if (m_handle) close();
+	    m_handle = dlopen(m_location.c_str(), RTLD_LAZY);
+	    char * msg = dlerror();
+	    if (msg != nullptr) {
+            std::cout << "Unable to load library \"" << m_location << "\": " << msg << "\n";
+        }
+        return m_handle != 0;
+    }
+
+    bool close() {
+        return dlclose(m_handle)==0;
+    }
+
+    template <typename T>
+    T (*get(const std::string& name))() {
+        return reinterpret_cast<T (*)()>(dlsym(m_handle, name.c_str()));
+    }
+
+protected:
+    std::string m_location;
+    bool m_autoClose;
+    void * m_handle;
+};
 
 int main( int argc, char *argv[] ) {
 	std::string  visPath;
@@ -159,9 +204,9 @@ int main( int argc, char *argv[] ) {
 			backend->getLog()->error("Input factory does not exist: " + p.string());
 			return graphene.run(fps);
 		}
-		ext::shared_library lib(p.string());
+		Plugin lib(p.string());
 		if (!lib.open()) {
-			backend->getLog()->error("Library failed to open: " + p.string());
+			backend->getLog()->error("Plugin failed to open: " + p.string());
 			return graphene.run(fps);
 		}
 		std::function<FW::Factory* ()> retrFactory(lib.get<FW::Factory*>("getFactory"));
@@ -183,9 +228,9 @@ int main( int argc, char *argv[] ) {
 			std::string filename = p.filename().string();
 			if (!regex_match(filename, what, pattern)) continue;
 			std::string name = what[1];
-			ext::shared_library lib(p.string());
+			Plugin lib(p.string());
 			if (!lib.open()) {
-				backend->getLog()->warn("Library failed to open: " + p.string());
+				backend->getLog()->warn("Plugin failed to open: " + p.string());
 				continue;
 			}
 			std::function<FW::Factory* ()> retrFactory(lib.get<FW::Factory*>("getFactory"));
@@ -204,7 +249,7 @@ int main( int argc, char *argv[] ) {
 }
 
 GUI::Backend::Ptr getBackend(std::string path) {
-	ext::shared_library lib(path);
+	Plugin lib(path);
 	if (!lib.open()) {
 		std::cout << "Error: Could not open backend! Aborting." << "\n";
 		return GUI::Backend::Ptr();
@@ -222,6 +267,6 @@ inline void substituteHome(std::string& path) {
 	regex pattern("~");
 	std::ostringstream t(std::ios::out | std::ios::binary);
 	std::ostream_iterator<char, char> oi(t);
-	boost::regex_replace(oi, path.begin(), path.end(),	pattern, std::string(getenv("HOME")));
+	std::regex_replace(oi, path.begin(), path.end(),	pattern, std::string(getenv("HOME")));
 	path = t.str();
 }

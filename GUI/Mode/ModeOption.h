@@ -17,8 +17,8 @@
 #include <iostream>
 #include <memory>
 
-#include <boost/filesystem.hpp>
-namespace fs = boost::filesystem;
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
 
 #include "../GUIElement.h"
 

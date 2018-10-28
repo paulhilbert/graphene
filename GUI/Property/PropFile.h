@@ -14,8 +14,8 @@
  *  Defines single file property type.
  */
 
-#include <boost/filesystem.hpp>
-namespace fs = boost::filesystem;
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
 
 #include "PropBase.h"
 #include "PropNotify.h"

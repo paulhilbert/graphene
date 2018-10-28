@@ -58,6 +58,8 @@ struct  Graphene::Impl {
 	void         setCameraControl(std::string control);
 	//void         setOrtho(bool ortho);
 
+    void         dumpCam(const fs::path& filepath);
+    void         reconstructCam(const fs::path& filepath);
 
     // framework
 	GUI::Backend::Ptr m_backend;
@@ -87,7 +89,10 @@ struct  Graphene::Impl {
 	unsigned int m_frameCount;
 
     bool m_showCamPos;
-
+    bool m_screenshot;
+    bool m_dumpData;
+    bool m_dumpCam;
+    fs::path m_screenshotPath;
 
 	std::map<std::string, harmont::camera_model::ptr> m_camControls;
     std::string m_crtCamControl;
@@ -138,7 +143,7 @@ Graphene::Impl::Impl(GUI::Backend::Ptr backend, FW::Events::EventHandler::Ptr ev
 #ifdef USE_SPACENAV
 	m_spaceNav = std::make_shared<FW::Events::SpaceNav>();
     m_spaceNav->setCallbackPressRight([&] () {
-        m_lightDir = m_camera->forward().normalized();
+        m_lightDir = -m_camera->forward().normalized();
     });
 #endif
 
@@ -246,7 +251,7 @@ void Graphene::Impl::initRenderProperties() {
     bg->setCallback([&] (Eigen::Vector4f color) { m_renderer->set_background_color(color.head(3)); });
 
     groupRendering->add<Button>("View Direction -> Light Direction", "setLightDir")->setCallback([&] () {
-        m_lightDir = m_camera->forward().normalized();
+        m_lightDir = -m_camera->forward().normalized();
     });
 	auto exposure = groupRendering->add<Range>("Exposure", "exposure");
     exposure->setDigits(3).setMin(0.f).setMax(1.f).setValue(m_renderer->exposure());
@@ -256,14 +261,38 @@ void Graphene::Impl::initRenderProperties() {
     bias->setDigits(4).setMin(0.f).setMax(0.01f).setValue(m_renderer->shadow_bias());
     bias->setCallback([&] (float b) { m_renderer->set_shadow_bias(b); });
 
+	auto groupStore = main->add<Section>("Store", "groupStore");
+    auto dumpData = groupStore->add<Boolean>("Dump Data", "dumpData");
+    dumpData->setValue(true);
+    auto dumpCam = groupStore->add<Boolean>("Dump Camera", "dumpCam");
+    dumpCam->setValue(true);
+    auto screenshot = groupStore->add<File>("Screenshot", "screenshot");
+    screenshot->setMode(File::SAVE);
+    screenshot->setExtensions({"png"});
+    screenshot->setCallback([&] (const fs::path& filepath) {
+        m_screenshot = true;
+        m_dumpData = m_backend->getMainSettings()->get<Boolean>({"groupStore", "dumpData"})->value();
+        m_dumpCam = m_backend->getMainSettings()->get<Boolean>({"groupStore", "dumpCam"})->value();
+        m_screenshotPath = filepath;
+    });
+    auto loadCam = groupStore->add<File>("Load Camera", "loadCam");
+    loadCam->setMode(File::OPEN);
+    loadCam->setExtensions({"cam"});
+    loadCam->setCallback([&] (const fs::path& filepath) {
+        reconstructCam(filepath);
+    });
+    auto reconstruct = groupStore->add<File>("Load Dumped Data", "reconstruct");
+    reconstruct->setMode(File::OPEN);
+    reconstruct->setExtensions({"vis"});
+    reconstruct->setCallback([&] (const fs::path& filepath) {
+        m_renderer->reconstruct_objects(filepath);
+    });
+
     // DEBUG (SHADOW) FRUSTUM
     auto freeze_btn = groupRendering->add<Button>("Freeze Frustum", "add_frustum");
     auto remove_btn = groupRendering->add<Button>("Remove Frustum", "rem_frustum");
     remove_btn->disable();
     freeze_btn->setCallback([&, freeze_btn, remove_btn] () {
-        //auto corners = m_camera->frustum_corners();
-        //auto fr = std::make_shared<harmont::box_object>(corners, Eigen::Vector4f(1.f, 0.f, 0.f, 1.f), true, 2.f);
-        //fr->init();
         m_renderer->light_debug_add();
         freeze_btn->disable();
         remove_btn->enable();
@@ -292,6 +321,7 @@ void Graphene::Impl::initRenderProperties() {
 
     groupNav->setCollapsed(m_singleMode);
     groupRendering->setCollapsed(m_singleMode);
+    groupStore->setCollapsed(true);
 }
 
 int Graphene::Impl::run(int fps) {
@@ -414,6 +444,20 @@ void Graphene::Impl::render() {
 			m_visualizer[name]->postRender();
 		}
 	}
+
+    if (std::exchange(m_screenshot, false)) {
+        m_renderer->screenshot(m_camera, m_screenshotPath);
+        if (m_dumpCam) {
+            fs::path dumpPath = m_screenshotPath;
+            dumpPath.replace_extension(".cam");
+            dumpCam(dumpPath);
+        }
+        if (m_dumpData) {
+            fs::path dumpPath = m_screenshotPath;
+            dumpPath.replace_extension(".vis");
+            m_renderer->dump_objects(dumpPath);
+        }
+    }
 }
 
 void Graphene::Impl::modifier(Keys::Modifier mod, bool down) {
@@ -427,6 +471,65 @@ void Graphene::Impl::modifier(Keys::Modifier mod, bool down) {
 
 void Graphene::Impl::setCameraControl(std::string control) {
     m_camera->set_model(m_camControls[control]);
+    m_crtCamControl = control;
+}
+
+void Graphene::Impl::dumpCam(const fs::path& filepath) {
+    std::ofstream out(filepath.string(), std::ios_base::out | std::ios_base::binary);
+    if (out.good()) {
+        int version = 1;
+        out.write((const char*) &version, sizeof(int));
+        std::string modelStr = m_backend->getMainSettings()->get<Choice>({"groupNavigation", "camControl"})->value();
+        bool isOrbit = modelStr == "orbit";
+        out.write((const char*) &isOrbit, sizeof(bool));
+        out.write((const char*) m_camControls[isOrbit ? "orbit" : "fly"]->position().data(), 3*sizeof(float));
+        out.write((const char*) m_camControls[isOrbit ? "orbit" : "fly"]->look_at().data(), 3*sizeof(float));
+        int width = m_camera->width();
+        int height = m_camera->height();
+        float fov = m_camera->fov();
+        float near = m_camera->near();
+        float far = m_camera->far();
+        bool ortho = m_camera->ortho();
+        out.write((const char*) &width, sizeof(int));
+        out.write((const char*) &height, sizeof(int));
+        out.write((const char*) &fov, sizeof(float));
+        out.write((const char*) &near, sizeof(float));
+        out.write((const char*) &far, sizeof(float));
+        out.write((const char*) &ortho, sizeof(bool));
+    }
+    out.close();
+}
+
+void Graphene::Impl::reconstructCam(const fs::path& filepath) {
+    std::ifstream in(filepath.string(), std::ios_base::in | std::ios_base::binary);
+    if (in.good()) {
+        int version = 1;
+        in.read((char*) &version, sizeof(int));
+        bool isOrbit = true;
+        in.read((char*) &isOrbit, sizeof(bool));
+
+        Eigen::Vector3f pos, lookAt;
+        in.read((char*) pos.data(), 3*sizeof(float));
+        in.read((char*) lookAt.data(), 3*sizeof(float));
+        m_crtCamControl = isOrbit ? "orbit" : "fly";
+        if (isOrbit) {
+            m_camControls[m_crtCamControl] = harmont::camera_model::looking_at<harmont::orbit_camera_model>(pos, lookAt);
+        } else {
+            m_camControls[m_crtCamControl] = harmont::camera_model::looking_at<harmont::fly_camera_model>(pos, lookAt);
+        }
+
+        int width, height;
+        float fov, near, far;
+        bool ortho;
+        in.read((char*) &width, sizeof(int));
+        in.read((char*) &height, sizeof(int));
+        in.read((char*) &fov, sizeof(float));
+        in.read((char*) &near, sizeof(float));
+        in.read((char*) &far, sizeof(float));
+        in.read((char*) &ortho, sizeof(bool));
+        m_camera = std::make_shared<harmont::camera>(m_camControls[m_crtCamControl], width, height, fov, near, far, ortho);
+    }
+    in.close();
 }
 
 //void Graphene::Impl::setOrtho(bool ortho) {
